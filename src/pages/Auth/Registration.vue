@@ -10,27 +10,20 @@
         h4.form__subtitle Личные данные
         name-field(id="register-firstName" v-model="firstName" :v="$v.firstName")
         name-field(id="register-lastName" v-model="lastName" :v="$v.lastName" label="Фамилия")
-      .form__block
-        h4.form__subtitle Введите код
-        span.form__code {{code}}
-        number-field(id="register-number" v-model="number" :v="$v.number" :class="{checked: $v.number.required && $v.number.isCode}")
-        confirm-field(id="register-confirm" v-model="confirm" :v="$v.confirm")
+      .form__block.captcha
+        vue-hcaptcha(sitekey="6cb436a2-4748-4d38-8404-113bf4e2069f" @verify="onVerify")
       .registration__action
         button-hover(tag="button" type="submit" variant="white") Зарегистрироваться
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { required, email, minLength, sameAs, numeric } from 'vuelidate/lib/validators'
+import { mapActions } from 'vuex'
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import PasswordField from '@/components/FormElements/PasswordField'
 import PasswordRepeatField from '@/components/FormElements/PasswordRepeatField'
 import EmailField from '@/components/FormElements/EmailField'
 import NameField from '@/components/FormElements/NameField'
-import NumberField from '@/components/FormElements/NumberField'
-import ConfirmField from '@/components/FormElements/ConfirmField'
-import store from '@/store'
-
-const isCode = value => +value === store.state.code
+import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 
 export default {
   name: 'Registration',
@@ -38,9 +31,8 @@ export default {
     PasswordField,
     EmailField,
     NameField,
-    NumberField,
-    ConfirmField,
-    PasswordRepeatField
+    PasswordRepeatField,
+    VueHcaptcha,
   },
   data: () => ({
     email: '',
@@ -48,41 +40,41 @@ export default {
     passwd2: '',
     firstName: '',
     lastName: '',
-    code: 0,
-    number: '',
-    confirm: false
+    // hcaptcha
+    verified: false,
+    token: null,
+    eKey: null,
   }),
-  computed: {
-    ...mapGetters(['getCode'])
-  },
   methods: {
+    onVerify(token, ekey) {
+      this.verified = true
+      this.token = token
+      this.eKey = ekey
+    },
     ...mapActions('auth/api', ['register']),
     submitHandler() {
       if (this.$v.$invalid) {
         this.$v.$touch()
         return
       }
-      const { email, passwd1, passwd2, firstName, lastName } = this
-      this.register({ email, passwd1, passwd2, firstName, lastName, code: this.number }).then(() => {
+      // проверка прохождения hCaptcha
+      if (!this.verified) {
+        document.querySelector('.captcha').classList.add('error')
+        return
+      }
+
+      const { email, passwd1, passwd2, firstName, lastName, token, eKey } = this
+      this.register({ email, passwd1, passwd2, firstName, lastName, token, eKey }).then(() => {
         this.$router.push({ name: 'RegisterSuccess' })
       })
     }
   },
-  mounted() {
-    this.code = this.getCode
-  },
   validations: {
-    confirm: { sameAs: sameAs(() => true) },
     email: { required, email },
     passwd1: { required, minLength: minLength(8) },
     passwd2: { required, minLength: minLength(8), sameAsPassword: sameAs('passwd1') },
     firstName: { required, minLength: minLength(3) },
-    lastName: { required, minLength: minLength(3) },
-    number: {
-      required,
-      numeric,
-      isCode
-    }
+    lastName: { required, minLength: minLength(3) }
   }
 }
 </script>
@@ -103,5 +95,10 @@ export default {
   @media (max-width: breakpoint-xxl) {
     margin-top: 20px;
   }
+}
+
+.captcha.error {
+  display: inline-block;
+  outline: 1px #ff5573 solid;
 }
 </style>

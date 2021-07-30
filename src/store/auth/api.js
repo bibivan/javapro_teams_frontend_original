@@ -19,6 +19,7 @@ export default {
     async register({
       dispatch
     }, user) {
+      console.log(user)
       await axios({
         url: 'account/register',
         data: user,
@@ -34,7 +35,14 @@ export default {
           email: user.email,
           password: user.passwd1
         })
-      }).catch(error => {})
+      }).catch(error => {
+        dispatch('global/alert/setAlert', {
+          status: 'error',
+          text: error.message
+        }, {
+          root: true
+        })
+      })
     },
     async login({
       commit

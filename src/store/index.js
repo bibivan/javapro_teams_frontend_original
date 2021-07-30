@@ -16,12 +16,6 @@ export default new Vuex.Store({
     profile,
     users
   },
-  state: {
-    code: 3675
-  },
-  getters: {
-    getCode: s => s.code
-  },
   actions: {},
   mutations: {},
   strict: process.env.NODE_ENV !== 'production'

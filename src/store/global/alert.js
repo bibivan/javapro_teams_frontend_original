@@ -1,31 +1,37 @@
 export default {
   namespaced: true,
   state: {
-    status: 'success',
-    text: 'Сделано!',
+    status: '',
+    text: '',
     show: false,
-    timeout: 2000
+    timeout: 7000
   },
   getters: {
-    getState: s => s
+    getState(state) {
+      return state
+    },
   },
   mutations: {
     setInfo(state, value) {
       state.status = value.status
       state.text = value.text
     },
-    toggleShow: s => s.show = !s.show
+    toggleShow(state) {
+      state.show = !state.show
+    },
   },
   actions: {
     setAlert({
       commit,
       state
-    }, value) {
-      commit('setInfo', value)
+    }, value) {      
+      commit('setInfo', value)      
       commit('toggleShow')
+      console.log('Старт сообщения', state)
       setTimeout(() => {
         commit('toggleShow')
       }, state.timeout)
+      console.log('Окончание сообщения', state)
     }
   }
 }
