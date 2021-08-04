@@ -8,8 +8,8 @@ export default {
   },
   getters: {
     apiToken: s => s.token,
-    isAuthenticated: state => !!state.token,
-    authStatus: state => state.status
+    isAuthenticated: s => !!s.token,
+    authStatus: s => s.status
   },
   mutations: {
     setToken: (s, token) => s.token = token,
@@ -19,7 +19,6 @@ export default {
     async register({
       dispatch
     }, user) {
-      console.log(user)
       await axios({
         url: 'account/register',
         data: user,
@@ -34,13 +33,6 @@ export default {
         await dispatch('login', {
           email: user.email,
           password: user.passwd1
-        })
-      }).catch(error => {
-        dispatch('global/alert/setAlert', {
-          status: 'error',
-          text: error.message
-        }, {
-          root: true
         })
       })
     },
@@ -64,6 +56,7 @@ export default {
       }).catch(error => {
         commit('setStatus', 'error')
         localStorage.removeItem('user-token')
+        throw(error)
       })
     },
     async logout({

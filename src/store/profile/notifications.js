@@ -37,7 +37,6 @@ export default {
         url: 'notifications',
         method: 'GET'
       }).then(response => {
-
         if (`${response.data.data.map(z => z.sent_time)}` !== `${state.notifications.map(z => z.sent_time)}`) {
           commit('setNotifications', response.data.data)
         }

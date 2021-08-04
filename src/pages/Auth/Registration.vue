@@ -46,10 +46,9 @@ export default {
     eKey: null,
   }),
   methods: {
-    onVerify(token, ekey) {
+    onVerify(token) {
       this.verified = true
       this.token = token
-      this.eKey = ekey
     },
     ...mapActions('auth/api', ['register']),
     submitHandler() {
@@ -63,8 +62,8 @@ export default {
         return
       }
 
-      const { email, passwd1, passwd2, firstName, lastName, token, eKey } = this
-      this.register({ email, passwd1, passwd2, firstName, lastName, token, eKey }).then(() => {
+      const { email, passwd1, passwd2, firstName, lastName, token } = this
+      this.register({ email, passwd1, passwd2, firstName, lastName, token }).then(() => {
         this.$router.push({ name: 'RegisterSuccess' })
       })
     }

@@ -18,7 +18,7 @@ export default {
       // если понадобиться то добавить склонение (для публикаций, но нужен или пол или отчество)
       // библиотека - petrovich
       result.fullName = result.first_name + ' ' + result.last_name
-      result.ages = moment().diff(result.birth_date, 'years')
+      result.ages = moment().diff(result.birth_date * 1000, 'years')
       result.is_onlined = moment().diff(moment(result.last_online_time), 'seconds') <= 60
       return result
     },
@@ -30,7 +30,7 @@ export default {
       // если понадобиться то добавить склонение (для публикаций, но нужен или пол или отчество)
       // библиотека - petrovich
       result.fullName = result.first_name + ' ' + result.last_name
-      result.ages = moment().diff(result.birth_date, 'years')
+      result.ages = moment().diff(result.birth_date * 1000, 'years')
       result.is_onlined = moment().diff(moment(result.last_online_time), 'seconds') <= 60
       return result
     },

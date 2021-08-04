@@ -15,7 +15,7 @@
         span.user-status(:class="{online, offline: !online}") {{statusText}}
       .profile-info__block
         span.profile-info__title Дата рождения:
-        span.profile-info__val(v-if="info.birth_date") {{info.birth_date | moment("D MMMM YYYY") }} ({{info.ages}} года)
+        span.profile-info__val(v-if="info.birth_date") {{info.birth_date | moment("D MMMM YYYY") }} ({{info.ages}} {{declOfNum(info.ages, ['год', 'года', 'лет'])}})
         span.profile-info__val(v-else) не заполнено
       .profile-info__block
         span.profile-info__title Телефон:
@@ -39,6 +39,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Modal from '@/components/Modal'
+import declOfNum from '@/utils/declOfNum'
 
 export default {
   name: 'ProfileInfo',
@@ -72,6 +73,7 @@ export default {
     }
   },
   methods: {
+    declOfNum,
     ...mapActions('users/actions', ['apiBlockUser', 'apiUnblockUser']),
     ...mapActions('profile/friends', ['apiAddFriends', 'apiDeleteFriends']),
     ...mapActions('profile/dialogs', ['createDialogWithUser', 'apiLoadAllDialogs']),

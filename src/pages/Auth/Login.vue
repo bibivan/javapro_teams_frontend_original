@@ -38,11 +38,13 @@ export default {
         return
       }
 
-      this.login({ email: this.email, password: this.password }).then(() => {
-        this.apiInfo().then(() => {
-          this.$router.push({ name: this.redirectUrl || 'News' })
+      this.login({ email: this.email, password: this.password })
+        .then(() => {
+          this.apiInfo().then(() => {
+            this.$router.push({ name: this.redirectUrl || 'News' })
+          })
         })
-      })
+        .catch(error => {})
     }
   },
   validations: {

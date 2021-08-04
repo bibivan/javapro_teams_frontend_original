@@ -4,7 +4,7 @@ export default {
     status: '',
     text: '',
     show: false,
-    timeout: 7000
+    timeout: 3000
   },
   getters: {
     getState(state) {
@@ -27,11 +27,9 @@ export default {
     }, value) {      
       commit('setInfo', value)      
       commit('toggleShow')
-      console.log('Старт сообщения', state)
       setTimeout(() => {
         commit('toggleShow')
       }, state.timeout)
-      console.log('Окончание сообщения', state)
     }
   }
 }
