@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
+import moment from 'moment';
 
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 
@@ -20,6 +21,8 @@ const token = localStorage.getItem('user-token')
 console.log('TOKEN: ', token)
 if (token) axios.defaults.headers.common['Authorization'] = token
 
+let timeLastStart = null
+
 axios.interceptors.response.use(null, error => {
   // добавить проверку на законченный токен и сделать выход из приложения
   // store.dispatch('auth/api/logout')
@@ -28,17 +31,20 @@ axios.interceptors.response.use(null, error => {
     window.location.reload()
   }
 
-  const snack = document.querySelector('.v-snack')
-  const timeout = snack ? 3000 : 0
   const message = error.response.data.error_description || error.response.data.path + ' - ' + error.response.data.error
   
-  
+  const currentTime = moment();
+  let timeCount = !timeLastStart ? 0 : 3500 - currentTime.diff(timeLastStart, 'milliseconds')
+  timeCount = timeCount < 0 ? 0 : timeCount
+
   setTimeout(() => {
     store.dispatch('global/alert/setAlert', {
       status: 'error',
       text: message
     })
-  }, timeout) 
+  }, timeCount) 
+
+  timeLastStart = currentTime;
 
   return Promise.reject(error)
 });
