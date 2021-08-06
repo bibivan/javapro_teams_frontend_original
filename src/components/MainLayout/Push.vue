@@ -29,9 +29,9 @@ export default {
   },
   watch: {
     isOpen(val) {
-      if (val) {
+      if (!val) {
         this.$refs.list.scrollTop = 0
-        this.readNotifications()
+        /* this.readNotifications() */
       }
     }
   },

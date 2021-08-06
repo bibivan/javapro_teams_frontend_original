@@ -5,12 +5,12 @@
       a.comments__show(@click.prevent="showComments" href="#" v-if="info.length > 1") {{showText}}
     .comments__list(v-if="getInfo")
       comment-block(
-        :admin="admin" 
-        v-for="i in info" 
-        :key="i.id" 
-        :info="i" 
-        :edit="getInfo.id === i.author.id" 
-        :deleted="getInfo.id === i.author.id" 
+        :admin="admin"
+        v-for="i in info"
+        :key="i.id"
+        :info="i"
+        :edit="getInfo.id === i.author.id"
+        :deleted="getInfo.id === i.author.id"
         @edit-comment="onEditMain"
       )
       .comments__add(v-if="!admin")

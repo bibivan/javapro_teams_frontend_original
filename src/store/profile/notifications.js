@@ -30,6 +30,7 @@ export default {
   },
   actions: {
     async apiNotifications({
+      state,
       commit,
       dispatch
     }) {
@@ -38,7 +39,15 @@ export default {
         method: 'GET'
       }).then(response => {
         if (`${response.data.data.map(z => z.sent_time)}` !== `${state.notifications.map(z => z.sent_time)}`) {
-          commit('setNotifications', response.data.data)
+          const result = response.data.data.map(el => {
+            if (!el.entity_author) el.entity_author = {}
+            if (!el.entity_author.photo) el.entity_author.photo = '../static/img/user/default_avatar.svg'
+            if (!el.entity_author.first_name) el.entity_author.first_name = `Имя автора с ID: ${el.id}`
+            if (!el.entity_author.last_name) el.entity_author.last_name = `Фамилия автора с ID: ${el.id}`
+            if (!el.event_type) el.event_type = 'POST'
+            return el;
+          });
+          commit('setNotifications', result)
         }
         // добавить когда будет прод
         // setTimeout(() => {
