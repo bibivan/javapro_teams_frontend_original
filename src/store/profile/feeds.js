@@ -6,7 +6,7 @@ export default {
     feeds: []
   },
   getters: {
-    getFeeds: s => s.feeds
+    getFeeds: s => s.feeds,
   },
   mutations: {
     setFeeds: (s, feeds) => s.feeds = feeds,
@@ -29,7 +29,7 @@ export default {
         url: `feeds?${query.join('&')}`,
         method: 'GET'
       }).then(response => {
-        console.log("TCL: apiFeeds -> response", response)
+        console.log("TCL: apiFeeds -> response", response.data.data)
         commit('setFeeds', response.data.data)
       }).catch(() => {})
     },

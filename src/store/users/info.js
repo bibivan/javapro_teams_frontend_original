@@ -67,7 +67,7 @@ export default {
       await axios({
         url: `users/${id}/wall${offset ? '?offset='+offset : ''}${itemPerPage ? '&itemPerPage='+itemPerPage : ''}`,
         method: 'GET'
-      }).then(response => {
+      }).then(response => {        r
         commit('setWall', response.data.data)
       }).catch(error => {})
     },
