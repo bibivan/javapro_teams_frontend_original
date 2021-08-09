@@ -3,6 +3,7 @@
     label.form__label(:for="id") Повторите пароль
     input.form__input(name="password" type="password" :id="id"
       v-model.trim="password"
+      :autocomplete="autocomplete"
       @change="v.$touch()"
       :class="{invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword)}"
     )
@@ -25,7 +26,11 @@ export default {
     id: {
       type: String,
       required: true
-    }
+    },
+    autocomplete: {
+      type: String,
+      required: true
+    },
   },
   computed: {
     password: {

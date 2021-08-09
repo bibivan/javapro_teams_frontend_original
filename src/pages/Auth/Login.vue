@@ -3,7 +3,7 @@
     h2.login__title.form__title Войдите в аккаунт
     form.login__form(@submit.prevent="submitHandler")
       email-field(id="login-email" v-model="email" :v="$v.email")
-      password-field(id="login-password" v-model="password" :v="$v.password")
+      password-field(id="login-password" v-model="password" :v="$v.password" autocomplete="current-password")
       .login__action
         button-hover(tag="button" type="submit" variant="white") Войти
         router-link.login__link(:to="{name: 'Forgot'}") Забыли пароль?

@@ -30,7 +30,7 @@ export default {
         }, {
           root: true
         })
-        await dispatch('login', {
+        dispatch('login', {
           email: user.email,
           password: user.passwd1
         })
