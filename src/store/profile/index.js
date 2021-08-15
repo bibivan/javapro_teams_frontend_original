@@ -5,6 +5,7 @@ import feeds from './feeds'
 import dialogs from './dialogs'
 import comments from './comments'
 import notifications from './notifications'
+import country_city from './country_city'
 
 export default {
   namespaced: true,
@@ -15,6 +16,7 @@ export default {
     feeds,
     dialogs,
     comments,
-    notifications
+    notifications,
+    country_city
   }
 }

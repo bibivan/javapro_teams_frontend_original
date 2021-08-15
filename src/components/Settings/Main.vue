@@ -3,8 +3,38 @@
     user-info-form-block(label="Имя:" placeholder="Введите имя" v-model="name" )
     user-info-form-block(label="Фамилия:" placeholder="Введите фамилию" v-model="lastName" )
     user-info-form-block(label="Телефон:" placeholder="Введите телефон" v-model="phone" phone)
-    user-info-form-block(label="Страна:" placeholder="Введите страну" v-model="country")
-    user-info-form-block(label="Город:" placeholder="Введите город" v-model="city")
+    
+    .user-info-form__block
+      span.user-info-form__label Страна
+      .user-info-form__wrap.countries
+        input.user-info-form__input(
+          type="text"
+          v-model="country"
+          placeholder="Введите страну"
+          @click="countriesShow"
+        )
+
+        .countries__wrap(v-if="isCountriesShow")
+          ul.countries__list
+            li.countries__item(v-for="country in countries" :key="country.id") {{country.title}}
+    
+    .user-info-form__block.countries
+      span.user-info-form__label Город
+      .user-info-form__wrap
+        input.user-info-form__input(
+          type="text" 
+          v-model="city" 
+          placeholder="Введите город"
+          @click="citiesShow"
+        )
+
+        .countries__wrap(v-if="isCitiesShow")
+          ul.countries__list
+            li.countries__item(v-for="city in cities" :key="city.id") {{city.title}}
+    
+    //- user-info-form-block(label="Страна:" placeholder="Введите страну" v-model="country")
+    //- user-info-form-block(label="Город:" placeholder="Введите город" v-model="city")
+    
     .user-info-form__block
       span.user-info-form__label Дата рождения:
       .user-info-form__wrap
@@ -23,8 +53,8 @@
             span.setting-main__photo-delete(v-if="photo") {{photo.name}}
               simple-svg(:filepath="'/static/img/delete.svg'" @click.native.prevent="deletePhoto")
           button-hover(variant="fill" bordered @click.native="loadPhoto") Загрузить
-        .user-info-form__photo-pic(v-if="photo && src")
-          img(:src="src" :alt="photo.name")
+        .user-info-form__photo-pic(v-if="src")
+          img(:src="src" :alt="name +' ' + lastName")
     user-info-form-block(label="О себе:" v-model="about" about)
     .user-info-form__block.user-info-form__block--actions
       span.user-info-form__label
@@ -66,11 +96,20 @@ export default {
     photo: null,
     src: '',
     country: '',
-    city: ''
+    city: '',
+    isCountriesShow: false,
+    isCitiesShow: false,
   }),
   computed: {
     ...mapGetters('global/storage', ['getStorage']),
     ...mapGetters('profile/info', ['getInfo']),
+    ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
+    countries() {
+      return this.getCountries
+    },
+    cities() {
+      return this.getCities
+    },
     phoneNumber() {
       return this.phone.replace(/\D+/g, '')
     },
@@ -88,11 +127,23 @@ export default {
   methods: {
     ...mapActions('global/storage', ['apiStorage']),
     ...mapActions('profile/info', ['apiChangeInfo']),
+    ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
     submitHandler() {
-      if (!this.src) return
-      this.apiStorage(this.photo).then(() => {
+      if (this.src !== this.getInfo.photo && this.src !== '') {
+        this.apiStorage(this.photo).then(() => {
+          this.apiChangeInfo({
+            photo_id: this.getStorage && this.getStorage.id,
+            first_name: this.name,
+            last_name: this.lastName,
+            birth_date: moment([this.year, this.month.val - 1, this.day]).format(),
+            phone: this.phoneNumber,
+            about: this.about,
+            country: this.country,
+            city: this.city
+          })
+        })
+      } else {
         this.apiChangeInfo({
-          photo_id: this.getStorage && this.getStorage.id,
           first_name: this.name,
           last_name: this.lastName,
           birth_date: moment([this.year, this.month.val - 1, this.day]).format(),
@@ -101,7 +152,7 @@ export default {
           country: this.country,
           city: this.city
         })
-      })
+      }
     },
     processFile(event) {
       this.photo = event.target.files[0]
@@ -122,13 +173,21 @@ export default {
       this.src = this.getInfo.photo
       this.phone = this.getInfo.phone ? this.getInfo.phone.replace(/^[+]?[78]/, "") : "";
       if (this.getInfo.birth_date) {
-        this.day = moment(this.getInfo.birth_date).date()
-        this.month = this.months[moment(this.getInfo.birth_date).month()]
-        this.year = moment(this.getInfo.birth_date).year()
+        this.day = moment(this.getInfo.birth_date * 1000).date()
+        this.month = this.months[moment(this.getInfo.birth_date * 1000).month()]
+        this.year = moment(this.getInfo.birth_date * 1000).year()
       }
       this.about = this.getInfo.about
       this.country = this.getInfo.country
       this.city = this.getInfo.city
+    },
+    countriesShow() {
+      console.log('1111111111')
+      this.isCountriesShow = !this.isCountriesShow
+    },
+    citiesShow() {
+      console.log('22222222')
+      this.isCitiesShow = !this.isCitiesShow
     }
   },
   watch: {
@@ -139,6 +198,8 @@ export default {
   },
   mounted() {
     if (this.getInfo) this.setInfo()
+    this.apiCountries()
+    this.apiCities()
   }
 }
 </script>
@@ -163,4 +224,13 @@ export default {
 .settings-main__back {
   margin-left: 20px;
 }
+
+.countries {
+  position: relative;
+  &__wrap {
+    position: absolute;
+    top: 50px;
+  }
+}
+
 </style>
