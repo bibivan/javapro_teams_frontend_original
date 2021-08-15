@@ -3,7 +3,7 @@
     user-info-form-block(label="Имя:" placeholder="Введите имя" v-model="name" )
     user-info-form-block(label="Фамилия:" placeholder="Введите фамилию" v-model="lastName" )
     user-info-form-block(label="Телефон:" placeholder="Введите телефон" v-model="phone" phone)
-    
+
     .user-info-form__block
       span.user-info-form__label Страна
       .user-info-form__wrap.countries
@@ -16,25 +16,33 @@
 
         .countries__wrap(v-if="isCountriesShow")
           ul.countries__list
-            li.countries__item(v-for="country in countries" :key="country.id") {{country.title}}
-    
-    .user-info-form__block.countries
+            li.countries__item(
+              v-for="country in countries"
+              :key="country.id"
+              @click=""
+            ) {{country.title}}
+
+    .user-info-form__block
       span.user-info-form__label Город
-      .user-info-form__wrap
+      .user-info-form__wrap.countries
         input.user-info-form__input(
-          type="text" 
-          v-model="city" 
+          type="text"
+          v-model="city"
           placeholder="Введите город"
-          @click="citiesShow"
+          @input="citiesOpen"
         )
 
-        .countries__wrap(v-if="isCitiesShow")
-          ul.countries__list
-            li.countries__item(v-for="city in cities" :key="city.id") {{city.title}}
-    
+        ul.countries__list(v-if="isCitiesShow")
+          li.countries__item(
+            v-for="item in cities"
+            :key="item.id"
+            @click="setCity(item.title)"
+            tabindex=0
+          ) {{item.title}}
+
     //- user-info-form-block(label="Страна:" placeholder="Введите страну" v-model="country")
     //- user-info-form-block(label="Город:" placeholder="Введите город" v-model="city")
-    
+
     .user-info-form__block
       span.user-info-form__label Дата рождения:
       .user-info-form__wrap
@@ -108,7 +116,7 @@ export default {
       return this.getCountries
     },
     cities() {
-      return this.getCities
+      return this.getCities.filter(c => c.title.toUpperCase().includes(this.city.toUpperCase()))
     },
     phoneNumber() {
       return this.phone.replace(/\D+/g, '')
@@ -182,12 +190,18 @@ export default {
       this.city = this.getInfo.city
     },
     countriesShow() {
-      console.log('1111111111')
       this.isCountriesShow = !this.isCountriesShow
     },
-    citiesShow() {
-      console.log('22222222')
-      this.isCitiesShow = !this.isCitiesShow
+    citiesOpen() {
+      if (this.isCitiesShow) return
+      this.isCitiesShow = true
+    },
+    citiesClose() {
+      if (this.isCitiesShow) this.isCitiesShow = false
+    },
+    setCity(value) {
+      this.city = value
+      this.citiesClose()
     }
   },
   watch: {
@@ -227,10 +241,25 @@ export default {
 
 .countries {
   position: relative;
-  &__wrap {
+  &__list {
     position: absolute;
     top: 50px;
+    width: 100%;
+    max-height: 150px;
+    z-index: 10;
+
+    overflow-y: scroll;
+
+    background-color: rgba(0,0,0,0.3);
+  }
+  &__item {
+    padding: 5px 20px;
+
+    &:hover, &:focus {
+      background-color: rgba(0,0,0,0.5);
+      cursor: pointer;
+    }
+
   }
 }
-
 </style>
