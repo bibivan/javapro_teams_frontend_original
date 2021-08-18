@@ -28,6 +28,7 @@ export default {
         url: `friends?${query.join('&')}`,
         method: 'GET'
       }).then(response => {
+        response.data.data.forEach(el => el.photo = el.photo || '../static/img/user/default_avatar.svg')        
         console.log("TCL: friends", response)
         commit('setResult', {
           id: 'friends',

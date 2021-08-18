@@ -6,37 +6,39 @@
 
     .user-info-form__block
       span.user-info-form__label Страна
-      .user-info-form__wrap.countries
+      .user-info-form__wrap.countries(v-click-outside="countriesClose")
         input.user-info-form__input(
           type="text"
           v-model="country"
           placeholder="Введите страну"
-          @click="countriesShow"
+          @input="countriesOpen"
         )
 
-        .countries__wrap(v-if="isCountriesShow")
-          ul.countries__list
-            li.countries__item(
-              v-for="country in countries"
-              :key="country.id"
-              @click=""
-            ) {{country.title}}
+        ul.countries__list(v-if="isCountriesShow")
+          li.countries__item(
+            v-for="item in countries"
+            :key="item.id"
+            tabindex=0
+            @click="setCountry(item.title)"
+            @keyup.enter="setCountry(item.title)"
+          ) {{item.title}}
 
     .user-info-form__block
       span.user-info-form__label Город
-      .user-info-form__wrap.countries
+      .user-info-form__wrap.countries(v-click-outside="citiesClose")
         input.user-info-form__input(
           type="text"
           v-model="city"
           placeholder="Введите город"
-          @input="citiesOpen"
+          @input="citiesOpen"          
         )
 
         ul.countries__list(v-if="isCitiesShow")
-          li.countries__item(
+          li.countries__item(            
             v-for="item in cities"
             :key="item.id"
             @click="setCity(item.title)"
+            @keyup.enter="setCity(item.title)"
             tabindex=0
           ) {{item.title}}
 
@@ -75,6 +77,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
+import ClickOutside from 'vue-click-outside'
 import UserInfoFormBlock from '@/components/Settings/UserInfoForm/Block.vue'
 export default {
   name: 'SettingsMain',
@@ -113,7 +116,7 @@ export default {
     ...mapGetters('profile/info', ['getInfo']),
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
     countries() {
-      return this.getCountries
+      return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.toUpperCase()))
     },
     cities() {
       return this.getCities.filter(c => c.title.toUpperCase().includes(this.city.toUpperCase()))
@@ -189,15 +192,21 @@ export default {
       this.country = this.getInfo.country
       this.city = this.getInfo.city
     },
-    countriesShow() {
-      this.isCountriesShow = !this.isCountriesShow
+    countriesOpen() {
+      this.isCountriesShow = true
+    },
+    countriesClose() {
+      this.isCountriesShow = false
+    },
+    setCountry(value) {
+      this.country = value
+      this.countriesClose()
     },
     citiesOpen() {
-      if (this.isCitiesShow) return
       this.isCitiesShow = true
     },
     citiesClose() {
-      if (this.isCitiesShow) this.isCitiesShow = false
+      this.isCitiesShow = false
     },
     setCity(value) {
       this.city = value
@@ -214,7 +223,10 @@ export default {
     if (this.getInfo) this.setInfo()
     this.apiCountries()
     this.apiCities()
-  }
+  },
+  directives: {
+    ClickOutside
+  },
 }
 </script>
 
@@ -250,13 +262,14 @@ export default {
 
     overflow-y: scroll;
 
-    background-color: rgba(0,0,0,0.3);
+    background-color: #FFFFFF;
+    border: 1px solid #c4c4c4;
   }
   &__item {
     padding: 5px 20px;
 
     &:hover, &:focus {
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.3);
       cursor: pointer;
     }
 

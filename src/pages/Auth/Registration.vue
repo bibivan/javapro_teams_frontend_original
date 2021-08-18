@@ -12,6 +12,8 @@
         name-field(id="register-lastName" v-model="lastName" :v="$v.lastName" label="Фамилия")
       .form__block.captcha
         vue-hcaptcha(sitekey="6cb436a2-4748-4d38-8404-113bf4e2069f" @verify="onVerify")
+      .form__block
+        confirm-field(id="register-confirm" v-model="confirm" :v="$v.confirm")
       .registration__action
         button-hover(tag="button" type="submit" variant="white") Зарегистрироваться
 </template>
@@ -23,6 +25,7 @@ import PasswordField from '@/components/FormElements/PasswordField'
 import PasswordRepeatField from '@/components/FormElements/PasswordRepeatField'
 import EmailField from '@/components/FormElements/EmailField'
 import NameField from '@/components/FormElements/NameField'
+import ConfirmField from '@/components/FormElements/ConfirmField'
 import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
 
 export default {
@@ -32,6 +35,7 @@ export default {
     EmailField,
     NameField,
     PasswordRepeatField,
+    ConfirmField,
     VueHcaptcha,
   },
   data: () => ({
@@ -40,10 +44,10 @@ export default {
     passwd2: '',
     firstName: '',
     lastName: '',
-    // hcaptcha
     verified: false,
     token: null,
     eKey: null,
+    confirm: false,
   }),
   methods: {
     onVerify(token) {
@@ -63,12 +67,14 @@ export default {
       }
 
       const { email, passwd1, passwd2, firstName, lastName, token } = this
-      this.register({ email, passwd1, passwd2, firstName, lastName, token }).then(() => {
-        this.$router.push({ name: 'RegisterSuccess' })
-      })
+      this.register({ email, passwd1, passwd2, firstName, lastName, token })
+      // .then(() => {
+      //   this.$router.push({ name: 'RegisterSuccess' })
+      // })
     }
   },
   validations: {
+    confirm: { sameAs: sameAs(() => true) },
     email: { required, email },
     passwd1: { required, minLength: minLength(8) },
     passwd2: { required, minLength: minLength(8), sameAsPassword: sameAs('passwd1') },

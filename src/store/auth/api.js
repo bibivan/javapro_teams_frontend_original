@@ -1,19 +1,26 @@
 import axios from 'axios'
+import router from '../../router'
 
 export default {
   namespaced: true,
   state: {
     token: localStorage.getItem('user-token') || '',
-    status: ''
+    status: '',
+    modalOpen: false,
+    modalTitle: '',
+    modalLink: ''
   },
   getters: {
     apiToken: s => s.token,
-    isAuthenticated: s => !!s.token,
-    authStatus: s => s.status
+    isAuthenticated: state => !!state.token,
+    authStatus: state => state.status
   },
   mutations: {
     setToken: (s, token) => s.token = token,
-    setStatus: (s, status) => s.status = status
+    setStatus: (s, status) => s.status = status,
+    setModal: (s, modalStatus) => s.modalOpen = modalStatus,
+    setModalTitle: (s, modalTitle) => s.modalTitle = modalTitle,
+    setModalLink: (s, modalLink) => s.modalLink = modalLink
   },
   actions: {
     async register({
@@ -26,14 +33,44 @@ export default {
       }).then(async response => {
         dispatch('global/alert/setAlert', {
           status: 'success',
-          text: 'Зарегестрирован, делаю логин'
+          text: 'Выслано письмо с подтверждением'
         }, {
           root: true
         })
-        dispatch('login', {
-          email: user.email,
-          password: user.passwd1
+        router.push({ name: 'RegisterLetter' });
+      }).catch(error => {
+        dispatch('global/alert/setAlert', {
+          status: 'error',
+          text: 'Не удалось зарегистрироваться'
+        }, {
+          root: true
         })
+        router.push({ name: 'RegisterFailed' });
+      })
+    },
+    async confirmRegistration({
+      dispatch
+    }, user) {
+      await axios({
+        url: 'account/register/confirm',
+        data: user,
+        method: 'POST'
+      }).then(async response => {
+        dispatch('global/alert/setAlert', {
+          status: 'success',
+          text: 'Регистрация успешно подтверждена'
+        }, {
+          root: true
+        })
+        router.push({ name: 'RegisterSuccess' });
+      }).catch(async error => {
+        dispatch('global/alert/setAlert', {
+          status: 'error',
+          text: 'Не удалось подтвердить регистрацию'
+        }, {
+          root: true
+        })
+        router.push({ name: 'RegisterConfirmationFailed' });
       })
     },
     async login({
@@ -56,7 +93,6 @@ export default {
       }).catch(error => {
         commit('setStatus', 'error')
         localStorage.removeItem('user-token')
-        throw(error)
       })
     },
     async logout({
@@ -78,6 +114,14 @@ export default {
         localStorage.removeItem('user-token')
         delete axios.defaults.headers.common['Authorization']
       }).catch(error => {})
+    },
+    async modalOff({ commit }) {
+      commit('setModal', false)
+    },
+    async modalOn({ commit }, { header, link }) {
+      commit('setModal', true)
+      commit('setModalTitle', header)
+      commit('setModalLink', link)
     }
-  }
+  },
 }
