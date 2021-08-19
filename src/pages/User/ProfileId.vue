@@ -9,17 +9,19 @@
         .profile__news-list
           news-block(v-for="news in getWall" :key="news.id" :info="news")
     .inner-page__aside
+      friends-request
       friends-possible
 </template>
 
 <script>
 import FriendsPossible from '@/components/Friends/Possible'
 import ProfileInfo from '@/components/Profile/Info'
+import FriendsRequest from '@/components/Friends/Request'
 import NewsBlock from '@/components/News/Block'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ProfileId',
-  components: { FriendsPossible, ProfileInfo, NewsBlock },
+  components: { FriendsPossible, FriendsRequest, ProfileInfo, NewsBlock },
   data: () => ({
     loading: false
   }),
@@ -27,10 +29,12 @@ export default {
     ...mapGetters('users/info', ['getUsersInfo', 'getWall']),
   },
   methods: {
-    ...mapActions('users/info', ['userInfoId'])
+    ...mapActions('users/info', ['userInfoId']),
+    ...mapActions('profile/friends', ['apiFriends'])
   },
   created() {
     this.userInfoId(this.$route.params.id)
-  }
+    this.apiFriends()
+  },
 }
 </script>

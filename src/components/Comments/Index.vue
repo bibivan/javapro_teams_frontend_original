@@ -9,8 +9,8 @@
         v-for="i in info"
         :key="i.id"
         :info="i"
-        :edit="getInfo.id === i.author.id"
-        :deleted="getInfo.id === i.author.id"
+        :edit="getInfo.id === i.author_id"
+        :deleted="getInfo.id === i.author_id"
         @edit-comment="onEditMain"
       )
       .comments__add(v-if="!admin")

@@ -6,7 +6,25 @@ export default {
     feeds: []
   },
   getters: {
-    getFeeds: s => s.feeds,
+    //getFeeds: s => s.feeds,
+    getFeeds(state) {
+      if (!state.feeds) return
+      let result = {
+        ...state.feeds
+      }
+
+      for (let item in result) {
+        for (let el in result[item].comments) {       
+          result[item].comments[el].first_name = 'Name'
+          result[item].comments[el].last_name = 'LastName'
+          result[item].comments[el].photo = '../static/img/user/default_avatar.svg'
+          result[item].comments[el].my_like = false
+          result[item].comments[el].is_deleted = false
+        }        
+      }
+
+      return result
+    },
   },
   mutations: {
     setFeeds: (s, feeds) => s.feeds = feeds,

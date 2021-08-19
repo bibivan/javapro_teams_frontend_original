@@ -10,12 +10,11 @@
       .friends__list
         friends-block(friend v-for="friend in friends" :key="friend.id" :info="friend")
     .inner-page__aside
-      friends-possible
       friends-request
+      friends-possible      
 </template>
 
 <script>
-import store from '@/store'
 import { mapGetters, mapActions } from 'vuex'
 import FriendsPossible from '@/components/Friends/Possible'
 import FriendsRequest from '@/components/Friends/Request'

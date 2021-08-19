@@ -5,26 +5,25 @@
         simple-svg(:filepath="'/static/img/unblocked.svg'")
       .edit(v-tooltip.bottom="'Заблокировать'" v-else)
         simple-svg(:filepath="'/static/img/blocked.svg'")
-    comment-main(
-      :admin="admin" 
-      :info="info" 
-      :edit="edit" 
-      :deleted="deleted" 
-      @answer-comment="onAnswerMain" 
-      @edit-comment="onEditMain"
-      @delete-comment="onDeleteComment"
-      @recover-comment="onRecoverComment"
-    )
+    //- comment-main(
+    //-   :admin="admin" 
+    //-   :info="info" 
+    //-   :edit="edit" 
+    //-   :deleted="deleted" 
+    //-   @answer-comment="onAnswerMain" 
+    //-   @edit-comment="onEditMain"
+    //-   @delete-comment="onDeleteComment"
+    //-   @recover-comment="onRecoverComment"
+    //- )
     .comment-block__reviews(v-if="!info.is_deleted")
-      a.comment-block__reviews-show(href="#" v-if="!isShowSubComments && info.sub_comments.length > 0" @click.prevent="showSubComments") показать {{info.sub_comments.length}} {{answerText}}
+      a.comment-block__reviews-show(href="#" v-if="!isShowSubComments && info.length > 0" @click.prevent="showSubComments") показать {{info.length}} {{answerText}}
       .comment-block__reviews-list(v-else)
         comment-main(
-          :admin="admin" 
-          v-for="i in info.sub_comments" 
-          :key="i.id" 
-          :info="i"  
-          :edit="getInfo.id === i.author.id" 
-          :deleted="getInfo.id === i.author.id"  
+          :admin="admin"
+          :key="info.id" 
+          :info="info" 
+          :edit="getInfo.id === info.author_id" 
+          :deleted="getInfo.id === info.author_id"  
           @answer-comment="onAnswerSub" 
           @edit-comment="onEditSub"
           @delete-comment="onDeleteComment"
@@ -65,7 +64,7 @@ export default {
     ...mapGetters('profile/info', ['getInfo']),
     answerText() {
       if (!this.info) return 'ответ'
-      return this.info.sub_comments.length > 1 ? 'ответа' : 'ответ'
+      return this.info.length > 1 ? 'ответа' : 'ответ'
     }
   },
   methods: {

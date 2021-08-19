@@ -8,21 +8,23 @@
           v-for="feed in getFeeds" 
           :key="feed.id"
           :info="feed" 
-          :edit="getInfo.id === feed.author.id" 
-          :deleted="getInfo.id === feed.author.id"
+          :edit="getInfo.id === feed.author_id" 
+          :deleted="getInfo.id === feed.author_id"
         )
     .inner-page__aside
+      friends-request
       friends-possible
  </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import FriendsPossible from '@/components/Friends/Possible'
+import FriendsRequest from '@/components/Friends/Request'
 import NewsBlock from '@/components/News/Block'
 import NewsAdd from '@/components/News/Add'
 export default {
   name: 'News',
-  components: { FriendsPossible, NewsBlock, NewsAdd },
+  components: { FriendsPossible, FriendsRequest, NewsBlock, NewsAdd },
   computed: {
     ...mapGetters('profile/feeds', ['getFeeds']),
     ...mapGetters('profile/info', ['getInfo'])
