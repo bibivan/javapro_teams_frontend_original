@@ -13,17 +13,19 @@
           news-block(edit deleted :deffered="activeTab === 'queue'" v-for="news in activeWall" :key="news.id" :info="news")
     .inner-page__aside
       friends-possible
+      friends-request
 </template>
 
 <script>
 import FriendsPossible from '@/components/Friends/Possible'
+import FriendsRequest from '@/components/Friends/Request'
 import ProfileInfo from '@/components/Profile/Info'
 import NewsAdd from '@/components/News/Add'
 import NewsBlock from '@/components/News/Block'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Profile',
-  components: { FriendsPossible, ProfileInfo, NewsAdd, NewsBlock },
+  components: { FriendsPossible, FriendsRequest, ProfileInfo, NewsAdd, NewsBlock },
   data: () => ({
     activeTab: 'POSTED'
   }),

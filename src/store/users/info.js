@@ -47,7 +47,10 @@ export default {
       s.wall.push('dog-nail')
       s.wall.splice(-1,1)
     },
-    setUsersInfo: (s, info) => s.users = info
+    setUsersInfo: (s,info) => {
+      info.photo = info.photo || '../static/img/user/default_avatar.svg'
+      return s.users = info
+    }
   },
   actions: {
     async apiInfo({
@@ -102,7 +105,7 @@ export default {
         method: 'GET'
       }).then(async response => {
         await dispatch('apiWall', {id})
-        commit('setUsersInfo', response.data.data)
+        commit('setUsersInfo', response.data)
       }).catch(error => {})
     }
   }

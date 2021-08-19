@@ -24,7 +24,7 @@ export default {
     loading: false
   }),
   computed: {
-    ...mapGetters('users/info', ['getUsersInfo', 'getWall'])
+    ...mapGetters('users/info', ['getUsersInfo', 'getWall']),
   },
   methods: {
     ...mapActions('users/info', ['userInfoId'])

@@ -28,11 +28,11 @@ axios.interceptors.response.use(null, error => {
   // store.dispatch('auth/api/logout')
   if (error.response.status === 401) {
     store.dispatch('auth/api/logout')
-    window.location.reload()
+    //window.location.reload()
   }
 
   const message = error.response.data.error_description || error.response.data.path + ' - ' + error.response.data.error
-  
+
   const currentTime = moment();
   let timeCount = !timeLastStart ? 0 : 3500 - currentTime.diff(timeLastStart, 'milliseconds')
   timeCount = timeCount < 0 ? 0 : timeCount
@@ -42,7 +42,7 @@ axios.interceptors.response.use(null, error => {
       status: 'error',
       text: message
     })
-  }, timeCount) 
+  }, timeCount)
 
   timeLastStart = currentTime;
 

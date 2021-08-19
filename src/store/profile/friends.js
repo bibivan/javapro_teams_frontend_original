@@ -14,7 +14,10 @@ export default {
     getResultById: s => id => s.result[id]
   },
   mutations: {
-    setResult: (s, payload) => s.result[payload.id] = payload.value
+    setResult: (s, payload) => {
+      payload.value.forEach(el => el.photo = el.photo || '../static/img/user/default_avatar.svg')
+      return s.result[payload.id] = payload.value
+    }
   },
   actions: {
     async apiFriends({
@@ -28,7 +31,6 @@ export default {
         url: `friends?${query.join('&')}`,
         method: 'GET'
       }).then(response => {
-        response.data.data.forEach(el => el.photo = el.photo || '../static/img/user/default_avatar.svg')        
         console.log("TCL: friends", response)
         commit('setResult', {
           id: 'friends',

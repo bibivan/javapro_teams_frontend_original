@@ -11,16 +11,18 @@
         friends-block(friend v-for="friend in friends" :key="friend.id" :info="friend")
     .inner-page__aside
       friends-possible
+      friends-request
 </template>
 
 <script>
 import store from '@/store'
 import { mapGetters, mapActions } from 'vuex'
 import FriendsPossible from '@/components/Friends/Possible'
+import FriendsRequest from '@/components/Friends/Request'
 import FriendsBlock from '@/components/Friends/Block'
 export default {
   name: 'Friends',
-  components: { FriendsPossible, FriendsBlock },
+  components: { FriendsPossible, FriendsRequest, FriendsBlock },
   data: () => ({
     first_name: ''
   }),
@@ -35,7 +37,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('profile/friends', ['apiFriends'])
+    ...mapActions('profile/friends', ['apiFriends', 'apiRequest'])
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

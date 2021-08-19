@@ -39,7 +39,7 @@ export default {
     getNotificationsSettings: s => s.notifications
   },
   mutations: {
-    setNotificationsSettings: (s, notifications) => s.notifications.map(el => el.enable = notifications.find(n => n.type === el.type).enable)
+    setNotificationsSettings: (s, notifications) => s.notifications.map(el => el.enable = notifications.find(n => n.notification_type === el.type).enable)
   },
   actions: {
     async passwordRecovery({}, email) {
@@ -93,6 +93,7 @@ export default {
         url: 'account/notifications',
         method: 'GET'
       }).then(response => {
+        console.log(response.data.data)
         commit('setNotificationsSettings', response.data.data)
       }).catch(error => {})
     }
