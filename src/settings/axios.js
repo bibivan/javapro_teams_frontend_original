@@ -26,9 +26,10 @@ let timeLastStart = null
 axios.interceptors.response.use(null, error => {
   // добавить проверку на законченный токен и сделать выход из приложения
   // store.dispatch('auth/api/logout')
-  if (error.response.status === 401) {
+  if (error.response.data.error_description === "unauthorized") {
     store.dispatch('auth/api/logout')
-    //window.location.reload()
+    localStorage.removeItem('user-token')
+    window.location.reload()
   }
 
   const message = error.response.data.error_description || error.response.data.path + ' - ' + error.response.data.error

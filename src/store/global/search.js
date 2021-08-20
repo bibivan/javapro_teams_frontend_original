@@ -76,19 +76,23 @@ export default {
         method: 'GET'
       }).then(response => {
         console.log("TCL: searchUsers -> response", response)
+        const result = [
+          ...response.data.data
+        ]
+        result.forEach(el => el.photo = el.photo || '../static/img/user/default_avatar.svg')
         commit('setResult', {
           id: 'users',
-          value: response.data.data
+          value: result
         })
       }).catch(error => {})
     },
     async searchNews({
       commit
     }, payload) {
-      if (!payload || !payload.text) {
-        alert('введите текст в поиск')
-        return false
-      }
+      // if (!payload || !payload.text) {
+      //   alert('введите текст в поиск')
+      //   return false
+      // }
       let query = []
       payload && Object.keys(payload).map(el => {
         payload[el] && query.push(`${el}=${payload[el]}`)

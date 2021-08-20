@@ -17,7 +17,12 @@ export default {
     setResult: (s, payload) => {
       payload.value.forEach(el => el.photo = el.photo || '../static/img/user/default_avatar.svg')
       return s.result[payload.id] = payload.value
-    }
+    },
+    delRequest: (s, id) => {
+      const index = s.result.request.findIndex(el => el.id === id)
+      if (index === -1) return
+      return s.result.request.splice(index, 1)
+    },
   },
   actions: {
     async apiFriends({
@@ -51,25 +56,29 @@ export default {
           text: 'Пользователь удален из друзей'
         }, {
           root: true
-        })
+        })        
         dispatch('apiFriends')
       }).catch(error => {})
     },
     apiAddFriends({
+      commit,
       dispatch
     }, id) {
+      console.log('apiAddFriends', id)
       axios({
         url: `friends/${id}`,
         method: 'POST'
       }).then(response => {
         console.log("TCL: response", response)
+        commit('delRequest', id)
+        dispatch('apiFriends')
         dispatch('global/alert/setAlert', {
           status: 'success',
           text: 'Заявка отправлена'
         }, {
           root: true
         })
-        dispatch('apiFriends')
+        
       }).catch(error => {})
     },
     async apiRequest({

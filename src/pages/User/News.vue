@@ -13,6 +13,7 @@
         )
     .inner-page__aside
       friends-request
+      br
       friends-possible
  </template>
 

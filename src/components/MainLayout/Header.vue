@@ -37,6 +37,7 @@ export default {
     ...mapActions('profile/info', ['apiInfo']),
     ...mapActions('global/search', ['searchAll']),
     onSearch() {
+      if (this.searchText === '') this.$router.push({ name: 'Search'})
       this.searchAll(this.searchText).then(() => {
         this.$router.push({ name: 'Search', query: { text: this.searchText } })
       })

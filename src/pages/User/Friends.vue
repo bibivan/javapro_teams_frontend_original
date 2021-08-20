@@ -11,6 +11,7 @@
         friends-block(friend v-for="friend in friends" :key="friend.id" :info="friend")
     .inner-page__aside
       friends-request
+      br
       friends-possible      
 </template>
 

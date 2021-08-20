@@ -10,6 +10,7 @@
           news-block(v-for="news in getWall" :key="news.id" :info="news")
     .inner-page__aside
       friends-request
+      br
       friends-possible
 </template>
 

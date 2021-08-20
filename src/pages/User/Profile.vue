@@ -3,7 +3,7 @@
     .inner-page__main
       .profile__info
         profile-info(me online :info="getInfo")
-      .profile__news(v-if="getWall.length > 0")
+      .profile__news(v-if="Object.keys(getWall).length != 0")
         .profile__tabs
           span.profile__tab(@click="changeTab('POSTED')" :class="{active: activeTab === 'published'}") Мои публикации ({{getWallPostedLength}})
           span.profile__tab(@click="changeTab('QUEUED')" :class="{active: activeTab === 'queue'}" v-if="getWallQueuedLength > 0") Отложенные публикации ({{getWallQueuedLength}})
@@ -12,8 +12,9 @@
         .profile__news-list
           news-block(edit deleted :deffered="activeTab === 'queue'" v-for="news in activeWall" :key="news.id" :info="news")
     .inner-page__aside
-      friends-possible
       friends-request
+      br
+      friends-possible      
 </template>
 
 <script>
@@ -33,7 +34,13 @@ export default {
     ...mapGetters('profile/info', ['getInfo']),
     ...mapGetters('users/info', ['getWall', 'getWallPostedLength', 'getWallQueuedLength']),
     activeWall() {
-      return this.getWall.filter(el => el.type === this.activeTab)
+      let result = []
+      for (let key in this.getWall) {
+        if(this.getWall[key].type === this.activeTab) {
+          result.push(this.getWall[key])
+        }
+      }
+      return result //this.getWall.filter(el => el.type === this.activeTab)
     }
   },
   methods: {
