@@ -1,6 +1,6 @@
 <template lang="pug">
   .friends-possible(v-if="requestFriends.length > 0")
-    h4.friends-possible__title Они хотят стать вашими друзьями
+    h4.friends-possible__title Заявки в друзья
     ul.friends-possible__list
       li.friends-possible__item(v-for="user in requestFriends" :key="user.id")
         .friends-possible__pic

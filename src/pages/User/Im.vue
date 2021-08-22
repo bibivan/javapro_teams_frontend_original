@@ -22,9 +22,9 @@ import ImChat from '@/components/Im/Chat'
 export default {
   name: 'Im',
   components: { ImDialog, ImChat },
-  // data: () => ({
-  //   intervalForMessages: null
-  // }),
+  data: () => ({
+    intervalForMessages: null
+  }),
   computed: {
     ...mapGetters('profile/dialogs', ['messages', 'activeDialog', 'dialogs'])
   },

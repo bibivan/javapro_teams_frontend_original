@@ -27,7 +27,6 @@
 
 <script>
 import moment from 'moment'
-import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import ChatMessage from '@/components/Im/ChatMessage'
 import VirtualList from 'vue-virtual-scroll-list'
@@ -42,6 +41,7 @@ export default {
     messages: Array,
     online: Boolean
   },
+  components: { VirtualList },
   data: () => ({
     mes: '',
     itemComponent: ChatMessage,

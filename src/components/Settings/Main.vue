@@ -4,7 +4,7 @@
     user-info-form-block(label="Фамилия:" placeholder="Введите фамилию" v-model="lastName" )
     user-info-form-block(label="Телефон:" placeholder="Введите телефон" v-model="phone" phone)
 
-    .user-info-form__block
+    .user-info-form__block(v-if="country || isCountryShow")
       span.user-info-form__label Страна
       .user-info-form__wrap.countries(v-click-outside="countriesClose")
         input.user-info-form__input(
@@ -14,7 +14,7 @@
           @input="countriesOpen"
         )
 
-        ul.countries__list(v-if="isCountriesShow")
+        ul.countries__list(v-if="countries.length !== 0 && isCountriesShow")
           li.countries__item(
             v-for="item in countries"
             :key="item.id"
@@ -30,18 +30,20 @@
           type="text"
           v-model="city"
           placeholder="Введите город"
-          @input="citiesOpen"          
+          @input="citiesOpen"
+          @keyup.enter="setCity(city)"
         )
 
-        ul.countries__list(v-if="isCitiesShow")
-          li.countries__item(            
+        ul.countries__list(v-if="cities.length !== 0 && isCitiesShow")
+          li.countries__item(
             v-for="item in cities"
-            :key="item.id"
-            @click="setCity(item.title)"
-            @keyup.enter="setCity(item.title)"
+            :key="item.countryId"
+            @click="setCity(item)"
+            @keyup.enter="setCity(item)"
             tabindex=0
-          ) {{item.title}}
+          ) {{item.country}}
 
+    //- UserInfoFormCountry(v-model="country_city.country")
     //- user-info-form-block(label="Страна:" placeholder="Введите страну" v-model="country")
     //- user-info-form-block(label="Город:" placeholder="Введите город" v-model="city")
 
@@ -79,9 +81,10 @@ import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import ClickOutside from 'vue-click-outside'
 import UserInfoFormBlock from '@/components/Settings/UserInfoForm/Block.vue'
+import UserInfoFormCountry from '@/components/Settings/UserInfoForm/Country.vue'
 export default {
   name: 'SettingsMain',
-  components: { UserInfoFormBlock },
+  components: { UserInfoFormBlock,  UserInfoFormCountry },
   data: () => ({
     name: '',
     lastName: '',
@@ -110,6 +113,11 @@ export default {
     city: '',
     isCountriesShow: false,
     isCitiesShow: false,
+    isCountryShow: false,
+    country_city: {
+      country: '',
+      city: ''
+    },
   }),
   computed: {
     ...mapGetters('global/storage', ['getStorage']),
@@ -119,7 +127,7 @@ export default {
       return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.toUpperCase()))
     },
     cities() {
-      return this.getCities.filter(c => c.title.toUpperCase().includes(this.city.toUpperCase()))
+      return this.getCities.filter(c => c.country.toUpperCase().includes(this.city.toUpperCase()))
     },
     phoneNumber() {
       return this.phone.replace(/\D+/g, '')
@@ -138,7 +146,7 @@ export default {
   methods: {
     ...mapActions('global/storage', ['apiStorage']),
     ...mapActions('profile/info', ['apiChangeInfo']),
-    ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
+    ...mapActions('profile/country_city', ['apiCountries', 'apiAllCities']),
     submitHandler() {
       if (this.src !== this.getInfo.photo && this.src !== '') {
         this.apiStorage(this.photo).then(() => {
@@ -196,6 +204,10 @@ export default {
       this.isCountriesShow = true
     },
     countriesClose() {
+      if (this.city === '') {
+        this.country = ''
+        this.isCountryShow = false
+      }
       this.isCountriesShow = false
     },
     setCountry(value) {
@@ -209,7 +221,18 @@ export default {
       this.isCitiesShow = false
     },
     setCity(value) {
-      this.city = value
+      if (value === '') {
+        this.country = ''
+        this.isCountryShow = false
+        return
+      }
+      if (this.cities.length === 0) {
+        this.country = ''
+        this.isCountryShow = true
+        return
+      }
+      this.city = value.country
+      if (this.country !== value.city) this.country = value.city
       this.citiesClose()
     }
   },
@@ -222,7 +245,7 @@ export default {
   mounted() {
     if (this.getInfo) this.setInfo()
     this.apiCountries()
-    this.apiCities()
+    this.apiAllCities()
   },
   directives: {
     ClickOutside
