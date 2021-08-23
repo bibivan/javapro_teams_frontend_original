@@ -9,19 +9,24 @@ export default {
     //getFeeds: s => s.feeds,
     getFeeds(state) {
       if (!state.feeds) return
-      let result = {
+      let result = [
         ...state.feeds
-      }
+      ]
 
-      for (let item in result) {
-        for (let el in result[item].comments) {       
-          result[item].comments[el].first_name = 'Name'
-          result[item].comments[el].last_name = 'LastName'
-          result[item].comments[el].photo = '../static/img/user/default_avatar.svg'
-          result[item].comments[el].my_like = false
-          result[item].comments[el].is_deleted = false
-        }        
-      }
+      result.forEach(el => {
+        el.comments.forEach(comment => {
+          comment.photo = el.photo || '../static/img/user/default_avatar.svg'
+          comment.my_like =  comment.my_like || false
+          comment.is_deleted = comment.is_deleted || false
+          comment.sub_comments =  comment.sub_comments || []
+
+          if (comment.parent_id !== 0) {
+            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)     
+          }
+        })
+
+        el.comments = el.comments.filter(comment => !comment.parent_id)
+      })      
 
       return result
     },

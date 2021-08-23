@@ -29,7 +29,6 @@ export default {
         ...state.users
       }
 
-      console.log(rootState.profile.friends.result.friends)
       // если понадобиться то добавить склонение (для публикаций, но нужен или пол или отчество)
       // библиотека - petrovich
       result.fullName = result.first_name + ' ' + result.last_name
@@ -47,13 +46,18 @@ export default {
 
       result.forEach(el => {
         el.comments.forEach(comment => {
-          comment.first_name = 'Name'
-          comment.last_name = 'LastName'
           comment.photo = el.photo || '../static/img/user/default_avatar.svg'
-          comment.my_like = false
-          comment.is_deleted = false
+          comment.my_like =  comment.my_like || false
+          comment.is_deleted = comment.is_deleted || false
+          comment.sub_comments =  comment.sub_comments || []
+
+          if (comment.parent_id !== 0) {
+            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)     
+          }
         })
-      })
+
+        el.comments = el.comments.filter(comment => !comment.parent_id)
+      })      
 
       return result
     },
