@@ -29,7 +29,24 @@ export default {
   },
   getters: {
     oldestKnownMessageId: s => (s.messages.length > 0 ? s.messages[0]['id'] : null),
-    dialogs: s => s.dialogs,
+    dialogs: s => {
+      const result = [
+        ...s.dialogs
+      ]
+
+      result.forEach(dialog => {
+        dialog.last_message = dialog.last_message || {}
+        dialog.last_message.isSentByMe = dialog.last_message.isSentByMe || true
+        dialog.last_message.recipient = dialog.last_message.recipient || {}
+        dialog.last_message.recipient.last_online_time = dialog.last_message.recipient.last_online_time || 0
+        dialog.last_message.recipient.id = dialog.last_message.recipient.id || dialog.last_message.recipient_id
+        dialog.last_message.recipient.photo = dialog.last_message.recipient.photo || '../static/img/user/default_avatar.svg'
+        dialog.last_message.recipient.first_name = dialog.last_message.recipient.first_name || 'Name'
+        dialog.last_message.recipient.last_name = dialog.last_message.recipient.last_name || 'LastName'
+      })
+
+      return result
+    },
     activeDialog: s => s.dialogs.find(el => el.id == s.activeId),
     activeDialogId: s => s.activeId,
     dialogsLoaded: s => s.dialogsLoaded,

@@ -66,6 +66,7 @@ export default {
       this.$refs.addComment.$refs.addInput.focus()
     },
     onSubmitComment() {
+      if(this.commentText === '') return
       this.commentActions({
         edit: this.commentEdit,
         post_id: this.id,

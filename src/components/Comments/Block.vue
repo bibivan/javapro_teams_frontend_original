@@ -6,11 +6,11 @@
       .edit(v-tooltip.bottom="'Заблокировать'" v-else)
         simple-svg(:filepath="'/static/img/blocked.svg'")
     comment-main(
-      :admin="admin" 
-      :info="info" 
-      :edit="edit" 
-      :deleted="deleted" 
-      @answer-comment="onAnswerMain" 
+      :admin="admin"
+      :info="info"
+      :edit="edit"
+      :deleted="deleted"
+      @answer-comment="onAnswerMain"
       @edit-comment="onEditMain"
       @delete-comment="onDeleteComment"
       @recover-comment="onRecoverComment"
@@ -19,23 +19,23 @@
       a.comment-block__reviews-show(href="#" v-if="!isShowSubComments && info.sub_comments.length > 0" @click.prevent="showSubComments") показать {{info.sub_comments.length}} {{answerText}}
       .comment-block__reviews-list(v-else)
         comment-main(
-          :admin="admin" 
-          v-for="i in info.sub_comments" 
-          :key="i.id" 
-          :info="i"  
-          :edit="getInfo.id === i.author_id" 
-          :deleted="getInfo.id === i.author_id"  
-          @answer-comment="onAnswerSub" 
+          :admin="admin"
+          v-for="i in info.sub_comments"
+          :key="i.id"
+          :info="i"
+          :edit="getInfo.id === i.author_id"
+          :deleted="getInfo.id === i.author_id"
+          @answer-comment="onAnswerSub"
           @edit-comment="onEditSub"
           @delete-comment="onDeleteComment"
           @recover-comment="onRecoverComment"
         )
         comment-add(
-          v-if="!admin" 
-          ref="addComment" 
-          :id="info.post_id" 
-          :parent-id="info.parent_id"  
-          v-model="commentText" 
+          v-if="!admin"
+          ref="addComment"
+          :id="info.post_id"
+          :parent-id="info.parent_id"
+          v-model="commentText"
           @submited="onSubmitComment"
         )
 </template>
@@ -106,6 +106,7 @@ export default {
       this.onAnswerSub()
     },
     onSubmitComment() {
+      if(this.commentText === '') return
       this.commentActions({
         edit: this.commentEdit,
         post_id: this.info.post_id,
@@ -201,6 +202,10 @@ export default {
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid #e7e7e7;
+    .edit--small {
+      top: 15px;
+      z-index: 1;
+    }
   }
 
   .comment-main__pic {

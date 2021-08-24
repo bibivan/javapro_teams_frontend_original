@@ -10,8 +10,11 @@
       :online="checkOnlineUser(dialog.last_message.recipient.last_online_time)"
       @click.native="clickOnDialog(dialog.id)")
     .im__chat(v-if="activeDialog")
-      im-chat(:info="activeDialog" :messages="messages"
-      :online="checkOnlineUser(activeDialog.last_message.recipient.last_online_time)" )
+      im-chat(
+        :info="activeDialog"
+        :messages="messages"
+        :online="checkOnlineUser(activeDialog.last_message.recipient.last_online_time)"
+      )
 </template>
 
 <script>

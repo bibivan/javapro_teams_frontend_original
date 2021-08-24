@@ -7,7 +7,7 @@
       span.user-status(:class="{online}") {{statusText}}
     .im-dialog__content
       p.im-dialog__last
-        span.im-dialog__last-me(v-if="me") Вы: 
+        span.im-dialog__last-me(v-if="me") Вы:
         | {{info.last_message.message_text}}
       span.im-dialog__time {{info.last_message.time | moment('from')}}
     span.im-dialog__push(v-if="push > 0") {{push}}
@@ -43,8 +43,11 @@ export default {
   height: 100px;
   position: relative;
   padding: 0 6.38%;
-  z-index: 0;
+  z-index: 1;
   cursor: pointer;
+  &:hover {
+    background-color: #c1c1c1;
+  }
 
   &:before {
     content: '';
