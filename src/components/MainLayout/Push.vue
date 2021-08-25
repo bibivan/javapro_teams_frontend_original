@@ -11,9 +11,11 @@
               | {{info.entity_author.first_name + ' ' + info.entity_author.last_name}}
               |
               | {{getNotificationsTextType(info.event_type)}}
-            //span.push__content-preview  «{{info.info}}»
           span.push__time {{info.sent_time | moment('from')}}
+          .push__del(@click="readNotifications(info.id)")
+            simple-svg(:filepath="'/static/img/delete.svg'")
       router-link.push__btn(:to="{name: 'Push'}" v-if="getNotificationsLength > 1") Показать все ({{getNotificationsLength}})
+      a.push__btn(href="#" v-if="getNotificationsLength > 1" @click.prevent="readNotifications()") Удалить все ({{getNotificationsLength}})
 </template>
 
 <script>
@@ -41,7 +43,7 @@ export default {
     closePush() {
       if (!this.isOpen) return
       this.$emit('close-push')
-    }
+    },
   },
   mounted() {
     if (this.getNotificationsLength === 0) this.apiNotifications()
@@ -130,12 +132,16 @@ export default {
 .push__item {
   display: flex;
   align-items: center;
-  padding: 35px 0;
-  margin: 0 40px;
+  padding: 10px 0;
+  margin: 0 20px;
 
   &+& {
     border-top: 1px solid #E7E7E7;
   }
+}
+
+.push__content-name:hover {
+  text-decoration: underline #000000;
 }
 
 .push__btn {
@@ -147,6 +153,23 @@ export default {
   letter-spacing: 0.01em;
   color: eucalypt;
   border-top: 1px solid #E7E7E7;
-  height: 85px;
+  height: 50px;
 }
+
+.push__btn:hover {
+  text-decoration: underline eucalypt;
+}
+
+.push__del {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+  padding: 10px;
+  transition: transform 0.4s;
+}
+
+.push__del:hover {
+  transform: rotate(360deg)
+}
+
 </style>

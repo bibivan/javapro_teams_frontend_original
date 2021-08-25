@@ -55,11 +55,22 @@ export default {
         // }, 5000)
       }).catch(() => {})
     },
-    async readNotifications() {
-      await axios({
-        url: 'notifications?all=true',
-        method: 'PUT'
-      }).then(response => {}).catch(() => {})
+    async readNotifications({
+      state,
+      commit,
+      dispatch
+    }, notificationId) {
+      if (!notificationId) {
+        await axios({
+          url: 'notifications?all=true',
+          method: 'PUT'
+        }).then(response => {}).catch(() => {})
+      } else {
+        await axios({
+          url: `notifications?id=${notificationId}`,
+          method: 'PUT'
+        }).then(response => {}).catch(() => {})
+      }
     }
   }
 }

@@ -7,12 +7,13 @@
         | {{info.entity_author.first_name + ' ' + info.entity_author.last_name}}
         |
         | {{getNotificationsTextType(info.event_type)}}
-      span.push__content-preview «{{info.info}}»
     span.push__time {{info.sent_time | moment('from')}}
+    .push__del(@click="readNotifications(info.id)")
+      simple-svg(:filepath="'/static/img/delete.svg'")
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { getRouteByNotification } from '@/utils/notifications.utils.js'
 export default {
   name: 'PushBlock',
@@ -23,6 +24,7 @@ export default {
     ...mapGetters('profile/notifications', ['getNotificationsTextType'])
   },
   methods: {
+    ...mapActions('profile/notifications', ['readNotifications']),
     getRouteByNotification
   }
 }
@@ -34,6 +36,8 @@ export default {
   padding: 25px 30px;
   box-shadow: 0px 2px 60px rgba(0, 0, 0, 0.1);
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &+& {
     margin-top: 20px;
@@ -45,12 +49,22 @@ export default {
 
   .push__content {
     max-width: 650px;
-    padding-top: 10px;
   }
 
   .push__time {
     flex: none;
-    padding-top: 20px;
+  }
+
+  .push__del {
+    width: 40px;
+    height: 40px;
+    margin-left: 40px;
+    padding: 10px;
+    transition: transform 0.4s;
+  }
+
+  .push__del:hover {
+    transform: rotate(360deg)
   }
 }
 </style>
