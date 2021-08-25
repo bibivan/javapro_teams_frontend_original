@@ -38,11 +38,13 @@ export default {
         dialog.last_message = dialog.last_message || {}
         dialog.last_message.isSentByMe = dialog.last_message.isSentByMe || true
         dialog.last_message.recipient = dialog.last_message.recipient || {}
-        dialog.last_message.recipient.last_online_time = dialog.last_message.recipient.last_online_time || 0
+        dialog.last_message.recipient.last_online_time = dialog.last_message.recipient.last_online_time * 1000 || 0
         dialog.last_message.recipient.id = dialog.last_message.recipient.id || dialog.last_message.recipient_id
         dialog.last_message.recipient.photo = dialog.last_message.recipient.photo || '../static/img/user/default_avatar.svg'
         dialog.last_message.recipient.first_name = dialog.last_message.recipient.first_name || 'Name'
         dialog.last_message.recipient.last_name = dialog.last_message.recipient.last_name || 'LastName'
+        dialog.last_message.time = dialog.last_message.time * 1000
+        dialog.time = dialog.time * 1000
       })
 
       return result
@@ -53,7 +55,26 @@ export default {
     unreadedMessages: s => s.unreadedMessages,
     hasOpenedDialog: s => dialogId => !!s.dialogs.find(el => el.id == dialogId),
     isHistoryEndReached: s => s.isHistoryEndReached,
-    messages: s => s.messages
+    messages: s => {
+      const result = [
+        ...s.messages
+      ]
+
+      result.forEach(message => {
+        message.last_message = message.last_message || {}
+        message.last_message.isSentByMe = message.last_message.isSentByMe || true
+        message.last_message.recipient = message.last_message.recipient || {}
+        message.last_message.recipient.last_online_time = message.last_message.recipient.last_online_time * 1000 || 0
+        message.last_message.recipient.id = message.last_message.recipient.id || message.last_message.recipient_id
+        message.last_message.recipient.photo = message.last_message.recipient.photo || '../static/img/user/default_avatar.svg'
+        message.last_message.recipient.first_name = message.last_message.recipient.first_name || 'Name'
+        message.last_message.recipient.last_name = message.last_message.recipient.last_name || 'LastName'
+        message.recipient.photo = message.recipient.photo || '../static/img/user/default_avatar.svg'
+        message.time = message.time * 1000
+      })
+
+      return result
+    }
   },
   mutations: {
     setUnreadedMessages: (s, unread) => (s.unreadedMessages = unread),
