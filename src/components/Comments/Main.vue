@@ -2,7 +2,7 @@
   .comment-main
     template(v-if="info.is_deleted")
       p.comment-main__text Комментарий удален.
-        a(href="#" @click="onRecoverComment") Восстановить
+        a(href="#" @click.prevent="onRecoverComment") Восстановить
     template(v-else)
       .edit.edit--small(v-if="edit || deleted")
         .edit__icon(v-if="deleted" @click="onDeleteComment")

@@ -15,6 +15,7 @@ export default {
           post_id,
           value: response.data.data
         }
+
         router.history.current.name === 'News' ?
           commit('profile/feeds/setCommentsById', dataComments, {
             root: true
@@ -35,7 +36,9 @@ export default {
           comment_text: payload.text
         }
       }).then(() => {
-        dispatch('commentsById', payload.post_id)
+        setTimeout(() => {
+          dispatch('commentsById', payload.post_id)
+        }, 50)
       }).catch(() => {})
     },
     async editComment({
@@ -48,7 +51,9 @@ export default {
           comment_text: payload.text
         }
       }).then(() => {
-        dispatch('commentsById', payload.post_id)
+        setTimeout(() => {
+          dispatch('commentsById', payload.post_id)
+        }, 50)
       }).catch(() => {})
     },
     async deleteComment({
@@ -58,7 +63,9 @@ export default {
         url: `post/${payload.post_id}/comments/${payload.id}`,
         method: 'DELETE'
       }).then(() => {
-        dispatch('commentsById', payload.post_id)
+        setTimeout(() => {
+          dispatch('commentsById', payload.post_id)
+        }, 50)
       }).catch(() => {})
     },
     async recoverComment({
@@ -68,15 +75,16 @@ export default {
         url: `post/${payload.post_id}/comments/${payload.id}/recover`,
         method: 'PUT'
       }).then(() => {
-        dispatch('commentsById', payload.post_id)
+        setTimeout(() => {
+          dispatch('commentsById', payload.post_id)
+        }, 50)
       }).catch(() => {})
     },
     async commentActions({
       dispatch
     }, payload) {
-      console.log("TCL: payload", payload)
-      payload.edit 
-        ? await dispatch('editComment', payload) 
+      payload.edit
+        ? await dispatch('editComment', payload)
         : await dispatch('newComment', payload)
     }
   }

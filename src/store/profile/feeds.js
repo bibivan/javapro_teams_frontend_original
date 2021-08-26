@@ -21,12 +21,13 @@ export default {
           comment.sub_comments =  comment.sub_comments || []
 
           if (comment.parent_id !== 0) {
-            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)     
+            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
           }
         })
 
         el.comments = el.comments.filter(comment => !comment.parent_id)
-      })      
+        el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
+      })
 
       return result
     },
@@ -35,8 +36,8 @@ export default {
     setFeeds: (s, feeds) => s.feeds = feeds,
     setCommentsById: (s, payload) => {
       s.feeds[s.feeds.indexOf(s.feeds.find(el => el.id === payload.post_id))].comments = payload.value
-      s.feeds.push('dog-nail')
-      s.feeds.splice(-1,1)
+      // s.feeds.push('dog-nail')
+      // s.feeds.splice(-1,1)
     },
     setFeedsById: (s, payload) => s.feeds[s.feeds.indexOf(s.feeds.find(el => el.id === payload.id))] = payload
   },

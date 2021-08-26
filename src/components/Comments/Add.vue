@@ -3,9 +3,9 @@
     .comment-add__pic(v-if="getInfo")
       img(:src="getInfo.photo" :alt="getInfo.fullName")
     input.comment-add__input(type="text" placeholder="Написать комментарий..." ref="addInput" v-model="commentText")
-    .comment-add__icon.photo
-      simple-svg(:filepath="'/static/img/photo.svg'")
-    .comment-add__icon.add
+    //- .comment-add__icon.photo
+    //-   simple-svg(:filepath="'/static/img/photo.svg'")
+    .comment-add__icon.add(@click="onSubmitComment")
       simple-svg(:filepath="'/static/img/add.svg'")
 </template>
 

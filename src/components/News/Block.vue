@@ -59,7 +59,6 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import Comments from '@/components/Comments'
 import LikeComment from '@/components/LikeComment'
-import AddTags from '@/components/News/AddTags'
 export default {
   name: 'NewsBlock',
   components: { Comments, LikeComment, AddForm },

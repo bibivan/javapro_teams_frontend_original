@@ -52,12 +52,13 @@ export default {
           comment.sub_comments =  comment.sub_comments || []
 
           if (comment.parent_id !== 0) {
-            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)     
+            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
           }
         })
 
         el.comments = el.comments.filter(comment => !comment.parent_id)
-      })      
+        el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
+      })
 
       return result
     },
