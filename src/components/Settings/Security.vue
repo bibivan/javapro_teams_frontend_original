@@ -3,39 +3,29 @@
     .settings-security__block
       h3.settings-security__title E-mail:
       span.settings-security__value {{getInfo.email}}
-      button-hover(@click.native="openModal('email')") Изменить
+      button-hover(@click.native="submitHandler('email')") Изменить
     .settings-security__block
       h3.settings-security__title Пароль:
       span.settings-security__value ********
-      button-hover(@click.native="openModal('password')") Изменить
-    modal(v-model="modalShow")
-      p(v-if="modalText") {{modalText}}
-      template(slot="actions")
-        button-hover(@click.native="closeModal") Ок
+      button-hover(@click.native="submitHandler('password')") Изменить
 </template>
 
 <script>
-import Modal from '@/components/Modal'
 import { mapGetters } from 'vuex'
+import router from '@/router'
+
 export default {
   name: 'SettingsSecurity',
-  components: { Modal },
-  data: () => ({
-    modalShow: false,
-    modalText: ''
-  }),
   computed: {
     ...mapGetters('profile/info', ['getInfo'])
   },
   methods: {
-    closeModal() {
-      this.modalShow = false
-    },
-    openModal(id) {
-      id === 'email'
-        ? (this.modalText = 'На ваш E-mail было отправлено письмо с подтверждением смены.')
-        : (this.modalText = 'На ваш E-mail было отправлено письмо с ссылкой для смены пароля.')
-      this.modalShow = true
+    submitHandler(id) {
+      if (id === 'email') {
+        router.push({name: 'ShiftEmail', params: {id: this.getInfo.id}});
+      } else {
+        router.push({name: 'ShiftPassword', params: {id: this.getInfo.id}});
+      }
     }
   }
 }
