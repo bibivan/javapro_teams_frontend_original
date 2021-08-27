@@ -44,7 +44,8 @@ export default {
         dialog.last_message.recipient.first_name = dialog.last_message.recipient.first_name || 'Name'
         dialog.last_message.recipient.last_name = dialog.last_message.recipient.last_name || 'LastName'
         dialog.last_message.time = dialog.last_message.time * 1000
-        dialog.time = dialog.time * 1000
+        dialog.last_message.last_online_time = dialog.last_message.last_online_time * 1000
+        dialog.last_message.photo = dialog.last_message.photo || '../static/img/user/default_avatar.svg'
       })
 
       return result

@@ -36,9 +36,7 @@ export default {
           comment_text: payload.text
         }
       }).then(() => {
-        setTimeout(() => {
-          dispatch('commentsById', payload.post_id)
-        }, 50)
+        dispatch('commentsById', payload.post_id)
       }).catch(() => {})
     },
     async editComment({
@@ -51,9 +49,7 @@ export default {
           comment_text: payload.text
         }
       }).then(() => {
-        setTimeout(() => {
-          dispatch('commentsById', payload.post_id)
-        }, 50)
+        dispatch('commentsById', payload.post_id)
       }).catch(() => {})
     },
     async deleteComment({
@@ -63,9 +59,7 @@ export default {
         url: `post/${payload.post_id}/comments/${payload.id}`,
         method: 'DELETE'
       }).then(() => {
-        setTimeout(() => {
-          dispatch('commentsById', payload.post_id)
-        }, 50)
+        dispatch('commentsById', payload.post_id)
       }).catch(() => {})
     },
     async recoverComment({
@@ -75,9 +69,7 @@ export default {
         url: `post/${payload.post_id}/comments/${payload.id}/recover`,
         method: 'PUT'
       }).then(() => {
-        setTimeout(() => {
-          dispatch('commentsById', payload.post_id)
-        }, 50)
+        dispatch('commentsById', payload.post_id)
       }).catch(() => {})
     },
     async commentActions({

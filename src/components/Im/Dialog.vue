@@ -1,9 +1,9 @@
 <template lang="pug">
   .im-dialog(:class="{active, push}")
-    router-link.im-dailog__pic(:to="{name: 'ProfileId', params: {id: info.last_message.recipient.id}}")
-      img(:src="info.last_message.recipient.photo" :alt="info.last_message.recipient.first_name")
+    router-link.im-dailog__pic(:to="{name: 'ProfileId', params: {id: info.last_message.author_id}}")
+      img(:src="info.last_message.photo" :alt="info.last_message.first_name")
     .im-dialog__info
-      router-link.im-dialog__name(:to="{name: 'ProfileId', params: {id: info.last_message.recipient.id}}") {{info.last_message.recipient.first_name + ' ' + info.last_message.recipient.last_name}}
+      router-link.im-dialog__name(:to="{name: 'ProfileId', params: {id: info.last_message.author_id}}") {{info.last_message.first_name + ' ' + info.last_message.last_name}}
       span.user-status(:class="{online}") {{statusText}}
     .im-dialog__content
       p.im-dialog__last
