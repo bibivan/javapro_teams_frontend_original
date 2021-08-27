@@ -66,7 +66,7 @@ export default {
       await axios({
         url: 'account/email',
         method: 'PUT',
-        data: email
+        data: { email }
       }).then(response => {}).catch(error => {})
     },
     changeNotifications({
