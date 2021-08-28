@@ -40,6 +40,7 @@
             @liked="likeAction"
             :active="info.my_like"
             :id="info.id"
+            :isPost = "true"
           )
         .news-block__actions-block
           like-comment(:quantity="commentsLength" width="16px" height="16px" font-size="15px" comment)

@@ -24,7 +24,7 @@ export default {
             el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
           }
         })
-
+        el.my_like =  el.my_like || false
         el.comments = el.comments.filter(comment => !comment.parent_id)
         el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
       })
