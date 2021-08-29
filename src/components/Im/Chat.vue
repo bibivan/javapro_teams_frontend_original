@@ -1,9 +1,9 @@
 <template lang="pug">
   .im-chat
     .im-chat__user
-      router-link.im-chat__user-pic(:to="{name: 'ProfileId', params: {id: info.last_message.recipient.id}}")
-        img(:src="info.last_message.recipient.photo" :alt="info.last_message.recipient.first_name")
-      router-link.im-chat__user-name(:to="{name: 'ProfileId', params: {id: info.last_message.recipient.id}}") {{info.last_message.recipient.first_name + ' ' + info.last_message.recipient.last_name}}
+      router-link.im-chat__user-pic(:to="{name: 'ProfileId', params: {id: info.recipient.id}}")
+        img(:src="info.recipient.photo" :alt="info.recipient.first_name")
+      router-link.im-chat__user-name(:to="{name: 'ProfileId', params: {id: info.recipient.id}}") {{info.recipient.first_name + ' ' + info.recipient.last_name}}
       span.user-status(:class="{online}") {{statusText}}
     .im-chat__infitite_list_wrapper
       virtual-list.im-chat__infitite_list.scroll-touch(:size="60"
@@ -60,14 +60,14 @@ export default {
     statusText() {
       return this.online
         ? 'Онлайн'
-        : 'был в сети ' + moment(this.info.last_message.recipient.last_online_time).fromNow()
+        : 'был в сети ' + moment(this.info.recipient.last_online_time).fromNow()
     },
     messagesGrouped() {
       let groups = []
       let headerDate = null
 
       for (const msg of this.messages) {
-        let msgDate = moment(msg.time).format('YYYY-MM-DD')
+        let msgDate = moment(msg.time * 1000).format('YYYY-MM-DD')
         if (msgDate !== headerDate) {
           headerDate = msgDate
           groups.push(makeHeader(headerDate))

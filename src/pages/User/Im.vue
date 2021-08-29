@@ -7,13 +7,13 @@
       :push="countPush(dialog.unread_count)"
       :me="dialog.last_message.isSentByMe"
       :active="activeDialog && dialog.id === activeDialog.id"
-      :online="checkOnlineUser(dialog.last_message.last_online_time)"
+      :online="checkOnlineUser(dialog.recipient.last_online_time)"
       @click.native="clickOnDialog(dialog.id)")
     .im__chat(v-if="activeDialog")
       im-chat(
         :info="activeDialog"
         :messages="messages"
-        :online="checkOnlineUser(activeDialog.last_message.recipient.last_online_time)"
+        :online="checkOnlineUser(activeDialog.recipient.last_online_time)"
       )
 </template>
 
