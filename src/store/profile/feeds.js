@@ -6,7 +6,6 @@ export default {
     feeds: []
   },
   getters: {
-    //getFeeds: s => s.feeds,
     getFeeds(state) {
       if (!state.feeds) return
       let result = [
@@ -88,6 +87,13 @@ export default {
           dispatch('users/info/apiWallById', payload.post_id, {
             root: true
           })
+          payload.route === 'News' ?
+            dispatch('apiFeeds') :
+            dispatch('users/info/apiWall', {
+              id: payload.id
+            }, {
+              root: true
+            })          
         } else {
           payload.route === 'News' ?
             dispatch('apiFeeds') :
@@ -103,6 +109,20 @@ export default {
       await axios({
         url: `post/${payload.post_id}`,
         method: 'DELETE'
+      }).then(response => {
+        payload.route === 'News' ?
+          dispatch('apiFeeds') :
+          dispatch('users/info/apiWall', {
+            id: payload.id
+          }, {
+            root: true
+          })
+      }).catch(() => {})
+    },
+    async recoverFeeds({dispatch}, payload) {
+      await axios({
+        url: `post/${payload.post_id}/recover`,
+        method: 'PUT'
       }).then(response => {
         payload.route === 'News' ?
           dispatch('apiFeeds') :

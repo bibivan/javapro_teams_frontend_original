@@ -4,8 +4,10 @@
     template(v-else)
       template(v-if="!admin")
         .edit
-          .edit__icon(v-if="deleted" @click="deleteNews")
+          .edit__icon(v-if="deleted && info.type === 'POSTED'" @click="deleteNews")
             simple-svg(:filepath="'/static/img/delete-news.svg'")
+          .edit__recover(v-if="deleted && info.type === 'DELETED'" @click="recoverNews")
+            a(href="#" @click.prevent="onRecoverComment") Восстановить
           .edit__icon(v-if="edit" @click="toggleEditNews")
             simple-svg(:filepath="'/static/img/edit.svg'")
       template(v-else)
@@ -103,7 +105,7 @@ export default {
   },
   methods: {
     ...mapActions('global/likes', ['putLike', 'deleteLike']),
-    ...mapActions('profile/feeds', ['deleteFeeds']),
+    ...mapActions('profile/feeds', ['deleteFeeds', 'recoverFeeds']),
     toggleText() {
       this.openText = !this.openText
     },
@@ -128,7 +130,14 @@ export default {
         post_id: this.info.id,
         route: this.$route.name
       })
-    }
+    },
+    recoverNews() {
+      this.recoverFeeds({
+        id: this.getInfo.id,
+        post_id: this.info.id,
+        route: this.$route.name
+      })
+    },
   },
   mounted() {
     this.$refs.text.offsetHeight > 100 ? (this.isLotText = true) : (this.isLotText = false)
@@ -321,6 +330,10 @@ export default {
 .news-block__actions-block {
   &+& {
     margin-left: 30px;
-  }
+  }  
+}
+
+.edit__recover {
+  margin-right: 20px;
 }
 </style>

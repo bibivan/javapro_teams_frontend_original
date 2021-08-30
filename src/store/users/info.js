@@ -65,6 +65,7 @@ export default {
     },
     getWallPostedLength: s => s.wall.filter(el => el.type === 'POSTED').length,
     getWallQueuedLength: s => s.wall.filter(el => el.type === 'QUEUED').length,
+    getWallDeletedLength: s => s.wall.filter(el => el.type === 'DELETED').length,
   },
   mutations: {
     setInfo: (s, info) => s.info = info,
