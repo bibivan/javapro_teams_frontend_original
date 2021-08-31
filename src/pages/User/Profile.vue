@@ -6,8 +6,8 @@
       .profile__news(v-if="Object.keys(getWall).length != 0")
         .profile__tabs
           span.profile__tab(@click="changeTab('POSTED')" :class="{active: activeTab === 'POSTED'}") Мои публикации ({{getWallPostedLength}})
-          span.profile__tab(@click="changeTab('QUEUED')" :class="{active: activeTab === 'QUEUED'}" v-if="getWallQueuedLength => 0") Отложенные публикации ({{getWallQueuedLength}})
-          span.profile__tab(@click="changeTab('DELETED')" :class="{active: activeTab === 'DELETED'}" v-if="getWallDeletedLength => 0") Удаленные публикации ({{getWallDeletedLength}})
+          span.profile__tab(@click="changeTab('QUEUED')" :class="{active: activeTab === 'QUEUED'}" v-if="getWallQueuedLength > 0") Отложенные публикации ({{getWallQueuedLength}})
+          span.profile__tab(@click="changeTab('DELETED')" :class="{active: activeTab === 'DELETED'}" v-if="getWallDeletedLength > 0") Удаленные публикации ({{getWallDeletedLength}})
         .profile__add
           news-add
         .profile__news-list
@@ -15,7 +15,7 @@
     .inner-page__aside
       friends-request
       br
-      friends-possible      
+      friends-possible
 </template>
 
 <script>
@@ -41,6 +41,7 @@ export default {
           result.push(this.getWall[key])
         }
       }
+
       return result //this.getWall.filter(el => el.type === this.activeTab)
     }
   },
@@ -52,6 +53,6 @@ export default {
   },
   created() {
     if (this.getInfo) this.apiWall({ id: this.getInfo.id })
-  }
+  },
 }
 </script>

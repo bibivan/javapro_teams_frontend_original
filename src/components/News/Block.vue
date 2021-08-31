@@ -16,7 +16,7 @@
         .edit(v-tooltip.bottom="'Заблокировать'" v-else)
           simple-svg(:filepath="'/static/img/blocked.svg'")
       .news-block__deffered(v-if="deffered")
-        span.news-block__deffered-text Дата и время публикации: {{info.time | moment('DD.MM.YYYY, HH:mm')}} ({{diffTime(info.time)}})
+        span.news-block__deffered-text Дата и время публикации: {{info.time | moment('DD.MM.YYYY, HH:mm')}} ({{diffTime(info.time * 1000)}})
       .news-block__author(v-if="!deffered")
         router-link.news-block__author-pic(:to="{name: 'ProfileId', params: {id: info.author.id}}")
           img(:src="info.author.photo || '../static/img/user/default_avatar.svg'" :alt="info.author.first_name")
@@ -330,7 +330,7 @@ export default {
 .news-block__actions-block {
   &+& {
     margin-left: 30px;
-  }  
+  }
 }
 
 .edit__recover {
