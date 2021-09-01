@@ -146,6 +146,7 @@ export default {
         alert('Введите тему или текст')
         return
       }
+      this.modalShow = false
       this.actionsFeed({
         route: this.$route.name,
         post_id: this.info ? this.info.id : null,
@@ -162,7 +163,7 @@ export default {
             date: this.day,
             hours: this.time.substring(0, 2)
           }).valueOf()
-      }).then(() => {
+      }).then(() => {        
         this.$emit('submit-complete')
       })
     },
