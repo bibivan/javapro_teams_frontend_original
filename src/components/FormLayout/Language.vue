@@ -20,7 +20,7 @@ export default {
     ...mapGetters('auth/languages', ['getLanguages']),
     filterLanguages() {
       return this.language.length > 0
-        ? this.getLanguages.filter(el => el.text.toLowerCase().indexOf(this.language.toLowerCase()) >= 0)
+        ? this.getLanguages.filter(el => el.title.toLowerCase().indexOf(this.language.toLowerCase()) >= 0)
         : this.getLanguages
     }
   },

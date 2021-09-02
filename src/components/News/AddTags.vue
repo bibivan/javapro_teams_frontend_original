@@ -23,6 +23,7 @@ export default {
     },
     addTag() {
       if (this.tag.length <= 0) return
+      if (this.tagsComponent.find(el => el === this.tag)) return
       this.tagsComponent.push(this.tag)
       this.tag = ''
       this.$emit('change-tags', this.tagsComponent)

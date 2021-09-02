@@ -51,7 +51,7 @@ export default {
         }, {
           root: true
         })
-        commit('setInfo', response.data.data)
+        commit('setInfo', response.data.body)
       }).catch(error => {})
     },
     async deleteInfo() {
