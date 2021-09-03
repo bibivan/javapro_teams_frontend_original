@@ -11,6 +11,12 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import moment from 'moment'
+import VueI18n from 'vue-i18n'
+
+const i18n = new VueI18n({
+  locale: 'ru'
+})
 export default {
   name: 'FormLayoutLanguage',
   data: () => ({
@@ -28,6 +34,17 @@ export default {
     ...mapMutations('auth/languages', ['setActiveLanguage', 'toggleLanguageBlock']),
     ...mapActions('auth/languages', ['apiLanguages']),
     setActiveHandler(lang) {
+      if (lang.title === 'Русский') {
+        moment.locale('ru')
+        i18n.locale = 'ru'
+      }
+
+      if (lang.title === 'English') {
+        moment.locale('en')
+        i18n.locale = 'en'
+      }
+      
+      console.log(i18n.locale)
       this.toggleLanguageBlock()
       this.setActiveLanguage(lang)
     }
