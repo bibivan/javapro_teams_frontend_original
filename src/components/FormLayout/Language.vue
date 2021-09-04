@@ -1,57 +1,63 @@
 <template lang="pug">
   .form-layout__language(ref="language")
-    h4.form-layout__language-title Выберите язык
+    h4.form-layout__language-title {{ $t('title') }}
     .form-layout__language-search
       simple-svg(:filepath="'/static/img/search.svg'")
-      input.form-layout__language-input(type="text" v-model="language" placeholder="Начните вводить название языка")
+      input.form-layout__language-input(type="text" v-model="language" :placeholder=`$t('placeholder')`)
     ul.form-layout__language-list
       li.form-layout__language-item(v-for="lang in filterLanguages" :key="lang.id" @click="setActiveHandler(lang)") {{lang.title}}
 </template>
 
-
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
-import moment from 'moment'
-import VueI18n from 'vue-i18n'
 
-const i18n = new VueI18n({
-  locale: 'ru'
-})
 export default {
   name: 'FormLayoutLanguage',
   data: () => ({
-    language: ''
+    language: '',
   }),
   computed: {
-    ...mapGetters('auth/languages', ['getLanguages']),
+    ...mapGetters('auth/languages', ['getLanguages', 'getLang']),
     filterLanguages() {
       return this.language.length > 0
         ? this.getLanguages.filter(el => el.title.toLowerCase().indexOf(this.language.toLowerCase()) >= 0)
         : this.getLanguages
-    }
+    },
   },
   methods: {
-    ...mapMutations('auth/languages', ['setActiveLanguage', 'toggleLanguageBlock']),
+    ...mapMutations('auth/languages', ['toggleLanguageBlock']),
     ...mapActions('auth/languages', ['apiLanguages']),
     setActiveHandler(lang) {
-      if (lang.title === 'Русский') {
-        moment.locale('ru')
-        i18n.locale = 'ru'
+      switch (lang.title) {
+        case 'Русский':
+          localStorage.setItem('lang', 'ru')
+          break
+        case 'English':
+          localStorage.setItem('lang', 'en')
+          break
+        default:
+          localStorage.setItem('lang', 'ru')
       }
 
-      if (lang.title === 'English') {
-        moment.locale('en')
-        i18n.locale = 'en'
-      }
-      
-      console.log(i18n.locale)
       this.toggleLanguageBlock()
-      this.setActiveLanguage(lang)
+      window.location.reload()
     }
   },
   mounted() {
     if (this.getLanguages.length === 0) this.apiLanguages()
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "title": "Choose language",
+        "placeholder": "Start typing the name of the language"
+      },
+      "ru": {
+        "title": "Выберите язык",
+        "placeholder": "Начните вводить название языка"
+      }
+    }
+  },
 }
 </script>
 

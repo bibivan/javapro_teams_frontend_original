@@ -2,20 +2,24 @@
   .registration
     form.registration__form(@submit.prevent="submitHandler")
       .form__block
-        h4.form__subtitle Аккаунт
+        h4.form__subtitle {{ $t('account') }}
         email-field(id="register-email" v-model="email" :v="$v.email" :class="{checked: $v.email.required && $v.email.email}")
         password-field(id="register-password" v-model="passwd1" :v="$v.passwd1" info registration :class="{checked: $v.passwd1.required && $v.passwd2.sameAsPassword && $v.passwd1.minLength}" autocomplete="new-password")
         password-repeat-field(id="register-repeat-password" v-model="passwd2" :v="$v.passwd2" :class="{checked: $v.passwd1.required && $v.passwd2.sameAsPassword && $v.passwd2.minLength}" autocomplete="new-password")
       .form__block
-        h4.form__subtitle Личные данные
-        name-field(id="register-firstName" v-model="firstName" :v="$v.firstName")
-        name-field(id="register-lastName" v-model="lastName" :v="$v.lastName" label="Фамилия")
+        h4.form__subtitle {{ $t('personal') }}
+        name-field(id="register-firstName" v-model="firstName" :v="$v.firstName" :label="$t('name')")
+        name-field(id="register-lastName" v-model="lastName" :v="$v.lastName" :label="$t('lastname')")
       .form__block.captcha
-        vue-hcaptcha(sitekey="6cb436a2-4748-4d38-8404-113bf4e2069f" @verify="onVerify")
+        vue-hcaptcha(
+          sitekey="6cb436a2-4748-4d38-8404-113bf4e2069f"
+          :language="getLang"
+          @verify="onVerify"
+        )
       .form__block
         confirm-field(id="register-confirm" v-model="confirm" :v="$v.confirm")
       .registration__action
-        button-hover(tag="button" type="submit" variant="white") Зарегистрироваться
+        button-hover(tag="button" type="submit" variant="white") {{ $t('registration') }}
 </template>
 
 <script>
@@ -49,6 +53,11 @@ export default {
     eKey: null,
     confirm: false,
   }),
+  computed: {
+    getLang() {
+      return localStorage.getItem('lang')
+    }
+  },
   methods: {
     onVerify(token) {
       this.verified = true
@@ -68,9 +77,6 @@ export default {
 
       const { email, passwd1, passwd2, firstName, lastName, token } = this
       this.register({ email, passwd1, passwd2, firstName, lastName, token })
-      // .then(() => {
-      //   this.$router.push({ name: 'RegisterSuccess' })
-      // })
     }
   },
   validations: {
@@ -80,7 +86,25 @@ export default {
     passwd2: { required, minLength: minLength(8), sameAsPassword: sameAs('passwd1') },
     firstName: { required, minLength: minLength(3) },
     lastName: { required, minLength: minLength(3) }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "account": "Account",
+        "personal": "Personal data",
+        "registration": "Registration",
+        "name": "Name",
+        "lastname": "Last name"
+      },
+      "ru": {
+        "account": "Аккаунт",
+        "personal": "Личные данные",
+        "registration": "Зарегистрироваться",
+        "name": "Имя",
+        "lastname": "Фамилия"
+      }
+    }
+  },
 }
 </script>
 

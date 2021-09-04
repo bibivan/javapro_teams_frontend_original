@@ -18,7 +18,6 @@ switch (NODE_ENV) {
 }
 
 const token = localStorage.getItem('user-token')
-console.log('TOKEN: ', token)
 if (token) axios.defaults.headers.common['Authorization'] = token
 
 let timeLastStart = null

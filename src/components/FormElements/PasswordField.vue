@@ -1,6 +1,6 @@
 <template lang="pug">
   .form__group(:class="{fill: password.length > 0}")
-    label.form__label(:for="id") Пароль
+    label.form__label(:for="id") {{ $t('password') }}
     input.form__input(name="password" :id="id"
       :type="passwordFieldType"
       :autocomplete="autocomplete"
@@ -8,17 +8,17 @@
       @change="passwordBlur"
       :class="{invalid: ((v.$dirty && !v.required) || (v.$dirty && !v.minLength))}"
     )
-    span.form__error(v-if="v.$dirty && !v.required") Введите пароль
+    span.form__error(v-if="v.$dirty && !v.required") {{ $t('enterPassword') }}
     .form__error-block
       template(v-if="registration")
         span.form__password-helper(:class="levelInfo.class")
         span.form__error(v-if="password.length>=3") {{levelInfo.text}}
       template(v-else)
-        span.form__error(v-if="v.$dirty && !v.minLength") Пароль должен быть не менее {{v.$params.minLength.min}} символов. Сейчас он {{password.length}}
+        span.form__error(v-if="v.$dirty && !v.minLength") {{ $t('errorPassword1') }} {{v.$params.minLength.min}} {{ $t('errorPassword2') }} {{password.length}}
     template(v-if="info")
       .form__password-icon.active
         simple-svg(:filepath="'/static/img/password-info.svg'")
-      p.form__password-info Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.
+      p.form__password-info {{ $t('infoPassword') }}
     .form__password-icon(:class="{'active': password.length > 0}" @click="switchVisibility" v-if="!registration")
       simple-svg(:filepath="'/static/img/password-eye.svg'")
 </template>
@@ -62,10 +62,10 @@ export default {
     levelInfo() {
       if (!this.passwordHelperShow) return { text: null, class: null }
       return this.password.length >= 3 && this.password.length < 7
-        ? { text: 'слабый', class: 'easy' }
+        ? { text: this.$t('easy'), class: 'easy' }
         : this.password.length >= 7 && this.password.length < 11
-        ? { text: 'средний', class: 'middle' }
-        : this.password.length >= 11 && { text: 'надёжный', class: 'hard' }
+        ? { text: this.$t('middle'), class: 'middle' }
+        : this.password.length >= 11 && { text: this.$t('hard'), class: 'hard' }
     }
   },
   methods: {
@@ -76,7 +76,31 @@ export default {
       this.passwordHelperShow = false
       this.v.$touch()
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "password": "Password",
+        "enterPassword": "Enter password",
+        "errorPassword1": "Password must be at least",
+        "errorPassword2": "characters. He is now",
+        "infoPassword": "The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.",
+        "easy": "Easy",
+        "middle": "Middle",
+        "hard": "Hard"
+      },
+      "ru": {
+        "password": "Пароль",
+        "enterPassword": "Введите пароль",
+        "errorPassword1": "Пароль должен быть не менее",
+        "errorPassword2": "символов. Сейчас он",
+        "infoPassword": "Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.",
+        "easy": "Слабый",
+        "middle": "Средний",
+        "hard": "Надёжный"
+      }
+    }
+  },
 }
 </script>
 

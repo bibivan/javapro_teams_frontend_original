@@ -1,18 +1,25 @@
 <template lang="pug">
   .form-layout__footer
-    a.form-layout__footer-support(href="#") Поддержка
-    .form-layout__footer-language Язык: 
-      span.active(@click="toggleLanguageBlock") {{getActiveLanguage}}
+    a.form-layout__footer-support(href="#") {{ $t('support') }}
+    .form-layout__footer-language {{ $t('lang') }}:
+      span.active(@click="toggleLanguageBlock") {{getActiveLang}}
     span.form-layout__footer-copyright © Copyright {{year}} ZERONE
 </template>
 
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+
+
 export default {
   name: 'FormLayoutFooter',
   computed: {
     ...mapGetters('auth/languages', ['getActiveLanguage']),
+    getActiveLang() {
+      const lang = localStorage.getItem('lang')
+      if (lang === 'ru') return 'Русский'
+      if (lang === 'en') return 'English'
+    },
     year() {
       let date = new Date()
       return date.getFullYear()
@@ -20,7 +27,19 @@ export default {
   },
   methods: {
     ...mapMutations('auth/languages', ['setActiveLanguage', 'toggleLanguageBlock'])
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "lang": "Language",
+        "support": "Support"
+      },
+      "ru": {
+        "lang": "Язык",
+        "support": "Поддержка"
+      }
+    }
+  },
 }
 </script>
 
