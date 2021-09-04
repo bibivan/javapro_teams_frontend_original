@@ -1,10 +1,10 @@
 <template lang="pug">
   .forgot
-    h2.forgot__title.form__title Напишите ваш e&#8209;mail
+    h2.forgot__title.form__title {{ $t('title') }}
     form.forgot__form(@submit.prevent="submitHandler")
       email-field(id="forgot-email" v-model="email" :v="$v.email")
       .forgot__action
-        button-hover(tag="button" type="submit" variant="white") Отправить
+        button-hover(tag="button" type="submit" variant="white") {{ $t('send') }}
 </template>
 
 <script>
@@ -34,7 +34,19 @@ export default {
   },
   validations: {
     email: { required, email }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "title": "Write your e-mail",
+        "send": "Send"
+      },
+      "ru": {
+        "title": "Напишите ваш e-mail",
+        "send": "Отправить"
+      }
+    }
+  },
 }
 </script>
 

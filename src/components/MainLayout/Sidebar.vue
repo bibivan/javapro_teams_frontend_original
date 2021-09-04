@@ -11,10 +11,10 @@
         span {{item.text}}
     router-link.main-layout__link(v-if="!isAdminPage" :to="{name: 'Settings'}")
       simple-svg(:filepath="'/static/img/sidebar/settings.svg'")
-      span Настройки
+      span {{ $t('settings') }}
     a.main-layout__link(@click.prvent="onLogout" href="#")
       simple-svg(:filepath="'/static/img/sidebar/exit.svg'")
-      span Выйти
+      span {{ $t('logout') }}
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
       return this.$route.path.indexOf('admin') !== -1
     },
     info() {
-      return this.getSidebarById(this.isAdminPage ? 'admin' : 'user')
+      return this.getSidebarById(this.isAdminPage ? 'admin' : 'user', localStorage.getItem('lang'))
     }
   },
   methods: {
@@ -42,7 +42,19 @@ export default {
   },
   mounted() {
     this.apiUnreadedMessages()
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "settings": "Settings",
+        "logout": "Log out"
+      },
+      "ru": {
+        "settings": "Настройки",
+        "logout": "Выйти"
+      }
+    }
+  },
 }
 </script>
 

@@ -3,8 +3,8 @@
     .inner-page__main
       .friends__header
         h2.friends__title
-          template(v-if="searchUsers.length === 0") Возможные друзья
-          template(v-else) Найдено {{searchUsers.length}} человек
+          template(v-if="searchUsers.length === 0") {{ $t('friends') }}
+          template(v-else) {{ $t('found') }} {{searchUsers.length}} {{ $t('people') }}
       .friends__list(v-if="searchUsers.length > 0")
         friends-block(v-for="user in searchUsers" :key="user.id" :info="user")
       .friends__list(v-else-if="possibleFriends")
@@ -38,7 +38,21 @@ export default {
   },
   mounted() {
     if (this.possibleFriends.length === 0) this.apiRecommendations()
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "friends": "Possible friends",
+        "found": "Found",
+        "people": "people"
+      },
+      "ru": {
+        "friends": "Возможные друзья",
+        "found": "Найдено",
+        "people": "человек"
+      }
+    }
+  },
 }
 </script>
 

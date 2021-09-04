@@ -9,19 +9,38 @@ export default {
     getNotifications: s => s.notifications,
     getNotificationsLength: s => s.notifications.length,
     getNotificationsTextType: s => type => {
-      switch (type) {
-        case 'POST':
-          return 'опубликовал новую запись'
-        case 'POST_COMMENT':
-          return 'оставил комментарий'
-        case 'COMMENT_COMMENT':
-          return 'ответил на ваш комментарий'
-        case 'FRIEND_REQUEST':
-          return 'добавил в друзья нового пользователя'
-        case 'FRIEND_BIRTHDAY':
-          return 'день рождение'
-        case 'MESSAGE':
-          return 'прислал сообщение'
+      const lang = localStorage.getItem('lang') || 'ru'
+      if (lang === 'ru') {
+        switch (type) {
+          case 'POST':
+            return 'опубликовал новую запись'
+          case 'POST_COMMENT':
+            return 'оставил комментарий'
+          case 'COMMENT_COMMENT':
+            return 'ответил на ваш комментарий'
+          case 'FRIEND_REQUEST':
+            return 'добавил в друзья нового пользователя'
+          case 'FRIEND_BIRTHDAY':
+            return 'день рождение'
+          case 'MESSAGE':
+            return 'прислал сообщение'
+        }
+      }
+      if (lang === 'en') {
+        switch (type) {
+          case 'POST':
+            return 'posted a new post'
+          case 'POST_COMMENT':
+            return 'left a comment'
+          case 'COMMENT_COMMENT':
+            return 'replied to your comment'
+          case 'FRIEND_REQUEST':
+            return 'added a new user as a friend'
+          case 'FRIEND_BIRTHDAY':
+            return 'birthday'
+          case 'MESSAGE':
+            return 'sent a message'
+        }
       }
     }
   },

@@ -5,9 +5,9 @@
         profile-info(me online :info="getInfo")
       .profile__news(v-if="Object.keys(getWall).length != 0")
         .profile__tabs
-          span.profile__tab(@click="changeTab('POSTED')" :class="{active: activeTab === 'POSTED'}") Мои публикации ({{getWallPostedLength}})
-          span.profile__tab(@click="changeTab('QUEUED')" :class="{active: activeTab === 'QUEUED'}" v-if="getWallQueuedLength > 0") Отложенные публикации ({{getWallQueuedLength}})
-          span.profile__tab(@click="changeTab('DELETED')" :class="{active: activeTab === 'DELETED'}" v-if="getWallDeletedLength > 0") Удаленные публикации ({{getWallDeletedLength}})
+          span.profile__tab(@click="changeTab('POSTED')" :class="{active: activeTab === 'POSTED'}") {{ $t('posted') }} ({{getWallPostedLength}})
+          span.profile__tab(@click="changeTab('QUEUED')" :class="{active: activeTab === 'QUEUED'}" v-if="getWallQueuedLength > 0") {{ $t('queued') }} ({{getWallQueuedLength}})
+          span.profile__tab(@click="changeTab('DELETED')" :class="{active: activeTab === 'DELETED'}" v-if="getWallDeletedLength > 0") {{ $t('deleted') }} ({{getWallDeletedLength}})
         .profile__add
           news-add
         .profile__news-list
@@ -53,6 +53,20 @@ export default {
   },
   created() {
     if (this.getInfo) this.apiWall({ id: this.getInfo.id })
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "posted": "My publications",
+        "queued": "Queued publication",
+        "deleted": "Deleted publications"
+      },
+      "ru": {
+        "posted": "Мои публикации",
+        "queued": "Отложенные публикации",
+        "deleted": "Удаленные публикации"
+      }
+    }
   },
 }
 </script>

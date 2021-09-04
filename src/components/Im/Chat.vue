@@ -20,9 +20,9 @@
       )
         .im-chat__loader(slot="header", v-show="fetching")
           .spinner(v-show="!isHistoryEndReached()")
-          .finished(v-show="isHistoryEndReached()") Больше сообщений нет
+          .finished(v-show="isHistoryEndReached()") {{ $t('nomore') }}
     form.im-chat__enter(action="#" @submit.prevent="onSubmitMessage")
-      input.im-chat__enter-input(type="text" placeholder="Ваше сообщение..." v-model="mes")
+      input.im-chat__enter-input(type="text" :placeholder="$t('placeholder')" v-model="mes")
 </template>
 
 <script>
@@ -59,8 +59,8 @@ export default {
   computed: {
     statusText() {
       return this.online
-        ? 'Онлайн'
-        : 'был в сети ' + moment(this.info.recipient.last_online_time).fromNow()
+        ? this.$t('online')
+        : this.$t('was') + moment(this.info.recipient.last_online_time).fromNow()
     },
     messagesGrouped() {
       let groups = []
@@ -122,7 +122,23 @@ export default {
         this.$refs.vsl.scrollToBottom()
       }
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "nomore": "No more messages",
+        "placeholder": "Your message...",
+        "online": "Online",
+        "was": "was online "
+      },
+      "ru": {
+        "nomore": "Больше сообщений нет",
+        "placeholder": "Ваше сообщение...",
+        "online": "Онлайн",
+        "was": "был в сети "
+      }
+    }
+  },
 }
 </script>
 

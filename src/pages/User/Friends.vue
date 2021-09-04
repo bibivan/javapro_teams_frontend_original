@@ -2,17 +2,17 @@
   .friends.inner-page
     .inner-page__main
       .friends__header
-        h2.friends__title Мои друзья
+        h2.friends__title {{ $t('myFriends') }}
         .friends__search
           .friends__search-icon
             simple-svg(:filepath="'/static/img/search.svg'")
-          input.friends__search-input(placeholder="Начните вводить имя друга..." v-model="first_name")
+          input.friends__search-input(:placeholder="$t('enterFriend')" v-model="first_name")
       .friends__list
         friends-block(friend v-for="friend in friends" :key="friend.id" :info="friend")
     .inner-page__aside
       friends-request
       br
-      friends-possible      
+      friends-possible
 </template>
 
 <script>
@@ -43,6 +43,18 @@ export default {
     next(vm => {
       vm.apiFriends()
     })
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "myFriends": "My friends",
+        "enterFriend": "Start typing your friend's name ..."
+      },
+      "ru": {
+        "myFriends": "Мои друзья",
+        "enterFriend": "Начните вводить имя друга..."
+      }
+    }
+  },
 }
 </script>

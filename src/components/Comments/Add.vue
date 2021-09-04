@@ -2,7 +2,7 @@
   form.comment-add(action="#" @submit.prevent="onSubmitComment")
     .comment-add__pic(v-if="getInfo")
       img(:src="getInfo.photo" :alt="getInfo.fullName")
-    input.comment-add__input(type="text" placeholder="Написать комментарий..." ref="addInput" v-model="commentText")
+    input.comment-add__input(type="text" :placeholder="$t('placeholder')" ref="addInput" v-model="commentText")
     //- .comment-add__icon.photo
     //-   simple-svg(:filepath="'/static/img/photo.svg'")
     .comment-add__icon.add(@click="onSubmitComment")
@@ -33,7 +33,17 @@ export default {
     onSubmitComment() {
       this.$emit('submited')
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "placeholder": "Write a comment..."
+      },
+      "ru": {
+        "placeholder": "Написать комментарий..."
+      }
+    }
+  },
 }
 </script>
 

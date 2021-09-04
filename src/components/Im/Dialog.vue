@@ -9,7 +9,7 @@
       p.im-dialog__last
         span.im-dialog__last-me(v-if="me") Вы:
         | {{info.last_message.message_text}}
-      span.im-dialog__time {{info.last_message.time | moment('from')}}
+      span.im-dialog__time {{info.last_message.time - 60*60*3 | moment('from')}}
     span.im-dialog__push(v-if="push > 0") {{push}}
 </template>
 
@@ -27,10 +27,22 @@ export default {
   computed: {
     statusText() {
       return this.online
-        ? 'Онлайн'
-        : 'был в сети ' + moment(this.info.recipient.last_online_time).fromNow()
+        ? this.$t('online')
+        : this.$t('was') + moment(this.info.recipient.last_online_time).fromNow()
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "online": "Online",
+        "was": "was online "
+      },
+      "ru": {
+        "online": "Онлайн",
+        "was": "был в сети "
+      }
+    }
+  },
 }
 </script>
 

@@ -6,7 +6,6 @@
     button-hover.form-layout__btn(:to="{name: info.btn.link}" v-if="info.btn" :variant="info.btn.variant") {{info.btn.text}}
 </template>
 
-
 <script>
 import { mapGetters } from 'vuex'
 export default {
@@ -18,7 +17,7 @@ export default {
   computed: {
     ...mapGetters('auth/info', ['getInfoById']),
     info() {
-      return this.getInfoById(this.$route.path.substring(1))
+      return this.getInfoById(this.$route.path.substring(1), localStorage.getItem('lang'))
     }
   }
 }

@@ -1,7 +1,7 @@
 <template lang="pug">
   .form-layout__footer
     a.form-layout__footer-support(href="#") {{ $t('support') }}
-    .form-layout__footer-language {{ $t('lang') }}:
+    .form-layout__footer-language {{ $t('lang') }}: &nbsp;
       span.active(@click="toggleLanguageBlock") {{getActiveLang}}
     span.form-layout__footer-copyright © Copyright {{year}} ZERONE
 </template>

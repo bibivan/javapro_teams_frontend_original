@@ -2,10 +2,10 @@
   .shift-email
     form.shift-email__form(@submit.prevent="submitHandler")
       .form__block
-        h4.form__subtitle Смена почтового ящика
-        email-field(id="shift-email" v-model="email" :v="$v.email" :class="{checked: $v.email.required && $v.email.email}" placeholder="Новый почтовый ящик")
+        h4.form__subtitle {{ $t('email') }}
+        email-field(id="shift-email" v-model="email" :v="$v.email" :class="{checked: $v.email.required && $v.email.email}" :placeholder="$t('placeholder')")
       .shift-email__action
-        button-hover(tag="button" type="submit" variant="white") Сменить
+        button-hover(tag="button" type="submit" variant="white") {{ $t('change') }}
 </template>
 
 <script>
@@ -35,7 +35,21 @@ export default {
   },
   validations: {
     email: { required, email },
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "email": "Change mail",
+        "placeholder": "New mail",
+        "change": "Change"
+      },
+      "ru": {
+        "email": "Смена почтового ящика",
+        "placeholder": "Новый почтовый ящик",
+        "change": "Сменить"
+      }
+    }
+  },
 }
 </script>
 

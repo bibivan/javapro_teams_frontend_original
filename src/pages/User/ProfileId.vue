@@ -5,7 +5,7 @@
         profile-info(:info="getUsersInfo" :blocked="getUsersInfo.is_blocked" :friend="getUsersInfo.is_friend" :online="getUsersInfo.is_onlined")
       .profile__news
         .profile__tabs
-          span.profile__tab.active Публикации {{getUsersInfo.first_name}} ({{getWall.length}})
+          span.profile__tab.active {{ $t('posted') }} {{getUsersInfo.first_name}} ({{getWall.length}})
         .profile__news-list
           news-block(v-for="news in getWall" :key="news.id" :info="news")
     .inner-page__aside
@@ -36,6 +36,16 @@ export default {
   created() {
     this.userInfoId(this.$route.params.id)
     this.apiFriends()
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "posted": "Publications",
+      },
+      "ru": {
+        "posted": "Публикации",
+      }
+    }
   },
 }
 </script>

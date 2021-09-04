@@ -14,8 +14,8 @@
           span.push__time {{info.sent_time | moment('from')}}
           .push__del(@click="readNotifications(info.id)")
             simple-svg(:filepath="'/static/img/delete.svg'")
-      router-link.push__btn(:to="{name: 'Push'}" v-if="getNotificationsLength > 1") Показать все ({{getNotificationsLength}})
-      a.push__btn(href="#" v-if="getNotificationsLength > 1" @click.prevent="readNotifications()") Удалить все ({{getNotificationsLength}})
+      router-link.push__btn(:to="{name: 'Push'}" v-if="getNotificationsLength > 1") {{ $t('show') }} ({{getNotificationsLength}})
+      a.push__btn(href="#" v-if="getNotificationsLength > 1" @click.prevent="readNotifications()") {{ $t('delete') }} ({{getNotificationsLength}})
 </template>
 
 <script>
@@ -33,7 +33,6 @@ export default {
     isOpen(val) {
       if (!val) {
         this.$refs.list.scrollTop = 0
-        /* this.readNotifications() */
       }
     }
   },
@@ -53,7 +52,19 @@ export default {
     window.onscroll = () => {
       this.closePush()
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "show": "Show all",
+        "delete": "Delete all"
+      },
+      "ru": {
+        "show": "Показать все",
+        "delete": "Удалить все"
+      }
+    }
+  },
 }
 </script>
 

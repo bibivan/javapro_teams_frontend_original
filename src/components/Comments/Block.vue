@@ -16,7 +16,7 @@
       @recover-comment="onRecoverComment"
     )
     .comment-block__reviews(v-if="!info.is_deleted")
-      a.comment-block__reviews-show(href="#" v-if="!isShowSubComments && info.sub_comments.length > 0" @click.prevent="showSubComments") показать {{info.sub_comments.length}} {{answerText}}
+      a.comment-block__reviews-show(href="#" v-if="!isShowSubComments && info.sub_comments.length > 0" @click.prevent="showSubComments") {{ $t('show') }} {{info.sub_comments.length}} {{answerText}}
       .comment-block__reviews-list(v-else)
         comment-main(
           :admin="admin"
@@ -120,7 +120,17 @@ export default {
         this.commentEditParentId = null
       })
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "show": "show"
+      },
+      "ru": {
+        "show": "показать"
+      }
+    }
+  },
 }
 </script>
 

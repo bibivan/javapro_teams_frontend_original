@@ -4,7 +4,7 @@
       form.main-layout__search(action="#" @submit.prevent="onSearch")
         button.main-layout__search-btn
           simple-svg(:filepath="'/static/img/search.svg'")
-        input.main-layout__search-input(type="text" placeholder="Поиск" :value="searchText" @input="setSearchText($event.target.value)")
+        input.main-layout__search-input(type="text" :placeholder="$t('search')" :value="searchText" @input="setSearchText($event.target.value)")
       .main-layout__push(@click="togglePush")
         simple-svg(:filepath="'/static/img/push.svg'" :data-push="getNotificationsLength > 0 ? getNotificationsLength : false")
         push(:isOpen="isOpenPush" @close-push="togglePush")
@@ -12,7 +12,7 @@
       .main-layout__user-pic
         img(:src="getInfo.photo" :alt="getInfo.fullName")
       span.main-layout__user-name {{getInfo.fullName}}
-      span.main-layout__user-post(v-if="isAdminPage") - администратор
+      span.main-layout__user-post(v-if="isAdminPage") - {{ $t('admin') }}
 </template>
 
 <script>
@@ -48,7 +48,19 @@ export default {
   },
   mounted() {
     if (!this.getInfo) this.apiInfo()
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "search": "Search",
+        "admin": "administrator"
+      },
+      "ru": {
+        "search": "Поиск",
+        "admin": "администратор"
+      }
+    }
+  },
 }
 </script>
 

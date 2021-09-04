@@ -25,7 +25,7 @@ export default {
         })
         el.my_like =  el.my_like || false
         el.comments = el.comments.filter(comment => !comment.parent_id)
-        el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
+        // el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
       })
 
       return result
@@ -93,7 +93,7 @@ export default {
               id: payload.id
             }, {
               root: true
-            })          
+            })
         } else {
           payload.route === 'News' ?
             dispatch('apiFeeds') :
