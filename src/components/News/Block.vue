@@ -7,7 +7,7 @@
           .edit__icon(v-if="deleted && info.type === 'POSTED'" @click="deleteNews")
             simple-svg(:filepath="'/static/img/delete-news.svg'")
           .edit__recover(v-if="deleted && info.type === 'DELETED'" @click="recoverNews")
-            a(href="#" @click.prevent="onRecoverComment") Восстановить
+            a(href="#" @click.prevent="onRecoverComment") {{ $t('restore') }}
           .edit__icon(v-if="edit" @click="toggleEditNews")
             simple-svg(:filepath="'/static/img/edit.svg'")
       template(v-else)
@@ -16,7 +16,7 @@
         .edit(v-tooltip.bottom="'Заблокировать'" v-else)
           simple-svg(:filepath="'/static/img/blocked.svg'")
       .news-block__deffered(v-if="deffered")
-        span.news-block__deffered-text Дата и время публикации: {{info.time | moment('DD.MM.YYYY, HH:mm')}} ({{diffTime(info.time * 1000)}})
+        span.news-block__deffered-text {{ $t('date') }}: {{info.time | moment('DD.MM.YYYY, HH:mm')}} ({{diffTime(info.time * 1000)}})
       .news-block__author(v-if="!deffered")
         router-link.news-block__author-pic(:to="{name: 'ProfileId', params: {id: info.author.id}}")
           img(:src="info.author.photo || '../static/img/user/default_avatar.svg'" :alt="info.author.first_name")
@@ -28,8 +28,8 @@
           h3.news-block__content-title {{info.title}}
           p.news-block__content-text(ref="text" :class="{lotText: isLotText, open: openText}" v-html="info.post_text")
           a.news-block__content-more(href="#" v-if="isLotText" @click.prevent="toggleText")
-            template(v-if="openText") Скрыть
-            template(v-else) Читать весь пост
+            template(v-if="openText") {{ $t('hide') }}
+            template(v-else) {{ $t('read') }}
         ul.news-block__content-tags
           li.news-block__content-tag(v-for="(tag,index) in info.tags" :key="index") {{'#'+tag}}
       .news-block__actions(v-if="!deffered && !admin")
@@ -141,7 +141,23 @@ export default {
   },
   mounted() {
     this.$refs.text.offsetHeight > 100 ? (this.isLotText = true) : (this.isLotText = false)
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "restore": "Restore",
+        "date": "Date and time of publication",
+        "hide": "Hide",
+        "read": "Read the entire post"
+      },
+      "ru": {
+        "restore": "Восстановить",
+        "date": "Дата и время публикации",
+        "hide": "Скрыть",
+        "read": "Читать весь пост"
+      }
+    }
+  },
 }
 </script>
 

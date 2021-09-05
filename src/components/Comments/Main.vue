@@ -1,8 +1,8 @@
 <template lang="pug">
   .comment-main
     template(v-if="info.is_deleted")
-      p.comment-main__text Комментарий удален.
-        a(href="#" @click.prevent="onRecoverComment") Восстановить
+      p.comment-main__text {{ $t('del') }}.
+        a(href="#" @click.prevent="onRecoverComment") {{ $t('restore') }}
     template(v-else)
       .edit.edit--small(v-if="edit || deleted")
         .edit__icon(v-if="deleted" @click="onDeleteComment")
@@ -17,7 +17,7 @@
         .comment-main__actions
           span.comment-main__time {{info.time | moment('from') }}
           template(v-if="!admin")
-            a.comment-main__review(href="#" @click.prevent="$emit('answer-comment')") Ответить
+            a.comment-main__review(href="#" @click.prevent="$emit('answer-comment')") {{ $t('answer') }}
             like-comment(fill :active="info.my_like" :id="info.id" @liked="likeAction" )
 </template>
 
@@ -53,7 +53,21 @@ export default {
     onRecoverComment() {
       this.$emit('recover-comment', this.info.id)
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "del": "Comment has been deleted",
+        "restore": "Restore",
+        "answer": "To answer"
+      },
+      "ru": {
+        "del": "Комментарий удален",
+        "restore": "Восстановить",
+        "answer": "Ответить"
+      }
+    }
+  },
 }
 </script>
 

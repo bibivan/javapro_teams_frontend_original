@@ -4,7 +4,7 @@
       .profile-info__img(:class="{offline: !online && !me}")
         img(:src="info.photo" :alt="info.fullName")
       .profile-info__actions(v-if="!me")
-        button-hover(:disable="blocked" @click.native="onSentMessage") Написать сообщение
+        button-hover(:disable="blocked" @click.native="onSentMessage") {{ $t('sendMassage') }}
         button-hover.profile-info__add(:variant="btnVariantInfo.variant" bordered  @click.native="profileAction") {{btnVariantInfo.text}}
     .profile-info__main
       router-link.edit(v-if="me" :to="{name: 'Settings'}")
@@ -14,26 +14,26 @@
         h1.profile-info__name {{info.fullName}}
         span.user-status(:class="{online, offline: !online}") {{statusText}}
       .profile-info__block
-        span.profile-info__title Дата рождения:
-        span.profile-info__val(v-if="info.birth_date") {{info.birth_date | moment("D MMMM YYYY") }} ({{info.ages}} {{declOfNum(info.ages, ['год', 'года', 'лет'])}})
-        span.profile-info__val(v-else) не заполнено
+        span.profile-info__title {{ $t('birthday') }}:
+        span.profile-info__val(v-if="info.birth_date") {{info.birth_date | moment("D MMMM YYYY") }} ({{info.ages}} {{ yearsOld(info.ages) }})
+        span.profile-info__val(v-else) {{ $t('info') }}
       .profile-info__block
-        span.profile-info__title Телефон:
+        span.profile-info__title {{ $t('tel') }}:
         a.profile-info__val(v-if="info.phone" :href="`tel:${info.phone}`") {{info.phone | phone}}
-        a.profile-info__val(v-else) не заполнено
+        a.profile-info__val(v-else) {{ $t('info') }}
       .profile-info__block
-        span.profile-info__title Страна, город:
+        span.profile-info__title {{ $t('city')}}:
         span.profile-info__val(v-if="info.country") {{info.country}}, {{info.city}}
-        span.profile-info__val(v-else) не заполнено
+        span.profile-info__val(v-else) {{ $t('info') }}
       .profile-info__block
-        span.profile-info__title О себе:
+        span.profile-info__title {{ $t('myself') }}:
         span.profile-info__val(v-if="info.about") {{info.about}}
-        span.profile-info__val(v-else) не заполнено
+        span.profile-info__val(v-else) {{ $t('info') }}
     modal(v-model="modalShow")
       p(v-if="modalText") {{modalText}}
       template(slot="actions")
-        button-hover(@click.native.prevent="onConfirm") Да
-        button-hover(variant="red" bordered @click.native="closeModal") Отмена
+        button-hover(@click.native.prevent="onConfirm") {{ $t('yes') }}
+        button-hover(variant="red" bordered @click.native="closeModal") {{ $t('cancel') }}
 </template>
 
 <script>
@@ -59,28 +59,45 @@ export default {
   computed: {
     ...mapGetters('profile/dialogs', ['dialogs']),
     statusText() {
+      if (localStorage.getItem('lang') === 'en') {
+        return this.online ? 'online' : 'offline'
+      }
       return this.online ? 'онлайн' : 'не в сети'
     },
     blockedText() {
+      if (localStorage.getItem('lang') === 'en') {
+        return this.blocked ? 'The user is blocked' : 'Block'
+      }
       return this.blocked ? 'Пользователь заблокирован' : 'Заблокировать'
     },
     btnVariantInfo() {
+      if (localStorage.getItem('lang') === 'en') {
+        return this.blocked
+          ? { variant: 'red', text: 'Unblock' }
+          : this.friend
+          ? { variant: 'red', text: 'Remove from friends' }
+          : { variant: 'white', text: 'Add as Friend' }
+      }
       return this.blocked
         ? { variant: 'red', text: 'Разблокировать' }
         : this.friend
         ? { variant: 'red', text: 'Удалить из друзей' }
         : { variant: 'white', text: 'Добавить в друзья' }
-    }
+    },
   },
   methods: {
     declOfNum,
+    yearsOld(ages) {
+      if (localStorage.getItem('lang') === 'en') return 'years'
+      return declOfNum(ages, ['год', 'года', 'лет'])
+    },
     ...mapActions('users/actions', ['apiBlockUser', 'apiUnblockUser']),
     ...mapActions('profile/friends', ['apiAddFriends', 'apiDeleteFriends']),
     ...mapActions('profile/dialogs', ['createDialogWithUser', 'apiLoadAllDialogs']),
     ...mapActions('users/info', ['apiInfo']),
     blockedUser() {
       if (this.blocked) return
-      this.modalText = `Вы уверены, что хотите заблокировать пользователя ${this.info.fullName}`
+      this.modalText = localStorage.getItem('lang') === 'en' ? `Are you sure you want to block the user ${this.info.fullName}` : `Вы уверены, что хотите заблокировать пользователя ${this.info.fullName}`
       this.modalShow = true
       this.modalType = 'block'
     },
@@ -121,7 +138,31 @@ export default {
       if (this.blocked) return false
       this.$router.push({ name: 'Im', query: { userId: this.info.id } })
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "sendMassage": "Send message",
+        "birthday": "Date of Birth",
+        "tel": "Telephone",
+        "city": "Country, city",
+        "myself": "About myself",
+        "info": "not filled",
+        "yes": "Yes",
+        "cancel": "Сancel"
+      },
+      "ru": {
+        "sendMessage": "Написать сообщение",
+        "birthday": "Дата рождения",
+        "tel": "Телефон",
+        "city": "Страна, город",
+        "myself": "О себе",
+        "info": "не заполнено",
+        "yes": "Да",
+        "cancel": "Отмена"
+      }
+    }
+  },
 }
 </script>
 

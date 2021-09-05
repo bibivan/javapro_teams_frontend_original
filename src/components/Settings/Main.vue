@@ -43,10 +43,6 @@
             tabindex=0
           ) {{item.country}}
 
-    //- UserInfoFormCountry(v-model="country_city.country")
-    //- user-info-form-block(label="Страна:" placeholder="Введите страну" v-model="country")
-    //- user-info-form-block(label="Город:" placeholder="Введите город" v-model="city")
-
     .user-info-form__block
       span.user-info-form__label Дата рождения:
       .user-info-form__wrap

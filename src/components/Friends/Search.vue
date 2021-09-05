@@ -15,8 +15,8 @@
           select.select.friends-search__select(v-model.number="age_from")
             option(value="null" disabled) От
             option(value="31") От 31
-            option(value="32") От 32 
-            option(value="33") От 33 
+            option(value="32") От 32
+            option(value="33") От 33
           span.search__age-defis —
           select.select.friends-search__select(v-model.number="age_to")
             option(value="null" disabled) До
@@ -27,22 +27,18 @@
         label.search__label Регион:
         .search__row
           select.select.friends-search__select(v-model="country")
-            option(value="null" disabled) Страна
-            option Россия
-            option Англия
-            option США
+            option(value="null") Страна
+            option(v-for="country in getCountries" :key="country.id") {{ country.title }}
           select.select.friends-search__select(v-model="city")
-            option(value="null" disabled) Город
-            option Москва
-            option Лондон
-            option Техас
+            option(value="null") Город
+            option(v-for="city in getCityFilter" :key="city.countryId") {{ city.country }}
     button.friends-possible__btn(type="submit")
       simple-svg(:filepath="'/static/img/search.svg'")
       span.friends-possible__link Искать друзей
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'FriendsSearch',
   data: () => ({
@@ -50,16 +46,38 @@ export default {
     last_name: null,
     age_from: null,
     age_to: null,
-    country_id: null,
-    city_id: null,
+    country: null,
+    city: null,
     offset: 0,
     itemPerPage: 20
   }),
+  computed: {
+    ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
+    getCityFilter() {
+      if (!this.country || this.country === "null") {
+        return this.getCities
+      } else {
+        return this.getCities.filter(el => el.city === this.country)
+      }
+    }
+  },
   methods: {
     ...mapActions('global/search', ['searchUsers', 'clearSearch']),
+    ...mapActions('profile/country_city', ['apiCountries', 'apiAllCities']),
     onSearchUsers() {
       let { first_name, last_name, age_from, age_to, country, city } = this
       this.searchUsers({ first_name, last_name, age_from, age_to, country, city })
+    }
+  },
+  created() {
+    this.apiCountries()
+    this.apiAllCities()
+  },
+  watch: {
+    city(value) {
+      if (!value || value === "null") return
+      const countryId = this.getCities.find(el => el.country === value).cityId
+      this.country = this.getCountries.find(el => el.id === countryId).title
     }
   },
   beforeDestroy() {

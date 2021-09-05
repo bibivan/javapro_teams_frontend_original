@@ -16,6 +16,7 @@ export default {
       { component: 'settings-main', text: 'Основные' },
       { component: 'settings-push', text: 'Настройка оповещений' },
       { component: 'settings-security', text: 'Безопасность' },
+      { component: 'settings-lang', text: 'Изменить язык' },
       { component: 'settings-delete', text: 'Удалить профиль' }
     ]
   }),

@@ -18,10 +18,10 @@
               button.link(:class="{ 'is-active': isActive.link() }" @click="openLinkMenu(getMarkAttrs('link'))")
                 simple-svg(:filepath="'/static/img/link.svg'")
       .news-add__settings
-        h4.news-add__settings-title Настройка публикации
+        h4.news-add__settings-title {{ $t('title') }}
         add-tags(:tags="tags" @change-tags="onChangeTags")
-        button-hover.news-add__planning(variant="white" bordered @click.native="openModal" v-if="!edit || deffered") Запланировать
-        button-hover(@click.native="submitForm") Опубликовать
+        button-hover.news-add__planning(variant="white" bordered @click.native="openModal" v-if="!edit || deffered") {{ $t('plannig') }}
+        button-hover(@click.native="submitForm") {{ $t('publish') }}
     modal.news-add__modal(v-model="modalShow")
       v-date-picker(v-model="planingTime" @input="onChangeDatePicker" title-position="left" :min-date='new Date()' is-inline :attributes='attrs' :key="componentKey")
       .news-add__modal-selects
@@ -34,8 +34,8 @@
         select.select.news-add__modal-select.time(v-model="time")
           option(v-for="t in times" :key="t") {{t}}
       template(slot="actions")
-        button-hover(@click.native="onPlaning") Планировать
-        button-hover(variant="red" bordered @click.native="closeModal") Отмена
+        button-hover(@click.native="onPlaning") {{ $t('plannig') }}
+        button-hover(variant="red" bordered @click.native="closeModal") {{ $t('cancel') }}
 </template>
 
 <script>
@@ -77,20 +77,6 @@ export default {
     day: 1,
     month: { val: 0, text: 'Января' },
     year: 2000,
-    months: [
-      { val: 0, text: 'Января' },
-      { val: 1, text: 'Февраля' },
-      { val: 2, text: 'Марта' },
-      { val: 3, text: 'Апреля' },
-      { val: 4, text: 'Мая' },
-      { val: 5, text: 'Июня' },
-      { val: 6, text: 'Июля' },
-      { val: 7, text: 'Августа' },
-      { val: 8, text: 'Сентября' },
-      { val: 9, text: 'Октября' },
-      { val: 10, text: 'Ноября' },
-      { val: 11, text: 'Декабря' }
-    ],
     time: '12:00',
     times: [
       '8:00',
@@ -113,6 +99,38 @@ export default {
   }),
   computed: {
     ...mapGetters('profile/info', ['getInfo']),
+    months() {
+      if (localStorage.getItem('lang') === 'en') {
+        return [
+          { val: 0, text: 'January' },
+          { val: 1, text: 'February' },
+          { val: 2, text: 'March' },
+          { val: 3, text: 'April' },
+          { val: 4, text: 'May' },
+          { val: 5, text: 'June' },
+          { val: 6, text: 'July' },
+          { val: 7, text: 'August' },
+          { val: 8, text: 'September' },
+          { val: 9, text: 'October' },
+          { val: 10, text: 'November' },
+          { val: 11, text: 'December' }
+        ]
+      }
+      return [
+        { val: 0, text: 'Января' },
+        { val: 1, text: 'Февраля' },
+        { val: 2, text: 'Марта' },
+        { val: 3, text: 'Апреля' },
+        { val: 4, text: 'Мая' },
+        { val: 5, text: 'Июня' },
+        { val: 6, text: 'Июля' },
+        { val: 7, text: 'Августа' },
+        { val: 8, text: 'Сентября' },
+        { val: 9, text: 'Октября' },
+        { val: 10, text: 'Ноября' },
+        { val: 11, text: 'Декабря' }
+      ]
+    },
     years() {
       return Array.from({ length: 60 }, (value, index) => 1970 + index)
     },
@@ -163,7 +181,7 @@ export default {
             date: this.day,
             hours: this.time.substring(0, 2)
           }).valueOf()
-      }).then(() => {        
+      }).then(() => {
         this.$emit('submit-complete')
       })
     },
@@ -211,6 +229,7 @@ export default {
       this.tags = this.info.tags
       this.editor = new Editor({
         content: `<p>${this.info.post_text}</p>`,
+        class: 'cursor-text',
         extensions: [new Bold(), new Italic(), new Underline(), new Link()]
       })
       if (this.deffered) {
@@ -220,8 +239,13 @@ export default {
       }
     } else {
       this.editor = new Editor({
-        content: '<p>к черту добрые слова!</p>',
-        extensions: [new Bold(), new Italic(), new Underline(), new Link()]
+        extensions: [new Bold(), new Italic(), new Underline(), new Link()],
+        editorProps: {
+          attributes: {
+            class: 'cursor-text',
+          },
+        },
+        autofocus: true,
       })
       this.day = moment().date()
       this.month = this.months[moment().month()]
@@ -230,6 +254,28 @@ export default {
   },
   beforeDestroy() {
     this.editor.destroy()
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "title": "Publishing setup",
+        "plannig": "Plannig",
+        "cancel": "Cancel",
+        "publish": "Publish"
+      },
+      "ru": {
+        "title": "Настройка публикации",
+        "plannig": "Запланировать",
+        "cancel": "Отмена",
+        "publish": "Опубликовать"
+      }
+    }
+  },
 }
 </script>
+
+<style>
+  .cursor-text {
+    cursor: text;
+  }
+</style>

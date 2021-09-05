@@ -1,6 +1,6 @@
 <template lang="pug">
   .add-tags
-    input.add-tags__input(type="text" placeholder="Добавить тег..." v-model="tag" ref="input" @change="addTag")
+    input.add-tags__input(type="text" :placeholder="$t('placeholder')" v-model="tag" ref="input" @change="addTag")
     .add-tags__block
       .add-tags__item(v-for="(tag,index) in tags" :key="index") {{'#'+tag}}
         span.add-tags__delete(@click="deleteTag(index)") &#10005;
@@ -39,7 +39,17 @@ export default {
   },
   mounted() {
     this.tagsComponent = this.tags
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "placeholder": "Add tag..."
+      },
+      "ru": {
+        "placeholder": "Добавить тег..."
+      }
+    }
+  },
 }
 </script>
 

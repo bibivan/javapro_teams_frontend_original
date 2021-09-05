@@ -51,6 +51,11 @@ export default {
       this.activeTab = tab
     }
   },
+  watch: {
+    getInfo() {
+      this.apiWall({ id: this.getInfo.id })
+    }
+  },
   created() {
     if (this.getInfo) this.apiWall({ id: this.getInfo.id })
   },

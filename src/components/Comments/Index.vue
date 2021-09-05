@@ -1,7 +1,7 @@
 <template lang="pug">
   .comments(:class="{open: isOpenComments, 'comments--admin': admin}")
     h4.comments__title
-      span Комментарии ({{commentsLength}})
+      span {{ $t('title') }} ({{commentsLength}})
       a.comments__show(@click.prevent="showComments" href="#" v-if="info.length > 1") {{showText}}
     .comments__list(v-if="getInfo")
       comment-block(
@@ -40,6 +40,9 @@ export default {
   computed: {
     ...mapGetters('profile/info', ['getInfo']),
     showText() {
+      if (localStorage.getItem('lang') === 'en') {
+        return this.isOpenComments ? 'hide' : 'show'
+      }
       return this.isOpenComments ? 'скрыть' : 'показать'
     },
     commentsLength() {
@@ -78,7 +81,17 @@ export default {
         this.commentEditInfo = null
       })
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "title": "Comments",
+      },
+      "ru": {
+        "title": "Комментарии",
+      }
+    }
+  },
 }
 </script>
 

@@ -6,7 +6,7 @@
       router-link.friends-block__name(:to="{name: 'ProfileId', params: {id: info.id}}") {{info.first_name}} {{info.last_name}}
       span.friends-block__age-city(v-if="moderator") модератор
       span.friends-block__age-city(v-else-if="info.birth_date && info.city") {{info.birth_date | moment('from', true)}}, {{info.city}}
-      span.friends-block__age-city(v-else) профиль не заполнен
+      span.friends-block__age-city(v-else) {{ $t('info')}}
     .friends-block__actions
       template(v-if="moderator")
         .friends-block__actions-block(v-tooltip.bottom="'Редактировать'")
@@ -19,19 +19,19 @@
         .friends-block__actions-block(v-tooltip.bottom="'Заблокировать'" v-else)
           simple-svg(:filepath="'/static/img/blocked.svg'")
       template(v-else)
-        .friends-block__actions-block.message(v-tooltip.bottom="'Написать сообщение'" @click="sendMessage(info.id)")
+        .friends-block__actions-block.message(v-tooltip.bottom="$t('sendMassage')" @click="sendMessage(info.id)")
           simple-svg(:filepath="'/static/img/sidebar/im.svg'")
-        .friends-block__actions-block.delete(v-tooltip.bottom="'Удалить из друзей'" @click="openModal('delete')" v-if="friend")
+        .friends-block__actions-block.delete(v-tooltip.bottom="$t('del')" @click="openModal('delete')" v-if="friend")
           simple-svg(:filepath="'/static/img/delete.svg'")
-        .friends-block__actions-block.add(v-tooltip.bottom="'Добавить в друзья'" @click="apiAddFriends(info.id)" v-else)
+        .friends-block__actions-block.add(v-tooltip.bottom="$t('add')" @click="apiAddFriends(info.id)" v-else)
           simple-svg(:filepath="'/static/img/friend-add.svg'")
-        .friends-block__actions-block(v-tooltip.bottom="'Заблокировать'" @click="openModal('blocked')")
+        .friends-block__actions-block(v-tooltip.bottom="$t('blocked')" @click="openModal('blocked')")
           simple-svg(:filepath="'/static/img/friend-blocked.svg'")
     modal(v-model="modalShow")
       p(v-if="modalText") {{modalText}}
       template(slot="actions")
-        button-hover(@click.native="onConfrim(info.id)") Да
-        button-hover(variant="red" bordered @click.native="closeModal") Отмена
+        button-hover(@click.native="onConfrim(info.id)") {{ $t('yes') }}
+        button-hover(variant="red" bordered @click.native="closeModal") {{ $t('cancel') }}
 </template>
 
 <script>
@@ -64,6 +64,13 @@ export default {
   computed: {
     ...mapGetters('profile/dialogs', ['dialogs']),
     modalText() {
+      if (localStorage.getItem('lang') === 'en') {
+        return this.modalType === 'delete'
+        ? `Are you sure you want to remove the user  ${this.info.first_name + ' ' + this.info.last_name} from friends?`
+        : this.modalType === 'deleteModerator'
+        ? `Are you sure you want to be removed ${this.info.first_name + ' ' + this.info.last_name} from the list of moderators?`
+        : `Are you sure you want to block the user ${this.info.first_name + ' ' + this.info.last_name}?`
+      }
       return this.modalType === 'delete'
         ? `Вы уверены, что хотите удалить пользователя ${this.info.first_name + ' ' + this.info.last_name} из друзей?`
         : this.modalType === 'deleteModerator'
@@ -92,7 +99,29 @@ export default {
         ? console.log('delete moderator')
         : this.apiBlockUser(id).then(() => this.closeModal())
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "sendMassage": "Send message",
+        "del": "Remove from friends",
+        "info": "profile is not completed",
+        "add": "Add as Friend",
+        "blocked": "Blocked",
+        "yes": "Yes",
+        "cancel": "Сancel"
+      },
+      "ru": {
+        "sendMessage": "Написать сообщение",
+        "del": "Удалить из друзей",
+        "info": "профиль не заполнен",
+        "add":"Добавить в друзья",
+        "blocked": "Заблокировать",
+        "yes": "Да",
+        "cancel": "Отмена"
+      }
+    }
+  },
 }
 </script>
 
