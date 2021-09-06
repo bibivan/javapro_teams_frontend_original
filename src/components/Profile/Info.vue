@@ -4,7 +4,7 @@
       .profile-info__img(:class="{offline: !online && !me}")
         img(:src="info.photo" :alt="info.fullName")
       .profile-info__actions(v-if="!me")
-        button-hover(:disable="blocked" @click.native="onSentMessage") {{ $t('sendMassage') }}
+        button-hover(:disable="blocked" @click.native="onSentMessage") {{ $t('sendMessage') }}
         button-hover.profile-info__add(:variant="btnVariantInfo.variant" bordered  @click.native="profileAction") {{btnVariantInfo.text}}
     .profile-info__main
       router-link.edit(v-if="me" :to="{name: 'Settings'}")
@@ -142,7 +142,7 @@ export default {
   i18n: {
     messages: {
       "en": {
-        "sendMassage": "Send message",
+        "sendMessage": "Send message",
         "birthday": "Date of Birth",
         "tel": "Telephone",
         "city": "Country, city",
