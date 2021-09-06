@@ -25,6 +25,9 @@ export default {
     onChange(item) {
       this.activeComponent = item
     }
+  },
+  created() {
+    if (localStorage.getItem('lang') === 'en') this.activeComponent = { component: 'settings-main', text: 'Main' }
   }
 }
 </script>

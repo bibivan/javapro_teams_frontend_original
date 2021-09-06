@@ -3,43 +3,78 @@ import axios from 'axios'
 export default {
   namespaced: true,
   state: {
-    notifications: [{
-        icon: 'comments',
-        name: 'О новых комментариях к моим публикациям',
-        type: 'POST_COMMENT',
-        enable: false
-      },
-      {
-        icon: 'reviews',
-        name: 'О ответах на мои комментарии',
-        type: 'COMMENT_COMMENT',
-        enable: false
-      },
-      {
-        icon: 'friends',
-        name: 'О заявках в дузья',
-        type: 'FRIEND_REQUEST',
-        enable: false
-      },
-      {
-        icon: 'messages',
-        name: 'О новых личных сообщениях',
-        type: 'MESSAGE',
-        enable: false
-      },
-      {
-        icon: 'birthdays',
-        name: 'О дне рождения друга',
-        type: 'FRIEND_BIRTHDAY',
-        enable: false
-      }
-    ],
+    notifications: {
+      ru: [
+        {
+          icon: 'comments',
+          name: 'О новых комментариях к моим публикациям',
+          type: 'POST_COMMENT',
+          enable: false
+        },
+        {
+          icon: 'reviews',
+          name: 'О ответах на мои комментарии',
+          type: 'COMMENT_COMMENT',
+          enable: false
+        },
+        {
+          icon: 'friends',
+          name: 'О заявках в дузья',
+          type: 'FRIEND_REQUEST',
+          enable: false
+        },
+        {
+          icon: 'messages',
+          name: 'О новых личных сообщениях',
+          type: 'MESSAGE',
+          enable: false
+        },
+        {
+          icon: 'birthdays',
+          name: 'О дне рождения друга',
+          type: 'FRIEND_BIRTHDAY',
+          enable: false
+        }
+      ],
+      en: [
+        {
+          icon: 'comments',
+          name: 'About new comments to my publications',
+          type: 'POST_COMMENT',
+          enable: false
+        },
+        {
+          icon: 'reviews',
+          name: 'About replies to my comments',
+          type: 'COMMENT_COMMENT',
+          enable: false
+        },
+        {
+          icon: 'friends',
+          name: 'About friend requests',
+          type: 'FRIEND_REQUEST',
+          enable: false
+        },
+        {
+          icon: 'messages',
+          name: 'About new private messages',
+          type: 'MESSAGE',
+          enable: false
+        },
+        {
+          icon: 'birthdays',
+          name: 'Birthday friend',
+          type: 'FRIEND_BIRTHDAY',
+          enable: false
+        }
+      ],
+    },
   },
   getters: {
-    getNotificationsSettings: s => s.notifications
+    getNotificationsSettings: s => s.notifications[localStorage.getItem('lang')]
   },
   mutations: {
-    setNotificationsSettings: (s, notifications) => s.notifications.map(el => el.enable = notifications.find(n => n.notification_type === el.type).enable)
+    setNotificationsSettings: (s, notifications) => s.notifications[localStorage.getItem('lang')].map(el => el.enable = notifications.find(n => n.notification_type === el.type).enable)
   },
   actions: {
     async passwordRecovery({}, email) {

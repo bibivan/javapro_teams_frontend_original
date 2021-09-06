@@ -3,9 +3,9 @@
     .inner-page__main
       .profile__info
         profile-info(me online :info="getInfo")
-      .profile__news(v-if="Object.keys(getWall).length != 0")
+      .profile__news()
         .profile__tabs
-          span.profile__tab(@click="changeTab('POSTED')" :class="{active: activeTab === 'POSTED'}") {{ $t('posted') }} ({{getWallPostedLength}})
+          span.profile__tab(@click="changeTab('POSTED')" :class="{active: activeTab === 'POSTED'}" v-if="getWallPostedLength > 0") {{ $t('posted') }} ({{getWallPostedLength}})
           span.profile__tab(@click="changeTab('QUEUED')" :class="{active: activeTab === 'QUEUED'}" v-if="getWallQueuedLength > 0") {{ $t('queued') }} ({{getWallQueuedLength}})
           span.profile__tab(@click="changeTab('DELETED')" :class="{active: activeTab === 'DELETED'}" v-if="getWallDeletedLength > 0") {{ $t('deleted') }} ({{getWallDeletedLength}})
         .profile__add

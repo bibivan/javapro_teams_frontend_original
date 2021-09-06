@@ -1,16 +1,16 @@
 <template lang="pug">
   .settings-main
-    user-info-form-block(label="Имя:" placeholder="Введите имя" v-model="name" )
-    user-info-form-block(label="Фамилия:" placeholder="Введите фамилию" v-model="lastName" )
-    user-info-form-block(label="Телефон:" placeholder="Введите телефон" v-model="phone" phone)
+    user-info-form-block(:label="$t('name')" :placeholder="$t('entName')" v-model="name" )
+    user-info-form-block(:label="$t('lastName')" :placeholder="$t('entLastName')" v-model="lastName" )
+    user-info-form-block(:label="$t('tel')" :placeholder="$t('entTel')" v-model="phone" phone)
 
     .user-info-form__block(v-if="country || isCountryShow")
-      span.user-info-form__label Страна
+      span.user-info-form__label {{ $t('country') }}
       .user-info-form__wrap.countries(v-click-outside="countriesClose")
         input.user-info-form__input(
           type="text"
           v-model="country"
-          placeholder="Введите страну"
+          :placeholder="$t('entCountry')"
           @input="countriesOpen"
         )
 
@@ -24,12 +24,12 @@
           ) {{item.title}}
 
     .user-info-form__block
-      span.user-info-form__label Город
+      span.user-info-form__label {{ $t('city') }}
       .user-info-form__wrap.countries(v-click-outside="citiesClose")
         input.user-info-form__input(
           type="text"
           v-model="city"
-          placeholder="Введите город"
+          :placeholder="$t('entCity')"
           @input="citiesOpen"
           @keyup.enter="setCity(city)"
         )
@@ -44,7 +44,7 @@
           ) {{item.country}}
 
     .user-info-form__block
-      span.user-info-form__label Дата рождения:
+      span.user-info-form__label {{ $t('birthDay') }}
       .user-info-form__wrap
         select.select.user-info-form__select.day(v-model="day")
           option(v-for="d in days" :key="d") {{d}}
@@ -53,23 +53,23 @@
         select.select.user-info-form__select.year(v-model="year")
           option(v-for="i in years" :key="i") {{i}}
     .user-info-form__block.user-info-form__block--photo
-      span.user-info-form__label Фотография:
+      span.user-info-form__label {{ $t('photo') }}
       .user-info-form__wrap
         .user-info-form__photo-wrap
           input.user-info-form__input-photo(type="file" ref="photo" id="photo"  @change="processFile($event)" accept="image/*")
           label.user-info-form__input.user-info-form__input--photo(for="photo")
             span.setting-main__photo-delete(v-if="photo") {{photo.name}}
               simple-svg(:filepath="'/static/img/delete.svg'" @click.native.prevent="deletePhoto")
-          button-hover(variant="fill" bordered @click.native="loadPhoto") Загрузить
+          button-hover(variant="fill" bordered @click.native="loadPhoto") {{ $t('download') }}
         .user-info-form__photo-pic(v-if="src")
           img(:src="src" :alt="name +' ' + lastName")
-    user-info-form-block(label="О себе:" v-model="about" about)
+    user-info-form-block(:label="$t('myself')" v-model="about" about)
     .user-info-form__block.user-info-form__block--actions
       span.user-info-form__label
       .user-info-form__wrap
-        button-hover(@click.native.prevent="submitHandler") Сохранить
+        button-hover(@click.native.prevent="submitHandler") {{ $t('save') }}
         router-link.settings-main__back(:to="{name: 'Profile'}")
-          button-hover(variant="red" bordered) Отменить
+          button-hover(variant="red" bordered) {{ $t('cancel') }}
 </template>
 
 <script>
@@ -77,32 +77,17 @@ import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import ClickOutside from 'vue-click-outside'
 import UserInfoFormBlock from '@/components/Settings/UserInfoForm/Block.vue'
-import UserInfoFormCountry from '@/components/Settings/UserInfoForm/Country.vue'
 export default {
   name: 'SettingsMain',
-  components: { UserInfoFormBlock,  UserInfoFormCountry },
+  components: { UserInfoFormBlock },
   data: () => ({
     name: '',
     lastName: '',
     phone: '',
     about: '',
     day: 1,
-    month: { val: 1, text: 'Января' },
-    year: 2000,
-    months: [
-      { val: 1, text: 'Января' },
-      { val: 2, text: 'Февраля' },
-      { val: 3, text: 'Марта' },
-      { val: 4, text: 'Апреля' },
-      { val: 5, text: 'Мая' },
-      { val: 6, text: 'Июня' },
-      { val: 7, text: 'Июля' },
-      { val: 8, text: 'Августа' },
-      { val: 9, text: 'Сентября' },
-      { val: 10, text: 'Октября' },
-      { val: 11, text: 'Ноября' },
-      { val: 12, text: 'Декабря' }
-    ],
+    month: { },
+    year: 2000,    
     photo: null,
     src: '',
     country: '',
@@ -137,7 +122,39 @@ export default {
           ? 28
           : 29
         : 30 + ((this.month.val + (this.month.val >> 3)) & 1)
-    }
+    },
+    months() {
+      if (localStorage.getItem('lang') === 'en') {
+        return [
+          { val: 0, text: 'January' },
+          { val: 1, text: 'February' },
+          { val: 2, text: 'March' },
+          { val: 3, text: 'April' },
+          { val: 4, text: 'May' },
+          { val: 5, text: 'June' },
+          { val: 6, text: 'July' },
+          { val: 7, text: 'August' },
+          { val: 8, text: 'September' },
+          { val: 9, text: 'October' },
+          { val: 10, text: 'November' },
+          { val: 11, text: 'December' }
+        ]
+      }
+      return [
+        { val: 0, text: 'Января' },
+        { val: 1, text: 'Февраля' },
+        { val: 2, text: 'Марта' },
+        { val: 3, text: 'Апреля' },
+        { val: 4, text: 'Мая' },
+        { val: 5, text: 'Июня' },
+        { val: 6, text: 'Июля' },
+        { val: 7, text: 'Августа' },
+        { val: 8, text: 'Сентября' },
+        { val: 9, text: 'Октября' },
+        { val: 10, text: 'Ноября' },
+        { val: 11, text: 'Декабря' }
+      ]
+    },
   },
   methods: {
     ...mapActions('global/storage', ['apiStorage']),
@@ -245,6 +262,46 @@ export default {
   },
   directives: {
     ClickOutside
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "tel": "Phone:",
+        "entTel": "Enter your phone",
+        "lastName": "Last name:",
+        "entLastName": "Enter last name",
+        "name": "Name:",
+        "entName": "Enter name",
+        "country": "Country:",
+        "entCountry": "Enter country",
+        "city": "City:",
+        "entCity": "Enter city",
+        "birthDay": "Date of Birth:",
+        "photo": "Photo:",
+        "myself": "About myself:",
+        "download": "Download",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "ru": {
+        "tel": "Телефон:",
+        "entTel": "Введите телефон",
+        "lastName": "Фамилия:",
+        "entLastName": "Введите фамилию",
+        "name": "Имя:",
+        "entName": "Введите имя",
+        "country": "Страна:",
+        "entCountry": "Введите страну",
+        "city": "Город:",
+        "entCity": "Введите город",
+        "birthDay": "Дата рождения:",
+        "photo": "Фотография:",
+        "myself": "О себе:",
+        "download": "Загрузить",
+        "cancel": "Отмена",
+        "save": "Сохранить"
+      }
+    }
   },
 }
 </script>

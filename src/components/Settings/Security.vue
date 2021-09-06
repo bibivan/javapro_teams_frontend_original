@@ -3,11 +3,11 @@
     .settings-security__block
       h3.settings-security__title E-mail:
       span.settings-security__value {{getInfo.email}}
-      button-hover(@click.native="submitHandler('email')") Изменить
+      button-hover(@click.native="submitHandler('email')") {{ $t('change') }}
     .settings-security__block
-      h3.settings-security__title Пароль:
+      h3.settings-security__title {{ $t('password') }}:
       span.settings-security__value ********
-      button-hover(@click.native="submitHandler('password')") Изменить
+      button-hover(@click.native="submitHandler('password')") {{ $t('change') }}
 </template>
 
 <script>
@@ -27,7 +27,19 @@ export default {
         router.push({name: 'ShiftPassword', params: {id: this.getInfo.id}});
       }
     }
-  }
+  },
+  i18n: {
+    messages: {
+      "en": {
+        "password": "Password",
+        "change": "Change"
+      },
+      "ru": {
+        "password": "Пароль",
+        "change": "Изменить"
+      }
+    }
+  },
 }
 </script>
 

@@ -239,6 +239,7 @@ export default {
       }
     } else {
       this.editor = new Editor({
+        content: `<p>Ваш текст</p>`,
         extensions: [new Bold(), new Italic(), new Underline(), new Link()],
         editorProps: {
           attributes: {

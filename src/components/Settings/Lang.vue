@@ -1,10 +1,11 @@
 <template lang="pug">
-  ul.language-list
-    li.language-item(
-      v-for="lang in filterLanguages"
-      :key="lang.id"
-      @click="setActiveHandler(lang)"
-    ) {{lang.title}}
+  .language
+    ul.language-list
+      li.language-item(
+        v-for="lang in filterLanguages"
+        :key="lang.id"
+        @click="setActiveHandler(lang)"
+      ) {{lang.title}}
 </template>
 
 <script>
@@ -46,22 +47,20 @@ export default {
   mounted() {
     if (this.getLanguages.length === 0) this.apiLanguages()
   },
-  i18n: {
-    messages: {
-      "en": {
-        "title": "Choose language",
-        "placeholder": "Start typing the name of the language"
-      },
-      "ru": {
-        "title": "Выберите язык",
-        "placeholder": "Начните вводить название языка"
-      }
-    }
-  },
 }
 </script>
 
 <style lang="stylus">
+@import '../../assets/stylus/base/vars.styl';
+
+.language {
+  background: #fff;
+  box-shadow: standart-boxshadow;
+  display: flex;
+  align-items: center;
+  padding: 50px;
+  font-size: 15px;
+}
 
 .language-list {
   display: inline-flex;
@@ -73,7 +72,7 @@ export default {
 
 .language-item {
   margin-bottom: 15px;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 20px;
   line-height: 25px;
   color: charade;
