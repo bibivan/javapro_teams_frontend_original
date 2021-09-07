@@ -86,11 +86,12 @@ export default {
     },
     async passwordSet({
       rootState
-    }, password) {
+    }, value) {
       let data = {
-        token: rootState.auth.api.token,
-        password
+        token: value.token,
+        password: value.password
       }
+      console.log(value)
       await axios({
         url: 'account/password/set',
         method: 'PUT',
