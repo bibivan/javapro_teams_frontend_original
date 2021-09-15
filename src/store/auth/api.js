@@ -37,7 +37,9 @@ export default {
         }, {
           root: true
         })
-        router.push({ name: 'RegisterLetter' });
+        router.push({
+          name: 'RegisterLetter'
+        });
       }).catch(error => {
         dispatch('global/alert/setAlert', {
           status: 'error',
@@ -45,7 +47,9 @@ export default {
         }, {
           root: true
         })
-        router.push({ name: 'RegisterFailed' });
+        router.push({
+          name: 'RegisterFailed'
+        });
       })
     },
     async confirmRegistration({
@@ -62,7 +66,9 @@ export default {
         }, {
           root: true
         })
-        router.push({ name: 'RegisterSuccess' });
+        router.push({
+          name: 'RegisterSuccess'
+        });
       }).catch(async error => {
         dispatch('global/alert/setAlert', {
           status: 'error',
@@ -70,7 +76,9 @@ export default {
         }, {
           root: true
         })
-        router.push({ name: 'RegisterConfirmationFailed' });
+        router.push({
+          name: 'RegisterConfirmationFailed'
+        });
       })
     },
     async login({
@@ -95,6 +103,7 @@ export default {
         localStorage.removeItem('user-token')
       })
     },
+
     async logout({
       commit,
       dispatch
@@ -116,10 +125,17 @@ export default {
         window.location.reload()
       }).catch(error => {})
     },
-    async modalOff({ commit }) {
+    async modalOff({
+      commit
+    }) {
       commit('setModal', false)
     },
-    async modalOn({ commit }, { header, link }) {
+    async modalOn({
+      commit
+    }, {
+      header,
+      link
+    }) {
       commit('setModal', true)
       commit('setModalTitle', header)
       commit('setModalLink', link)
