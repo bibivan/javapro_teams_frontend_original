@@ -118,5 +118,15 @@ export default [{
       title: 'Не удалось изменить пароль'
     },
     component: () => import('@/pages/Auth/ChangePasswordFailed.vue')
+  },
+  {
+    path: '/support',
+    name: 'support',
+    meta: {
+      layout: 'form',
+      notRequiresAuth: true,
+      title: 'Написать в службу поддержки'
+    },
+    component: () => import('@/pages/Auth/Support.vue')
   }
 ]

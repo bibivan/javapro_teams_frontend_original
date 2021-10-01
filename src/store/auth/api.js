@@ -116,6 +116,15 @@ export default {
         window.location.reload()
       }).catch(error => {})
     },
+    async sendToSupport (supportData) {
+      await axios({
+        url: 'support',
+        method: 'POST'
+      },
+      {
+        supportData
+      })
+    },
     async modalOff({ commit }) {
       commit('setModal', false)
     },
