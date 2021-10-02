@@ -116,13 +116,11 @@ export default {
         window.location.reload()
       }).catch(error => {})
     },
-    async sendToSupport (supportData) {
+    async sendToSupport (context, supportData) {
       await axios({
         url: 'support',
+        data: supportData,
         method: 'POST'
-      },
-      {
-        supportData
       })
     },
     async modalOff({ commit }) {

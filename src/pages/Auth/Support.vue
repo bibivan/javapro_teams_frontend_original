@@ -37,7 +37,7 @@ export default {
       console.log(this.email)
       console.log(this.message)
       // проверка прохождения hCaptcha
-      this.sendToSupport({ email: this.email, password: this.message })
+      this.sendToSupport({ email: this.email, message: this.message })
         .catch(error => {})
     }
   },
