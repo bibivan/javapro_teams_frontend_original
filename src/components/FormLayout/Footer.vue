@@ -1,6 +1,6 @@
 <template lang="pug">
   .form-layout__footer
-    a.form-layout__footer-support(href="#") {{ $t('support') }}
+    router-link.form-layout__footer-support(:to="{name: 'support'}") {{ $t('support') }}
     .form-layout__footer-language {{ $t('lang') }}: &nbsp;
       span.active(@click="toggleLanguageBlock") {{getActiveLang}}
     span.form-layout__footer-copyright © Copyright {{year}} ZERONE

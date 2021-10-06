@@ -103,7 +103,6 @@ export default {
         localStorage.removeItem('user-token')
       })
     },
-
     async logout({
       commit,
       dispatch
@@ -125,17 +124,17 @@ export default {
         window.location.reload()
       }).catch(error => {})
     },
-    async modalOff({
-      commit
-    }) {
+    async sendToSupport (context, supportData) {
+      await axios({
+        url: 'support',
+        data: supportData,
+        method: 'POST'
+      })
+    },
+    async modalOff({ commit }) {
       commit('setModal', false)
     },
-    async modalOn({
-      commit
-    }, {
-      header,
-      link
-    }) {
+    async modalOn({ commit }, { header, link }) {
       commit('setModal', true)
       commit('setModalTitle', header)
       commit('setModalLink', link)
