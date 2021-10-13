@@ -135,6 +135,7 @@ export default {
       commit('setModal', false)
     },
     async modalOn({ commit }, { header, link }) {
+      console.log(1);
       commit('setModal', true)
       commit('setModalTitle', header)
       commit('setModalLink', link)
