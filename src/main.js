@@ -6,9 +6,11 @@ import moment from 'moment'
 import App from './App'
 import router from './router'
 import store from './store'
+import VModal from 'vue-js-modal'
 import './settings'
 
-Vue.use(VueI18n)
+Vue.use(VueI18n);
+Vue.use(VModal)
 
 if (!localStorage.getItem('lang')) {
   localStorage.setItem('lang', 'ru')
