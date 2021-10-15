@@ -12,17 +12,17 @@
     | {{ $t("policy3") }} &nbsp;
     a(@click='modalOn({ header: $t("header2"), link: "http://31.40.251.201:8086/personal-data.html" })') {{ $t("policy4") }}.
 
-    modal.custom-modal(
-      name='example',
-      slot='top-right',
-      scrollable,
-      height='auto',
-      width='90%',
-      :styles='{ top: "20px", padding: "20px" }',
-      @click='hideModal'
-    )
-      button.custom-modal-close(@click='$modal.hide("example")') &#10006;
-      PrivacyPolicy
+  modal.custom-modal(
+    name='privacy',
+    slot='top-right',
+    scrollable,
+    height='auto',
+    width='90%',
+    :styles='{ top: "20px", padding: "20px" }',
+    @click='hideModal'
+  )
+    button.custom-modal-close(@click='$modal.hide("privacy")') &#10006;
+    PrivacyPolicy
 </template>
 
 <script>
@@ -31,9 +31,6 @@ import PrivacyPolicy from './PrivacyPolicy.vue'
 
 export default {
   name: 'ConfirmField',
-  mounted() {
-    this.$modal.show('example')
-  },
   components: {
     PrivacyPolicy
   },
@@ -54,10 +51,10 @@ export default {
   methods: {
     ...mapActions('auth/api', ['modalOn']),
     modalShow() {
-      this.$modal.show('example')
+      this.$modal.show('privacy')
     },
     hideModal() {
-      this.$modal.show('example')
+      this.$modal.show('privacy')
     }
   },
   computed: {
