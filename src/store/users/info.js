@@ -39,27 +39,28 @@ export default {
       return result
     },
     getWall(state) {
-      if (!state.wall) return
+      if (!state.wall.length) return
       let result = [
         ...state.wall
       ]
-
       result.forEach(el => {
-        el.comments.forEach(comment => {
-          comment.photo = el.photo || '../static/img/user/default_avatar.svg'
-          comment.my_like =  comment.my_like || false
-          comment.is_deleted = comment.is_deleted || false
-          comment.sub_comments =  comment.sub_comments || []
+        if(el.comments && el.comments.length) {
+          el.comments.forEach(comment => {
+            comment.photo = el.photo || '../static/img/user/default_avatar.svg'
+            comment.my_like =  comment.my_like || false
+            comment.is_deleted = comment.is_deleted || false
+            comment.sub_comments =  comment.sub_comments || []
 
-          if (comment.parent_id !== 0) {
-            el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
-          }
+            if (comment.parent_id !== 0) {
+              el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
+            }
+          })
+
+          el.my_like =  el.my_like || false
+          el.comments = el.comments.filter(comment => !comment.parent_id)
+          // el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
+        }
         })
-
-        el.my_like =  el.my_like || false
-        el.comments = el.comments.filter(comment => !comment.parent_id)
-        // el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
-      })
 
       return result
     },
@@ -69,7 +70,9 @@ export default {
   },
   mutations: {
     setInfo: (s, info) => s.info = info,
-    setWall: (s, wall) => s.wall = wall,
+    setWall: (s, wall) => {
+      s.wall = wall
+    },
     setWallById: (s, payload) => s.wall[s.wall.indexOf(s.wall.find(el => el.id === payload.id))] = payload.value,
     setCommentsById: (s, payload) => {
       s.wall[s.wall.indexOf(s.wall.find(el => el.id === payload.post_id))].comments = payload.value
