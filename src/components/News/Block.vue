@@ -1,59 +1,57 @@
 <template lang="pug">
-  .news-block(:class="{deffered, 'news-block--admin': admin}")
-    add-form(v-if="isEditNews" :info="info" edit :deffered="deffered" @submit-complete="toggleEditNews")
+.news-block(:class='{ deffered, "news-block--admin": admin }')
+  add-form(v-if='isEditNews', :info='info', edit, :deffered='deffered', @submit-complete='toggleEditNews')
+  template(v-else)
+    template(v-if='!admin')
+      .edit
+        .edit__icon(v-if='deleted && info.type === "POSTED"', @click='deleteNews')
+          simple-svg(:filepath='"/static/img/delete-news.svg"')
+        .edit__recover(v-if='deleted && info.type === "DELETED"', @click='recoverNews')
+          a(href='#', @click.prevent='onRecoverComment') {{ $t("restore") }}
+        .edit__icon(v-if='edit', @click='toggleEditNews')
+          simple-svg(:filepath='"/static/img/edit.svg"')
     template(v-else)
-      template(v-if="!admin")
-        .edit
-          .edit__icon(v-if="deleted && info.type === 'POSTED'" @click="deleteNews")
-            simple-svg(:filepath="'/static/img/delete-news.svg'")
-          .edit__recover(v-if="deleted && info.type === 'DELETED'" @click="recoverNews")
-            a(href="#" @click.prevent="onRecoverComment") {{ $t('restore') }}
-          .edit__icon(v-if="edit" @click="toggleEditNews")
-            simple-svg(:filepath="'/static/img/edit.svg'")
-      template(v-else)
-        .edit(v-tooltip.bottom="'Разблокировать'" v-if="blocked")
-          simple-svg(:filepath="'/static/img/unblocked.svg'")
-        .edit(v-tooltip.bottom="'Заблокировать'" v-else)
-          simple-svg(:filepath="'/static/img/blocked.svg'")
-      .news-block__deffered(v-if="deffered")
-        span.news-block__deffered-text {{ $t('date') }}: {{info.time | moment('DD.MM.YYYY, HH:mm')}} ({{diffTime(info.time * 1000)}})
-      .news-block__author(v-if="!deffered")
-        router-link.news-block__author-pic(:to="{name: 'ProfileId', params: {id: info.author.id}}")
-          img(:src="info.author.photo || '../static/img/user/default_avatar.svg'" :alt="info.author.first_name")
-        .news-block__author-info
-          router-link.news-block__author-name(:to="{name: 'ProfileId', params: {id: info.author.id}}") {{info.author.first_name + ' ' + info.author.last_name}}
-          span.news-block__author-time {{info.time | moment("from")}}
-      .news-block__content
-        .news-block__content-main
-          h3.news-block__content-title {{info.title}}
-          p.news-block__content-text(ref="text" :class="{lotText: isLotText, open: openText}" v-html="info.post_text")
-          a.news-block__content-more(href="#" v-if="isLotText" @click.prevent="toggleText")
-            template(v-if="openText") {{ $t('hide') }}
-            template(v-else) {{ $t('read') }}
-        ul.news-block__content-tags
-          li.news-block__content-tag(v-for="(tag,index) in info.tags" :key="index") {{'#'+tag}}
-      .news-block__actions(v-if="!deffered && !admin")
-        .news-block__actions-block
-          like-comment(
-            :quantity="info.likes"
-            width="16px"
-            height="16px"
-            font-size="15px"
-            @liked="likeAction"
-            :active="info.my_like"
-            :id="info.id"
-            :isPost = "true"
-          )
-        .news-block__actions-block
-          like-comment(:quantity="commentsLength" width="16px" height="16px" font-size="15px" comment)
-      .news-block__comments(v-if="!deffered")
-        comments(
-          :admin="admin"
-          :info="info.comments"
-          :id="info.id"
-          :edit="edit"
-          :deleted="deleted"
+      .edit(v-tooltip.bottom='\'Разблокировать\'', v-if='blocked')
+        simple-svg(:filepath='"/static/img/unblocked.svg"')
+      .edit(v-tooltip.bottom='\'Заблокировать\'', v-else)
+        simple-svg(:filepath='"/static/img/blocked.svg"')
+    .news-block__deffered(v-if='deffered')
+      span.news-block__deffered-text {{ $t("date") }}: {{ info.time | moment("DD.MM.YYYY, HH:mm") }} ({{ diffTime(info.time * 1000) }})
+    .news-block__author(v-if='!deffered')
+      router-link.news-block__author-pic(:to='{ name: "ProfileId", params: { id: info.author.id } }')
+        img(:src='info.author.photo || "../static/img/user/default_avatar.svg"', :alt='info.author.first_name')
+      .news-block__author-info
+        router-link.news-block__author-name(:to='{ name: "ProfileId", params: { id: info.author.id } }') {{ info.author.first_name + " " + info.author.last_name }}
+        span.news-block__author-time {{ info.time | moment("from") }}
+    .news-block__content
+      .news-block__content-main
+        h3.news-block__content-title {{ info.title }}
+        p.news-block__content-text(
+          ref='text',
+          :class='{ lotText: isLotText, open: openText }',
+          v-html='info.post_text'
         )
+        a.news-block__content-more(href='#', v-if='isLotText', @click.prevent='toggleText')
+          template(v-if='openText') {{ $t("hide") }}
+          template(v-else) {{ $t("read") }}
+      ul.news-block__content-tags
+        li.news-block__content-tag(v-for='(tag, index) in info.tags', :key='index') {{ "#" + tag }}
+    .news-block__actions(v-if='!deffered && !admin')
+      .news-block__actions-block
+        like-comment(
+          :quantity='info.likes',
+          width='16px',
+          height='16px',
+          font-size='15px',
+          @liked='likeAction',
+          :active='info.my_like',
+          :id='info.id',
+          :isPost='true'
+        )
+      .news-block__actions-block
+        like-comment(:quantity='commentsLength', width='16px', height='16px', font-size='15px', comment)
+    .news-block__comments(v-if='!deffered')
+      comments(:admin='admin', :info='info.comments', :id='info.id', :edit='edit', :deleted='deleted')
 </template>
 
 <script>
@@ -93,13 +91,15 @@ export default {
     ...mapGetters('profile/info', ['getInfo']),
     commentsLength() {
       let result = 0
-      this.info.comments.map(el => {
-        !el.is_deleted && result++
-        el.sub_comments &&
-          el.sub_comments.map(subEl => {
-            !subEl.is_deleted && result++
-          })
-      })
+      if (this.comments && this.components.length) {
+        this.info.comments.map(el => {
+          !el.is_deleted && result++
+          el.sub_comments &&
+            el.sub_comments.map(subEl => {
+              !subEl.is_deleted && result++
+            })
+        })
+      }
       return result
     }
   },
@@ -137,27 +137,27 @@ export default {
         post_id: this.info.id,
         route: this.$route.name
       })
-    },
+    }
   },
   mounted() {
     this.$refs.text.offsetHeight > 100 ? (this.isLotText = true) : (this.isLotText = false)
   },
   i18n: {
     messages: {
-      "en": {
-        "restore": "Restore",
-        "date": "Date and time of publication",
-        "hide": "Hide",
-        "read": "Read the entire post"
+      en: {
+        restore: 'Restore',
+        date: 'Date and time of publication',
+        hide: 'Hide',
+        read: 'Read the entire post'
       },
-      "ru": {
-        "restore": "Восстановить",
-        "date": "Дата и время публикации",
-        "hide": "Скрыть",
-        "read": "Читать весь пост"
+      ru: {
+        restore: 'Восстановить',
+        date: 'Дата и время публикации',
+        hide: 'Скрыть',
+        read: 'Читать весь пост'
       }
     }
-  },
+  }
 }
 </script>
 
@@ -189,7 +189,7 @@ export default {
   }
 
   @media (max-width: breakpoint-xxl) {
-    padding: 20px 30px 0;
+    padding: 20px 30px 1px;
   }
 }
 

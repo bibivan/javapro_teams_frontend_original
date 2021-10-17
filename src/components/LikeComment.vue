@@ -1,12 +1,12 @@
 <template lang="pug">
-  .like-comment(:class="{active, fill}")
-    template(v-if="comment")
-      simple-svg(:filepath="'/static/img/comment.svg'" :width="width" :height="height")
-      span(v-if="quantity >= 1" :style="{'font-size': fontSize}") {{quantity}}
-    .like-comment__checkbox(v-else)
-      input(type="checkbox" :checked="active" :id="isPost ? 'post-' + id : 'comment-' + id" @change="onChange")
-      label(:for="isPost ? 'post-' + id : 'comment-' + id" :style="{'font-size': fontSize}")
-        template(v-if="localQuantity >= 1") {{localQuantity}}
+.like-comment(:class='{ active, fill }')
+  template(v-if='comment')
+    simple-svg(:filepath='"/static/img/comment.svg"', :width='width', :height='height')
+    span(v-if='quantity >= 1', :style='{ "font-size": fontSize }') {{ quantity }}
+  .like-comment__checkbox(v-else)
+    input(type='checkbox', :checked='active', :id='isPost ? "post-" + id : "comment-" + id', @change='onChange')
+    label(:for='isPost ? "post-" + id : "comment-" + id', :style='{ "font-size": fontSize }')
+      template(v-if='localQuantity >= 1') {{ localQuantity }}
 </template>
 
 <script>
@@ -30,7 +30,7 @@ export default {
     },
     comment: Boolean,
     id: Number,
-    isPost: Boolean,
+    isPost: Boolean
   },
   data: () => ({
     localQuantity: null,
@@ -141,11 +141,11 @@ export default {
   }
 
   label {
-    width: 18px;
     height: 16px;
     display: block;
     background: url('/static/img/like.svg') center no-repeat;
     background-size: 18px;
+    background-position-x: left;
     padding-left: 25px;
     font-weight: 600;
     color: #AEAEBD;
