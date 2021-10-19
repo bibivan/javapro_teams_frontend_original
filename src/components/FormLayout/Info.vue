@@ -1,9 +1,9 @@
 <template lang="pug">
-  .form-layout__main
-    h1.form-layout__title {{info.title}}
-    p.form-layout__text {{info.text}}
-    p.form-layout__descr(v-if="info.descr") {{info.descr}}
-    button-hover.form-layout__btn(:to="{name: info.btn.link}" v-if="info.btn" :variant="info.btn.variant") {{info.btn.text}}
+.form-layout__main
+  h1.form-layout__title {{ info.title }}
+  p.form-layout__text {{ info.text }}
+  p.form-layout__descr(v-if='info.descr') {{ info.descr }}
+  button-hover.form-layout__btn(:to='{ name: info.btn.link }', v-if='info.btn') {{ info.btn.text }}
 </template>
 
 <script>
@@ -28,6 +28,18 @@ export default {
 
 .form-layout__main {
   margin: auto 0;
+
+  & > .form-layout__btn {
+    transition: color 1s ease;
+
+    &:hover {
+      color: #21a45d;
+    }
+
+    & > .helper {
+      background-color: #fff;
+    }
+  }
 }
 
 .form-layout__title {

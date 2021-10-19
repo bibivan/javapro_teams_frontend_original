@@ -1,14 +1,18 @@
 <template lang="pug">
-  .form__group(:class="{fill: password.length > 0}")
-    label.form__label(:for="id") {{ $t('repeatPassword') }}
-    input.form__input(name="password" type="password" :id="id"
-      v-model.trim="password"
-      :autocomplete="autocomplete"
-      @change="v.$touch()"
-      :class="{invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword)}"
-    )
-    span.form__error(v-if="v.$dirty && !v.sameAsPassword") {{ $t('matchPassword') }}
-    span.form__error(v-if="v.$dirty && !v.minLength") {{ $t('errorPassword1') }} {{v.$params.minLength.min}} {{ $t('errorPassword2') }} {{password.length}}
+.form__group(:class='{ fill: password.length > 0 }')
+  label.form__label(:for='id') {{ $t("repeatPassword") }}
+    span.required-field *
+  input.form__input(
+    name='password',
+    type='password',
+    :id='id',
+    v-model.trim='password',
+    :autocomplete='autocomplete',
+    @change='v.$touch()',
+    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword) }'
+  )
+  span.form__error(v-if='v.$dirty && !v.sameAsPassword') {{ $t("matchPassword") }}
+  span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
 </template>
 
 <script>
