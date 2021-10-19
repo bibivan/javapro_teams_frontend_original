@@ -1,26 +1,29 @@
 <template lang="pug">
-  .form__group(:class="{fill: password.length > 0}")
-    label.form__label(:for="id") {{ $t('password') }}
-    input.form__input(name="password" :id="id"
-      :type="passwordFieldType"
-      :autocomplete="autocomplete"
-      v-model.trim="password"
-      @change="passwordBlur"
-      :class="{invalid: ((v.$dirty && !v.required) || (v.$dirty && !v.minLength))}"
-    )
-    span.form__error(v-if="v.$dirty && !v.required") {{ $t('enterPassword') }}
-    .form__error-block
-      template(v-if="registration")
-        span.form__password-helper(:class="levelInfo.class")
-        span.form__error(v-if="password.length>=3") {{levelInfo.text}}
-      template(v-else)
-        span.form__error(v-if="v.$dirty && !v.minLength") {{ $t('errorPassword1') }} {{v.$params.minLength.min}} {{ $t('errorPassword2') }} {{password.length}}
-    template(v-if="info")
-      .form__password-icon.active
-        simple-svg(:filepath="'/static/img/password-info.svg'")
-      p.form__password-info {{ $t('infoPassword') }}
-    .form__password-icon(:class="{'active': password.length > 0}" @click="switchVisibility" v-if="!registration")
-      simple-svg(:filepath="'/static/img/password-eye.svg'")
+.form__group(:class='{ fill: password.length > 0 }')
+  label.form__label(:for='id') {{ $t("password") }}
+    span.required-field *
+  input.form__input(
+    name='password',
+    :id='id',
+    :type='passwordFieldType',
+    :autocomplete='autocomplete',
+    v-model.trim='password',
+    @change='passwordBlur',
+    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) }'
+  )
+  span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
+  .form__error-block
+    template(v-if='registration')
+      span.form__password-helper(:class='levelInfo.class')
+      span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
+    template(v-else)
+      span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+  template(v-if='info')
+    .form__password-icon.active
+      simple-svg(:filepath='"/static/img/password-info.svg"')
+    p.form__password-info {{ $t("infoPassword") }}
+  .form__password-icon(:class='{ active: password.length > 0 }', @click='switchVisibility', v-if='!registration')
+    simple-svg(:filepath='"/static/img/password-eye.svg"')
 </template>
 
 <script>

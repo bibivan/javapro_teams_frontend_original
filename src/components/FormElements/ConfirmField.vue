@@ -10,7 +10,7 @@
   label.form__checkbox-label(:for='id') {{ $t("policy") }} &nbsp;
     a(@click='modalShow({ header: $t("header"), link: "http://31.40.251.201:8086/policy.html" })') {{ $t("policy2") }} &nbsp;
     | {{ $t("policy3") }} &nbsp;
-    a(@click='modalOn({ header: $t("header2"), link: "http://31.40.251.201:8086/personal-data.html" })') {{ $t("policy4") }}.
+    a(@click='modalShow({ header: $t("header2"), link: "http://31.40.251.201:8086/personal-data.html" })') {{ $t("policy4") }}.
 
   modal.custom-modal(
     name='privacy',

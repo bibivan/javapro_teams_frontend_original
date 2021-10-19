@@ -1,15 +1,15 @@
 <template lang="pug">
 .login
-    h2.login__title.form__title {{ $t("title") }}
-    form.login__form(@submit.prevent='submitHandler')
-        email-field#login-email(v-model='email', :v='$v.email')
-        password-field#login-password(v-model='password', :v='$v.password', autocomplete='current-password')
-        .login__action
-            button-hover(tag='button', type='submit', variant='white') {{ $t("login") }}
-            router-link.login__link(:to='{ name: "Forgot" }') {{ $t("forgot") }}
+  h2.login__title.form__title {{ $t("title") }}
+  form.login__form(@submit.prevent='submitHandler')
+    email-field#login-email(v-model='email', :v='$v.email')
+    password-field#login-password(v-model='password', :v='$v.password', autocomplete='current-password')
+    .login__action
+      button-hover(tag='button', type='submit', variant='white') {{ $t("login") }}
+      router-link.login__link(:to='{ name: "Forgot" }') {{ $t("forgot") }}
 
-            //- временный вход
-            router-link.login__link(:to='{ name: "Forgot" }') тыкни сюда
+      //- временный вход
+    //-   router-link.login__link(:to='{ name: "Forgot" }') тыкни сюда
 </template>
 
 <script>
@@ -76,31 +76,31 @@ export default {
 @import '../../assets/stylus/base/vars.styl';
 
 .login {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .login__title {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .login__action {
-    display: flex;
-    align-items: center;
-    margin-top: 50px;
+  display: flex;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .login__link {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-left: 30px;
-    white-space: nowrap;
-    transition: all 0.2s;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 30px;
+  white-space: nowrap;
+  transition: all 0.2s;
 
-    &:hover {
-        color: #fff;
-    }
+  &:hover {
+    color: #fff;
+  }
 }
 </style>
