@@ -8,9 +8,10 @@
     :type='passwordFieldType',
     :autocomplete='autocomplete',
     v-model.trim='password',
-    @change='passwordBlur',
     :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) }'
   )
+    //- @change='passwordBlur',
+    //- @focus='passwordFocus',
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
   .form__error-block
     template(v-if='registration')
@@ -75,10 +76,14 @@ export default {
     switchVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
     },
-    passwordBlur() {
-      this.passwordHelperShow = false
-      this.v.$touch()
-    }
+    // passwordBlur() {
+    //   this.passwordHelperShow = false
+    //   this.v.$touch()
+    // },
+    // passwordFocus() {
+    //   this.passwordHelperShow = true
+    //   this.v.$touch()
+    // }
   },
   i18n: {
     messages: {
