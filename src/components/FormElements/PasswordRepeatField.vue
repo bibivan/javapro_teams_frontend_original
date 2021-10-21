@@ -9,7 +9,7 @@
     v-model.trim='password',
     :autocomplete='autocomplete',
     @change='v.$touch()',
-    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword) }'
+    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword) || !v.passwordRule }'
   )
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
   span.form__error(v-else-if='v.$dirty && !v.sameAsPassword') {{ $t("matchPassword") }}
@@ -55,6 +55,7 @@ export default {
         "errorPassword1": "Password must be at least",
         "errorPassword2": "characters. He is now",
         "enterPassword": "Enter password",
+        "notValid": "Does not meet safety requirements"
       },
       "ru": {
         "repeatPassword": "Повторите пароль",
@@ -62,6 +63,7 @@ export default {
         "errorPassword1": "Пароль должен быть не менее",
         "errorPassword2": "символов. Сейчас он",
         "enterPassword": "Повтоите пароль",
+        "notValid": "Не соответствует требованиям безопасности"
       }
     }
   },
