@@ -1,26 +1,26 @@
 <template lang="pug">
-  .push(:class="{open: isOpen}")
-    .push__overlay(@click.stop="closePush")
-    .push__wrap(:class="{open: isOpen}" ref="wrap")
-      .push__list(ref="list")
-        .push__item(v-for="info in getNotifications.slice(0,10)" :key="info.id")
-          .push__img
-            img(:src="info.entity_author.photo" :alt="info.entity_author.first_name")
-          p.push__content
-            router-link.push__content-name(:to="getRouteByNotification(info)")
-              | {{info.entity_author.first_name + ' ' + info.entity_author.last_name}}
-              |
-              | {{getNotificationsTextType(info.event_type)}}
-          span.push__time {{info.sent_time | moment('from')}}
-          .push__del(@click="readNotifications(info.id)")
-            simple-svg(:filepath="'/static/img/delete.svg'")
-      router-link.push__btn(:to="{name: 'Push'}" v-if="getNotificationsLength > 1") {{ $t('show') }} ({{getNotificationsLength}})
-      a.push__btn(href="#" v-if="getNotificationsLength > 1" @click.prevent="readNotifications()") {{ $t('delete') }} ({{getNotificationsLength}})
+.push(:class='{ open: isOpen }')
+  .push__overlay(@click.stop='closePush')
+  .push__wrap(:class='{ open: isOpen }', ref='wrap')
+    .push__list(ref='list')
+      .push__item(v-for='info in getNotifications.slice(0, 10)', :key='info.id')
+        .push__img
+          img(:src='info.entity_author.photo', :alt='info.entity_author.first_name')
+        p.push__content
+          router-link.push__content-name(:to='getRouteByNotification(info)')
+            | {{ info.entity_author.first_name + " " + info.entity_author.last_name }}
+            |
+            | {{ getNotificationsTextType(normalizeNotificationType(info.data.type_id)) }}
+        span.push__time {{ info.sent_time | moment("from") }}
+        .push__del(@click='readNotifications(info.id)')
+          simple-svg(:filepath='"/static/img/delete.svg"')
+    router-link.push__btn(:to='{ name: "Push" }', v-if='getNotificationsLength > 1') {{ $t("show") }} ({{ getNotificationsLength }})
+    a.push__btn(href='#', v-if='getNotificationsLength > 1', @click.prevent='readNotifications()') {{ $t("delete") }} ({{ getNotificationsLength }})
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getRouteByNotification } from '@/utils/notifications.utils.js';
+import { getRouteByNotification, normalizeNotificationType } from '@/utils/notifications.utils.js'
 export default {
   name: 'Push',
   props: {
@@ -42,7 +42,7 @@ export default {
     closePush() {
       if (!this.isOpen) return
       this.$emit('close-push')
-    },
+    }
   },
   mounted() {
     if (this.getNotificationsLength === 0) this.apiNotifications()
@@ -55,16 +55,16 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "show": "Show all",
-        "delete": "Delete all"
+      en: {
+        show: 'Show all',
+        delete: 'Delete all'
       },
-      "ru": {
-        "show": "Показать все",
-        "delete": "Удалить все"
+      ru: {
+        show: 'Показать все',
+        delete: 'Удалить все'
       }
     }
-  },
+  }
 }
 </script>
 
@@ -180,7 +180,6 @@ export default {
 }
 
 .push__del:hover {
-  transform: rotate(360deg)
+  transform: rotate(360deg);
 }
-
 </style>
