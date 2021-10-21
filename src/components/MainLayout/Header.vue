@@ -1,18 +1,26 @@
 <template lang="pug">
-  header.main-layout__header(:class="{admin: isAdminPage}")
-    template(v-if="!isAdminPage")
-      form.main-layout__search(action="#" @submit.prevent="onSearch")
-        button.main-layout__search-btn
-          simple-svg(:filepath="'/static/img/search.svg'")
-        input.main-layout__search-input(type="text" :placeholder="$t('search')" :value="searchText" @input="setSearchText($event.target.value)")
-      .main-layout__push(@click="togglePush")
-        simple-svg(:filepath="'/static/img/push.svg'" :data-push="getNotificationsLength > 0 ? getNotificationsLength : false")
-        push(:isOpen="isOpenPush" @close-push="togglePush")
-    router-link.main-layout__user(v-if="getInfo" :to="{name: 'Profile'}")
-      .main-layout__user-pic
-        img(:src="getInfo.photo" :alt="getInfo.fullName")
-      span.main-layout__user-name {{getInfo.fullName}}
-      span.main-layout__user-post(v-if="isAdminPage") - {{ $t('admin') }}
+header.main-layout__header(:class='{ admin: isAdminPage }')
+  template(v-if='!isAdminPage')
+    form.main-layout__search(action='#', @submit.prevent='onSearch')
+      button.main-layout__search-btn
+        simple-svg(:filepath='"/static/img/search.svg"')
+      input.main-layout__search-input(
+        type='text',
+        :placeholder='$t("search")',
+        :value='searchText',
+        @input='setSearchText($event.target.value)'
+      )
+    .main-layout__push(@click='togglePush')
+      simple-svg(
+        :filepath='"/static/img/push.svg"',
+        :data-push='getNotificationsLength > 0 ? getNotificationsLength : false'
+      )
+      push(:isOpen='isOpenPush', @close-push='togglePush')
+  router-link.main-layout__user(v-if='getInfo', :to='{ name: "Profile" }')
+    .main-layout__user-pic
+      img(:src='getInfo.photo', :alt='getInfo.fullName')
+    span.main-layout__user-name {{ getInfo.fullName }}
+    span.main-layout__user-post(v-if='isAdminPage') - {{ $t("admin") }}
 </template>
 
 <script>
@@ -37,7 +45,7 @@ export default {
     ...mapActions('profile/info', ['apiInfo']),
     ...mapActions('global/search', ['searchAll']),
     onSearch() {
-      if (this.searchText === '') this.$router.push({ name: 'Search'})
+      if (this.searchText === '') this.$router.push({ name: 'Search' })
       this.searchAll(this.searchText).then(() => {
         this.$router.push({ name: 'Search', query: { text: this.searchText } })
       })
@@ -51,16 +59,16 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "search": "Search",
-        "admin": "administrator"
+      en: {
+        search: 'Search',
+        admin: 'administrator'
       },
-      "ru": {
-        "search": "Поиск",
-        "admin": "администратор"
+      ru: {
+        search: 'Поиск',
+        admin: 'администратор'
       }
     }
-  },
+  }
 }
 </script>
 

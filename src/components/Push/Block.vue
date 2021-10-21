@@ -1,20 +1,20 @@
 <template lang="pug">
-  .push-block
-    .push__img
-      img(:src="info.entity_author.photo" :alt="info.entity_author.first_name")
-    p.push__content
-      router-link.push__content-name(:to="getRouteByNotification(info)")
-        | {{info.entity_author.first_name + ' ' + info.entity_author.last_name}}
-        |
-        | {{getNotificationsTextType(info.event_type)}}
-    span.push__time {{info.sent_time | moment('from')}}
-    .push__del(@click="readNotifications(info.id)")
-      simple-svg(:filepath="'/static/img/delete.svg'")
+.push-block
+  .push__img
+    img(:src='info.entity_author.photo', :alt='info.entity_author.first_name')
+  p.push__content
+    router-link.push__content-name(:to='getRouteByNotification(info)')
+      | {{ info.entity_author.first_name + " " + info.entity_author.last_name }}
+      |
+      | {{ getNotificationsTextType(normalizeNotificationType(info.data.type_id)) }}
+  span.push__time {{ info.sent_time | moment("from") }}
+  .push__del(@click='readNotifications(info.id)')
+    simple-svg(:filepath='"/static/img/delete.svg"')
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getRouteByNotification } from '@/utils/notifications.utils.js'
+import { getRouteByNotification, normalizeNotificationType } from '@/utils/notifications.utils.js'
 export default {
   name: 'PushBlock',
   props: {
@@ -64,7 +64,7 @@ export default {
   }
 
   .push__del:hover {
-    transform: rotate(360deg)
+    transform: rotate(360deg);
   }
 }
 </style>
