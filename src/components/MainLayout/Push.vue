@@ -5,12 +5,12 @@
     .push__list(ref='list')
       .push__item(v-for='info in getNotifications.slice(0, 10)', :key='info.id')
         .push__img
-          img(:src='info.entity_author.photo', :alt='info.entity_author.first_name')
+          img(:src='info.author.photo', :alt='info.author.first_name')
         p.push__content
           router-link.push__content-name(:to='getRouteByNotification(info)')
-            | {{ info.entity_author.first_name + " " + info.entity_author.last_name }}
+            | {{ info.author.first_name + " " + info.author.last_name }}
             |
-            | {{ getNotificationsTextType(normalizeNotificationType(info.data.type_id)) }}
+            | {{ getNotificationsTextType(info.type_id) }}
         span.push__time {{ info.sent_time | moment("from") }}
         .push__del(@click='readNotifications(info.id)')
           simple-svg(:filepath='"/static/img/delete.svg"')
@@ -20,7 +20,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getRouteByNotification, normalizeNotificationType } from '@/utils/notifications.utils.js'
+import { getRouteByNotification } from '@/utils/notifications.utils.js'
 export default {
   name: 'Push',
   props: {
