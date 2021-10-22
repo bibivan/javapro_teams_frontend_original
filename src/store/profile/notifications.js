@@ -12,34 +12,34 @@ export default {
       const lang = localStorage.getItem('lang') || 'ru'
       if (lang === 'ru') {
         switch (type) {
-          case 'POST':
+          case 1:
             return 'опубликовал новую запись'
-          case 'POST_COMMENT':
+          case 2:
             return 'оставил комментарий'
-          case 'COMMENT_COMMENT':
+          case 3:
             return 'ответил на ваш комментарий'
-          case 'FRIEND_REQUEST':
+          case 4:
             return 'добавил в друзья нового пользователя'
-          case 'FRIEND_BIRTHDAY':
-            return 'день рождение'
-          case 'MESSAGE':
+          case 5:
             return 'прислал сообщение'
+          case 6:
+            return 'день рождение'
         }
       }
       if (lang === 'en') {
         switch (type) {
-          case 'POST':
+          case 1:
             return 'posted a new post'
-          case 'POST_COMMENT':
+          case 2:
             return 'left a comment'
-          case 'COMMENT_COMMENT':
+          case 3:
             return 'replied to your comment'
-          case 'FRIEND_REQUEST':
+          case 4:
             return 'added a new user as a friend'
-          case 'FRIEND_BIRTHDAY':
-            return 'birthday'
-          case 'MESSAGE':
+          case 5:
             return 'sent a message'
+          case 6:
+            return 'birthday'
         }
       }
     }
@@ -59,11 +59,11 @@ export default {
       }).then(response => {
         if (`${response.data.data.map(z => z.sent_time)}` !== `${state.notifications.map(z => z.sent_time)}`) {
           const result = response.data.data.map(el => {
-            if (!el.entity_author) el.entity_author = {}
-            if (!el.entity_author.photo) el.entity_author.photo = '../static/img/user/default_avatar.svg'
-            if (!el.entity_author.first_name) el.entity_author.first_name = `Имя автора с ID: ${el.id}`
-            if (!el.entity_author.last_name) el.entity_author.last_name = `Фамилия автора с ID: ${el.id}`
-            if (!el.event_type) el.event_type = 'POST'
+            if (!el.author) el.author = {}
+            if (!el.author.photo) el.author.photo = '../static/img/user/default_avatar.svg'
+            if (!el.author.first_name) el.author.first_name = `Имя автора с ID: ${el.id}`
+            if (!el.author.last_name) el.author.last_name = `Фамилия автора с ID: ${el.id}`
+            if (!el.type_id) el.type_id = 1
             return el;
           });
           commit('setNotifications', result)
