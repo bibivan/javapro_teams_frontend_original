@@ -1,39 +1,39 @@
 <template lang="pug">
-  .profile-info(v-if="info")
-    .profile-info__pic
-      .profile-info__img(:class="{offline: !online && !me}")
-        img(:src="info.photo" :alt="info.fullName")
-      .profile-info__actions(v-if="!me")
-        button-hover(:disable="blocked" @click.native="onSentMessage") {{ $t('sendMessage') }}
-        button-hover.profile-info__add(:variant="btnVariantInfo.variant" bordered  @click.native="profileAction") {{btnVariantInfo.text}}
-    .profile-info__main
-      router-link.edit(v-if="me" :to="{name: 'Settings'}")
-        simple-svg(:filepath="'/static/img/edit.svg'")
-      span.profile-info__blocked(:class="{blocked}" v-else @click="blockedUser") {{blockedText}}
-      .profile-info__header
-        h1.profile-info__name {{info.fullName}}
-        span.user-status(:class="{online, offline: !online}") {{statusText}}
-      .profile-info__block
-        span.profile-info__title {{ $t('birthday') }}:
-        span.profile-info__val(v-if="info.birth_date") {{info.birth_date | moment("D MMMM YYYY") }} ({{info.ages}} {{ yearsOld(info.ages) }})
-        span.profile-info__val(v-else) {{ $t('info') }}
-      .profile-info__block
-        span.profile-info__title {{ $t('tel') }}:
-        a.profile-info__val(v-if="info.phone" :href="`tel:${info.phone}`") {{info.phone | phone}}
-        a.profile-info__val(v-else) {{ $t('info') }}
-      .profile-info__block
-        span.profile-info__title {{ $t('city')}}:
-        span.profile-info__val(v-if="info.country") {{info.country}}, {{info.city}}
-        span.profile-info__val(v-else) {{ $t('info') }}
-      .profile-info__block
-        span.profile-info__title {{ $t('myself') }}:
-        span.profile-info__val(v-if="info.about") {{info.about}}
-        span.profile-info__val(v-else) {{ $t('info') }}
-    modal(v-model="modalShow")
-      p(v-if="modalText") {{modalText}}
-      template(slot="actions")
-        button-hover(@click.native.prevent="onConfirm") {{ $t('yes') }}
-        button-hover(variant="red" bordered @click.native="closeModal") {{ $t('cancel') }}
+.profile-info(v-if='info')
+  .profile-info__pic
+    .profile-info__img(:class='{ offline: !online && !me }')
+      img(:src='info.photo', :alt='info.fullName')
+    .profile-info__actions(v-if='!me')
+      button-hover(:disable='blocked', @click.native='onSentMessage') {{ $t("sendMessage") }}
+      button-hover.profile-info__add(:variant='btnVariantInfo.variant', bordered, @click.native='profileAction') {{ btnVariantInfo.text }}
+  .profile-info__main
+    router-link.edit(v-if='me', :to='{ name: "Settings" }')
+      simple-svg(:filepath='"/static/img/edit.svg"')
+    span.profile-info__blocked(:class='{ blocked }', v-else, @click='blockedUser') {{ blockedText }}
+    .profile-info__header
+      h1.profile-info__name {{ info.fullName }}
+      span.user-status(:class='{ online, offline: !online }') {{ statusText }}
+    .profile-info__block
+      span.profile-info__title {{ $t("birthday") }}:
+      span.profile-info__val(v-if='info.birth_date') {{ info.birth_date | moment("D MMMM YYYY") }} ({{ info.ages }} {{ yearsOld(info.ages) }})
+      span.profile-info__val(v-else) {{ $t("info") }}
+    .profile-info__block
+      span.profile-info__title {{ $t("tel") }}:
+      a.profile-info__val(v-if='info.phone', :href='`tel:${info.phone}`') {{ info.phone | phone }}
+      a.profile-info__val(v-else) {{ $t("info") }}
+    .profile-info__block
+      span.profile-info__title {{ $t("city") }}:
+      span.profile-info__val(v-if='info.country') {{ info.country.title }}, {{ info.town.title }}
+      span.profile-info__val(v-else) {{ $t("info") }}
+    .profile-info__block
+      span.profile-info__title {{ $t("myself") }}:
+      span.profile-info__val(v-if='info.about') {{ info.about }}
+      span.profile-info__val(v-else) {{ $t("info") }}
+  modal(v-model='modalShow')
+    p(v-if='modalText') {{ modalText }}
+    template(slot='actions')
+      button-hover(@click.native.prevent='onConfirm') {{ $t("yes") }}
+      button-hover(variant='red', bordered, @click.native='closeModal') {{ $t("cancel") }}
 </template>
 
 <script>
@@ -83,7 +83,7 @@ export default {
         : this.friend
         ? { variant: 'red', text: 'Удалить из друзей' }
         : { variant: 'white', text: 'Добавить в друзья' }
-    },
+    }
   },
   methods: {
     declOfNum,
@@ -97,7 +97,10 @@ export default {
     ...mapActions('users/info', ['apiInfo']),
     blockedUser() {
       if (this.blocked) return
-      this.modalText = localStorage.getItem('lang') === 'en' ? `Are you sure you want to block the user ${this.info.fullName}` : `Вы уверены, что хотите заблокировать пользователя ${this.info.fullName}`
+      this.modalText =
+        localStorage.getItem('lang') === 'en'
+          ? `Are you sure you want to block the user ${this.info.fullName}`
+          : `Вы уверены, что хотите заблокировать пользователя ${this.info.fullName}`
       this.modalShow = true
       this.modalType = 'block'
     },
@@ -141,28 +144,28 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "sendMessage": "Send message",
-        "birthday": "Date of Birth",
-        "tel": "Telephone",
-        "city": "Country, city",
-        "myself": "About myself",
-        "info": "not filled",
-        "yes": "Yes",
-        "cancel": "Сancel"
+      en: {
+        sendMessage: 'Send message',
+        birthday: 'Date of Birth',
+        tel: 'Telephone',
+        city: 'Country, city',
+        myself: 'About myself',
+        info: 'not filled',
+        yes: 'Yes',
+        cancel: 'Сancel'
       },
-      "ru": {
-        "sendMessage": "Написать сообщение",
-        "birthday": "Дата рождения",
-        "tel": "Телефон",
-        "city": "Страна, город",
-        "myself": "О себе",
-        "info": "не заполнено",
-        "yes": "Да",
-        "cancel": "Отмена"
+      ru: {
+        sendMessage: 'Написать сообщение',
+        birthday: 'Дата рождения',
+        tel: 'Телефон',
+        city: 'Страна, город',
+        myself: 'О себе',
+        info: 'не заполнено',
+        yes: 'Да',
+        cancel: 'Отмена'
       }
     }
-  },
+  }
 }
 </script>
 
