@@ -8,9 +8,10 @@
     :type='passwordFieldType',
     :autocomplete='autocomplete',
     v-model.trim='password',
-    @change='passwordBlur',
-    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) }'
+    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || !v.passwordRule }'
   )
+    //- @change='passwordBlur',
+    //- @focus='passwordFocus',
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
   .form__error-block
     template(v-if='registration')
@@ -65,6 +66,11 @@ export default {
     },
     levelInfo() {
       if (!this.passwordHelperShow) return { text: null, class: null }
+
+      if (!this.v.passwordRule) {
+        return { text: this.$t('notValid'), class: null }
+      }
+
       return this.password.length >= 3 && this.password.length < 7
         ? { text: this.$t('easy'), class: 'easy' }
         : this.password.length >= 7 && this.password.length < 11
@@ -75,11 +81,15 @@ export default {
   methods: {
     switchVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
-    },
-    passwordBlur() {
-      this.passwordHelperShow = false
-      this.v.$touch()
     }
+    // passwordBlur() {
+    //   this.passwordHelperShow = false
+    //   this.v.$touch()
+    // },
+    // passwordFocus() {
+    //   this.passwordHelperShow = true
+    //   this.v.$touch()
+    // }
   },
   i18n: {
     messages: {
@@ -92,7 +102,8 @@ export default {
           'The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.',
         easy: 'Easy',
         middle: 'Middle',
-        hard: 'Hard'
+        hard: 'Hard',
+        notValid: 'Does not meet safety requirements'
       },
       ru: {
         password: 'Пароль',
@@ -103,7 +114,8 @@ export default {
           'Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.',
         easy: 'Слабый',
         middle: 'Средний',
-        hard: 'Надёжный'
+        hard: 'Надёжный',
+        notValid: 'Не соответствует требованиям безопасности'
       }
     }
   }
