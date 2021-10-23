@@ -6,10 +6,10 @@
     name='password',
     :id='id',
     :type='passwordFieldType',
-    :autocomplete='autocomplete',
     v-model.trim='password',
     :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || !v.passwordRule }'
   )
+    //- :autocomplete='autocomplete',
     //- @change='passwordBlur',
     //- @focus='passwordFocus',
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
@@ -17,7 +17,8 @@
     template(v-if='registration')
       span.form__password-helper(:class='levelInfo.class')
       //- span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
-      span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+      span.form__error(v-if='!v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+      span.form__error(v-else) {{ levelInfo.text }}
     template(v-else)
       span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
   template(v-if='info')
