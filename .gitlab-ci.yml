@@ -25,4 +25,4 @@ deploy-job:
   script:
     - echo "Do docker image..."
     - docker build -t social-network_front .
-    # - cd /home/gitlab-runner/ && docker-compose up -d
+    - cd /home/gitlab-runner/ && docker-compose up -d
