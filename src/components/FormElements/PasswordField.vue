@@ -15,7 +15,8 @@
   .form__error-block
     template(v-if='registration')
       span.form__password-helper(:class='levelInfo.class')
-      span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
+      //- span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
+      span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
     template(v-else)
       span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
   template(v-if='info')
@@ -47,7 +48,7 @@ export default {
     autocomplete: {
       type: String,
       required: true
-    },
+    }
   },
   data: () => ({
     passwordFieldType: 'password',
@@ -82,28 +83,30 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "password": "Password",
-        "enterPassword": "Enter password",
-        "errorPassword1": "Password must be at least",
-        "errorPassword2": "characters. He is now",
-        "infoPassword": "The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.",
-        "easy": "Easy",
-        "middle": "Middle",
-        "hard": "Hard"
+      en: {
+        password: 'Password',
+        enterPassword: 'Enter password',
+        errorPassword1: 'Password must be at least',
+        errorPassword2: 'characters. He is now',
+        infoPassword:
+          'The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.',
+        easy: 'Easy',
+        middle: 'Middle',
+        hard: 'Hard'
       },
-      "ru": {
-        "password": "Пароль",
-        "enterPassword": "Введите пароль",
-        "errorPassword1": "Пароль должен быть не менее",
-        "errorPassword2": "символов. Сейчас он",
-        "infoPassword": "Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.",
-        "easy": "Слабый",
-        "middle": "Средний",
-        "hard": "Надёжный"
+      ru: {
+        password: 'Пароль',
+        enterPassword: 'Введите пароль',
+        errorPassword1: 'Пароль должен быть не менее',
+        errorPassword2: 'символов. Сейчас он',
+        infoPassword:
+          'Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.',
+        easy: 'Слабый',
+        middle: 'Средний',
+        hard: 'Надёжный'
       }
     }
-  },
+  }
 }
 </script>
 
