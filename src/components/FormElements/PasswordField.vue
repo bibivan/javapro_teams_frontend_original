@@ -7,9 +7,9 @@
     :id='id',
     :type='passwordFieldType',
     v-model.trim='password',
+    :autocomplete='autocomplete',
     :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || !v.passwordRule }'
   )
-    //- :autocomplete='autocomplete',
     //- @change='passwordBlur',
     //- @focus='passwordFocus',
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
