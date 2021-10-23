@@ -12,7 +12,7 @@
     :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword) }'
   )
   span.form__error(v-if='v.$dirty && !v.sameAsPassword') {{ $t("matchPassword") }}
-  span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+  span.form__error(v-else-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
 </template>
 
 <script>
@@ -34,7 +34,7 @@ export default {
     autocomplete: {
       type: String,
       required: true
-    },
+    }
   },
   computed: {
     password: {
@@ -48,20 +48,20 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "repeatPassword": "Repeat password",
-        "matchPassword": "Passwords must match",
-        "errorPassword1": "Password must be at least",
-        "errorPassword2": "characters. He is now",
+      en: {
+        repeatPassword: 'Repeat password',
+        matchPassword: 'Passwords must match',
+        errorPassword1: 'Password must be at least',
+        errorPassword2: 'characters. He is now'
       },
-      "ru": {
-        "repeatPassword": "Повторите пароль",
-        "matchPassword": "Пароли должны совпадать",
-        "errorPassword1": "Пароль должен быть не менее",
-        "errorPassword2": "символов. Сейчас он",
+      ru: {
+        repeatPassword: 'Повторите пароль',
+        matchPassword: 'Пароли должны совпадать',
+        errorPassword1: 'Пароль должен быть не менее',
+        errorPassword2: 'символов. Сейчас он'
       }
     }
-  },
+  }
 }
 </script>
 

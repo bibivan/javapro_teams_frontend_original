@@ -42,7 +42,7 @@ import PasswordRepeatField from '@/components/FormElements/PasswordRepeatField'
 import EmailField from '@/components/FormElements/EmailField'
 import NameField from '@/components/FormElements/NameField'
 import ConfirmField from '@/components/FormElements/ConfirmField'
-import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
+import VueHcaptcha from '@hcaptcha/vue-hcaptcha'
 
 export default {
   name: 'Registration',
@@ -52,7 +52,7 @@ export default {
     NameField,
     PasswordRepeatField,
     ConfirmField,
-    VueHcaptcha,
+    VueHcaptcha
   },
   data: () => ({
     email: '',
@@ -63,7 +63,7 @@ export default {
     verified: false,
     token: null,
     eKey: null,
-    confirm: false,
+    confirm: false
   }),
   computed: {
     getLang() {
@@ -101,22 +101,22 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "account": "Account",
-        "personal": "Personal data",
-        "registration": "Registration",
-        "name": "Name",
-        "lastname": "Last name"
+      en: {
+        account: 'Account',
+        personal: 'Personal data',
+        registration: 'Registration',
+        name: 'Name',
+        lastname: 'Last name'
       },
-      "ru": {
-        "account": "Аккаунт",
-        "personal": "Личные данные",
-        "registration": "Зарегистрироваться",
-        "name": "Имя",
-        "lastname": "Фамилия"
+      ru: {
+        account: 'Аккаунт',
+        personal: 'Личные данные',
+        registration: 'Зарегистрироваться',
+        name: 'Имя',
+        lastname: 'Фамилия'
       }
     }
-  },
+  }
 }
 </script>
 
