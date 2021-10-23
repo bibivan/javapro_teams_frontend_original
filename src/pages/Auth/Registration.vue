@@ -44,7 +44,7 @@ import NameField from '@/components/FormElements/NameField'
 import ConfirmField from '@/components/FormElements/ConfirmField'
 import VueHcaptcha from '@hcaptcha/vue-hcaptcha'
 
-const passwordRule = helpers.regex('passwordRule', /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]){8,}/);
+const passwordRule = helpers.regex('passwordRule', /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]){8,}/)
 
 export default {
   name: 'Registration',
