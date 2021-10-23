@@ -16,6 +16,7 @@ build-job:
     - npm run build
 
 deploy-job:
+  image: docker:latest
   stage: deploy 
   only:
      - master
