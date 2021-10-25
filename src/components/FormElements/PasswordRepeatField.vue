@@ -9,10 +9,12 @@
     v-model.trim='password',
     :autocomplete='autocomplete',
     @change='v.$touch()',
-    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword) }'
+    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || (v.$dirty && !v.sameAsPassword) || !v.passwordRule }'
   )
-  span.form__error(v-if='v.$dirty && !v.sameAsPassword') {{ $t("matchPassword") }}
-  span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+  span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
+  span.form__error(v-else-if='v.$dirty && !v.sameAsPassword') {{ $t("matchPassword") }}
+  span.form__error(v-else-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+  span.form__error(v-else-if='password.length') {{ $t("enterMainPassword") }}
 </template>
 
 <script>
@@ -34,7 +36,7 @@ export default {
     autocomplete: {
       type: String,
       required: true
-    },
+    }
   },
   computed: {
     password: {
@@ -48,20 +50,26 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "repeatPassword": "Repeat password",
-        "matchPassword": "Passwords must match",
-        "errorPassword1": "Password must be at least",
-        "errorPassword2": "characters. He is now",
+      en: {
+        repeatPassword: 'Repeat password',
+        matchPassword: 'Passwords must match',
+        errorPassword1: 'Password must be at least',
+        errorPassword2: 'characters. He is now',
+        enterPassword: 'Enter password',
+        notValid: 'Does not meet safety requirements',
+        enterMainPassword: 'Enter the main password'
       },
-      "ru": {
-        "repeatPassword": "Повторите пароль",
-        "matchPassword": "Пароли должны совпадать",
-        "errorPassword1": "Пароль должен быть не менее",
-        "errorPassword2": "символов. Сейчас он",
+      ru: {
+        repeatPassword: 'Повторите пароль',
+        matchPassword: 'Пароли должны совпадать',
+        errorPassword1: 'Пароль должен быть не менее',
+        errorPassword2: 'символов. Сейчас он',
+        enterPassword: 'Повтоите пароль',
+        notValid: 'Не соответствует требованиям безопасности',
+        enterMainPassword: 'Введите основной пароль'
       }
     }
-  },
+  }
 }
 </script>
 

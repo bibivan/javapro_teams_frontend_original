@@ -48,7 +48,8 @@ export default {
         //   .subtract(1, this.date_from)
         //   .valueOf(),
         date_to: moment().format(), //this.date_to
-        author: this.author
+        author: this.author,
+        tags: this.tags
       })
     }
   },

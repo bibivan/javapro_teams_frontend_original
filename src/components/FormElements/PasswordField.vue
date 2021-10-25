@@ -6,16 +6,19 @@
     name='password',
     :id='id',
     :type='passwordFieldType',
-    :autocomplete='autocomplete',
     v-model.trim='password',
-    @change='passwordBlur',
-    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) }'
+    :autocomplete='autocomplete',
+    :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || !v.passwordRule }'
   )
+    //- @change='passwordBlur',
+    //- @focus='passwordFocus',
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterPassword") }}
   .form__error-block
     template(v-if='registration')
       span.form__password-helper(:class='levelInfo.class')
-      span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
+      //- span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
+      span.form__error(v-if='!v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
+      span.form__error(v-else) {{ levelInfo.text }}
     template(v-else)
       span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
   template(v-if='info')
@@ -47,7 +50,7 @@ export default {
     autocomplete: {
       type: String,
       required: true
-    },
+    }
   },
   data: () => ({
     passwordFieldType: 'password',
@@ -64,6 +67,11 @@ export default {
     },
     levelInfo() {
       if (!this.passwordHelperShow) return { text: null, class: null }
+
+      if (!this.v.passwordRule) {
+        return { text: this.$t('notValid'), class: null }
+      }
+
       return this.password.length >= 3 && this.password.length < 7
         ? { text: this.$t('easy'), class: 'easy' }
         : this.password.length >= 7 && this.password.length < 11
@@ -74,36 +82,44 @@ export default {
   methods: {
     switchVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
-    },
-    passwordBlur() {
-      this.passwordHelperShow = false
-      this.v.$touch()
     }
+    // passwordBlur() {
+    //   this.passwordHelperShow = false
+    //   this.v.$touch()
+    // },
+    // passwordFocus() {
+    //   this.passwordHelperShow = true
+    //   this.v.$touch()
+    // }
   },
   i18n: {
     messages: {
-      "en": {
-        "password": "Password",
-        "enterPassword": "Enter password",
-        "errorPassword1": "Password must be at least",
-        "errorPassword2": "characters. He is now",
-        "infoPassword": "The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.",
-        "easy": "Easy",
-        "middle": "Middle",
-        "hard": "Hard"
+      en: {
+        password: 'Password',
+        enterPassword: 'Enter password',
+        errorPassword1: 'Password must be at least',
+        errorPassword2: 'characters. He is now',
+        infoPassword:
+          'The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.',
+        easy: 'Easy',
+        middle: 'Middle',
+        hard: 'Hard',
+        notValid: 'Does not meet safety requirements'
       },
-      "ru": {
-        "password": "Пароль",
-        "enterPassword": "Введите пароль",
-        "errorPassword1": "Пароль должен быть не менее",
-        "errorPassword2": "символов. Сейчас он",
-        "infoPassword": "Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.",
-        "easy": "Слабый",
-        "middle": "Средний",
-        "hard": "Надёжный"
+      ru: {
+        password: 'Пароль',
+        enterPassword: 'Введите пароль',
+        errorPassword1: 'Пароль должен быть не менее',
+        errorPassword2: 'символов. Сейчас он',
+        infoPassword:
+          'Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.',
+        easy: 'Слабый',
+        middle: 'Средний',
+        hard: 'Надёжный',
+        notValid: 'Не соответствует требованиям безопасности'
       }
     }
-  },
+  }
 }
 </script>
 

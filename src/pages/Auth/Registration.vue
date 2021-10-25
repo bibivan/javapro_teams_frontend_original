@@ -36,13 +36,15 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs, helpers } from 'vuelidate/lib/validators'
 import PasswordField from '@/components/FormElements/PasswordField'
 import PasswordRepeatField from '@/components/FormElements/PasswordRepeatField'
 import EmailField from '@/components/FormElements/EmailField'
 import NameField from '@/components/FormElements/NameField'
 import ConfirmField from '@/components/FormElements/ConfirmField'
-import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
+import VueHcaptcha from '@hcaptcha/vue-hcaptcha'
+
+const passwordRule = helpers.regex('passwordRule', /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]){8,}/)
 
 export default {
   name: 'Registration',
@@ -52,7 +54,7 @@ export default {
     NameField,
     PasswordRepeatField,
     ConfirmField,
-    VueHcaptcha,
+    VueHcaptcha
   },
   data: () => ({
     email: '',
@@ -63,7 +65,7 @@ export default {
     verified: false,
     token: null,
     eKey: null,
-    confirm: false,
+    confirm: false
   }),
   computed: {
     getLang() {
@@ -94,29 +96,29 @@ export default {
   validations: {
     confirm: { sameAs: sameAs(() => true) },
     email: { required, email },
-    passwd1: { required, minLength: minLength(8) },
-    passwd2: { required, minLength: minLength(8), sameAsPassword: sameAs('passwd1') },
+    passwd1: { required, minLength: minLength(8), passwordRule },
+    passwd2: { required, minLength: minLength(8), sameAsPassword: sameAs('passwd1'), passwordRule },
     firstName: { required, minLength: minLength(3) },
     lastName: { required, minLength: minLength(3) }
   },
   i18n: {
     messages: {
-      "en": {
-        "account": "Account",
-        "personal": "Personal data",
-        "registration": "Registration",
-        "name": "Name",
-        "lastname": "Last name"
+      en: {
+        account: 'Account',
+        personal: 'Personal data',
+        registration: 'Registration',
+        name: 'Name',
+        lastname: 'Last name'
       },
-      "ru": {
-        "account": "Аккаунт",
-        "personal": "Личные данные",
-        "registration": "Зарегистрироваться",
-        "name": "Имя",
-        "lastname": "Фамилия"
+      ru: {
+        account: 'Аккаунт',
+        personal: 'Личные данные',
+        registration: 'Зарегистрироваться',
+        name: 'Имя',
+        lastname: 'Фамилия'
       }
     }
-  },
+  }
 }
 </script>
 

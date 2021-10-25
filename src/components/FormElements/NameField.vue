@@ -10,7 +10,7 @@
   label.form__label(:for='id') {{ label }}
     span.required-field *
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("errorRequired") }}
-  span.form__error(v-else-if='v.$dirty && !v.minLength') {{ $t("errorMin") }} {{ v.minLength }}
+  span.form__error(v-else-if='v.$dirty && !v.minLength') {{ $t("errorMin") }} {{ v.$params.minLength.min }}
 </template>
 
 <script>
@@ -46,16 +46,16 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "errorRequired": "Required field",
-        "errorMin": "Minimum number of characters",
+      en: {
+        errorRequired: 'Required field',
+        errorMin: 'Minimum number of characters'
       },
-      "ru": {
-        "errorRequired": "Обязательно поле",
-        "errorMin": "Минимальное количество символов",
+      ru: {
+        errorRequired: 'Обязательно поле',
+        errorMin: 'Минимальное количество символов'
       }
     }
-  },
+  }
 }
 </script>
 
