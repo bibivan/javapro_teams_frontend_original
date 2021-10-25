@@ -21,15 +21,12 @@ export default {
     },
   },
   actions: {
-    setAlert({
-      commit,
-      state
-    }, value) {      
-      commit('setInfo', value)      
-      commit('toggleShow')
+    setAlert(context, value) {
+      context.commit('setInfo', value)
+      context.commit('toggleShow')
       setTimeout(() => {
-        commit('toggleShow')
-      }, state.timeout)
+        context.commit('toggleShow')
+      }, context.state.timeout)
     }
   }
 }
