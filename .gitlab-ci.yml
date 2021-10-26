@@ -12,7 +12,6 @@ build-job:
   script:
     - echo "Build project..."
     - npm install
-    - npm run
 
 deploy-job:
   image: docker:latest
