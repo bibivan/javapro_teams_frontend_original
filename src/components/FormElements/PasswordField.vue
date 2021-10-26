@@ -8,7 +8,6 @@
     :type='passwordFieldType',
     :autocomplete='autocomplete',
     v-model.trim='password',
-    :autocomplete='autocomplete',
     :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || !v.passwordRule }'
   )
     //- @change='passwordBlur',

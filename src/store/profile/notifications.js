@@ -27,7 +27,6 @@ export default {
         console.log('произошла ошибка при загрузке уведомлений')
         throw e
       }
-        console.log(response.data.data.map(z => z.sent_time))
         if (`${response.data.data.map(z => z.sent_time)}` !== `${context.state.notifications.map(z => z.sent_time)}`) {
           context.commit('setNotifications', response.data.data)
         }

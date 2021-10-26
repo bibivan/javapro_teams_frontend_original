@@ -8,11 +8,13 @@ import router from './router';
 import store from './store';
 import VModal from 'vue-js-modal';
 import Vuelidate from 'vuelidate';
+// import VueJWT from 'vuejs-jwt'
 import './settings';
 
 Vue.use(VueI18n);
 Vue.use(VModal);
 Vue.use(Vuelidate);
+// Vue.use(VueJWT, options);
 
 if (!localStorage.getItem('lang')) {
   localStorage.setItem('lang', 'ru');
