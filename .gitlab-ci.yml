@@ -3,7 +3,7 @@ stages:
   - deploy
 
 build-job:
-  image: node:14
+  image: node:latest
   stage: build
   only:
     - master
@@ -12,7 +12,7 @@ build-job:
   script:
     - echo "Build project..."
     - npm install
-    - npm start
+    - npm run
 
 deploy-job:
   image: docker:latest
