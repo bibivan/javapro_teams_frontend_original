@@ -99,6 +99,7 @@ export default {
           root: true
         })
       }).catch(error => {
+        alert(error.response.data);
         commit('setStatus', 'error')
         localStorage.removeItem('user-token')
       })

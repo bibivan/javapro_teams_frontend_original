@@ -24,12 +24,13 @@ export default {
         context.commit('setInfo', response.data.data)
       } catch (e) {
         console.log('Произошла ошибка при загрузке данных пользователя')
-        throw e
+        // throw e
       }
     },
     async apiChangeInfo(context, user) {
       try {
         const response = await axios.put('users/me', { data: user })
+        console.log(response);
         context.dispatch('global/alert/setAlert', {
           status: 'success',
           text: 'Информация обновлена'
