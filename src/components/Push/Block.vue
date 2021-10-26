@@ -6,7 +6,7 @@
     router-link.push__content-name(:to='getRouteByNotification(info)')
       | {{ info.author.first_name + " " + info.author.last_name }}
       |
-      | {{ getNotificationsTextType(info.type_id) }}
+      | {{ getNotificationType(info.type_id) }}
   span.push__time {{ info.sent_time | moment("from") }}
   .push__del(@click='readNotifications(info.id)')
     simple-svg(:filepath='"/static/img/delete.svg"')
@@ -14,7 +14,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getRouteByNotification } from '@/utils/notifications.utils.js'
+import { getRouteByNotification, getNotificationType } from '@/utils/notifications.utils'
 export default {
   name: 'PushBlock',
   props: {
@@ -25,7 +25,8 @@ export default {
   },
   methods: {
     ...mapActions('profile/notifications', ['readNotifications']),
-    getRouteByNotification
+    getRouteByNotification,
+    getNotificationType
   }
 }
 </script>
@@ -61,6 +62,7 @@ export default {
     margin-left: 40px;
     padding: 10px;
     transition: transform 0.4s;
+    cursor: pointer;
   }
 
   .push__del:hover {

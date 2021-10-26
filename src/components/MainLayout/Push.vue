@@ -1,36 +1,41 @@
 <template lang="pug">
-.push(:class='{ open: isOpen }')
-  .push__overlay(@click.stop='closePush')
-  .push__wrap(:class='{ open: isOpen }', ref='wrap')
+.push(:class='{ open: opened }')
+  .push__overlay(@click='closePush')
+  .push__wrap(:class='{ open: opened }', ref='wrap')
     .push__list(ref='list')
       .push__item(v-for='info in getNotifications.slice(0, 10)', :key='info.id')
         .push__img
           img(:src='info.author.photo', :alt='info.author.first_name')
-        p.push__content
+        p.push__content(@click='closePush')
           router-link.push__content-name(:to='getRouteByNotification(info)')
             | {{ info.author.first_name + " " + info.author.last_name }}
             |
-            | {{ getNotificationsTextType(info.type_id) }}
+            | {{ getNotificationType(info.type_id) }}
         span.push__time {{ info.sent_time | moment("from") }}
-        .push__del(@click='readNotifications(info.id)')
+        .push__del(@click.stop='readNotifications(info.id)')
           simple-svg(:filepath='"/static/img/delete.svg"')
-    router-link.push__btn(:to='{ name: "Push" }', v-if='getNotificationsLength > 1') {{ $t("show") }} ({{ getNotificationsLength }})
-    a.push__btn(href='#', v-if='getNotificationsLength > 1', @click.prevent='readNotifications()') {{ $t("delete") }} ({{ getNotificationsLength }})
+    .push__link-wrap(@click="closePush" v-if='getNotificationsLength > 1')
+      router-link.push__btn(:to='{ name: "Push" }') {{ $t("show") }} ({{ getNotificationsLength }})
+    a.push__btn(href='#', v-if='getNotificationsLength > 1', @click.prevent='readAllNotifications()') {{ $t("delete") }} ({{ getNotificationsLength }})
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getRouteByNotification } from '@/utils/notifications.utils'
+import { getRouteByNotification, getNotificationType } from '@/utils/notifications.utils'
+
 export default {
   name: 'Push',
   props: {
-    isOpen: Boolean
+    opened: Boolean
   },
   computed: {
-    ...mapGetters('profile/notifications', ['getNotifications', 'getNotificationsLength', 'getNotificationsTextType'])
+    ...mapGetters('profile/notifications', ['getNotifications', 'getNotificationsLength']),
+    lang() {
+      return localStorage.getItem('lang')
+    }
   },
   watch: {
-    isOpen(val) {
+    opened(val) {
       if (!val) {
         this.$refs.list.scrollTop = 0
       }
@@ -39,9 +44,14 @@ export default {
   methods: {
     ...mapActions('profile/notifications', ['apiNotifications', 'readNotifications']),
     getRouteByNotification,
+    getNotificationType,
     closePush() {
-      if (!this.isOpen) return
-      this.$emit('close-push')
+      if (!this.opened) return
+      this.$emit('update:opened', false)
+    },
+    readAllNotifications() {
+      this.closePush()
+      this.readNotifications()
     }
   },
   mounted() {

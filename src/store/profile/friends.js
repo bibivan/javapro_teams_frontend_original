@@ -99,6 +99,7 @@ export default {
     async apiRecommendations(context, payload) {
       let response
       const query = mapPayload(payload)
+      console.log(payload, 'payload')
 
       try {
         response = await axios.get('friends/recommendations?' + query.join('&'))

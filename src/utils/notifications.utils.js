@@ -1,13 +1,15 @@
 export function getRouteByNotification(notification) {
-    switch (notification.event_type) {
-        case 'MESSAGE':
-            return { name: 'Im', params: { id: notification.id } }
-        default:
-            return { name: 'ProfileId', params: { id: notification.id } }
-    }
+  switch (notification.type_id) {
+      case 5:
+        return { name: 'Im' }
+      default:
+        return { name: 'ProfileId', params: { id: notification.author.id } }
+  }
 }
 
-export function getNotificationType(lang, notificationID) {
+export function getNotificationType(notificationID) {
+  const lang = localStorage.getItem('lang') || ru
+
   if (lang === 'ru') {
     switch (notificationID) {
       case 1:

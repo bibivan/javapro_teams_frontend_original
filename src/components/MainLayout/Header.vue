@@ -10,12 +10,13 @@ header.main-layout__header(:class='{ admin: isAdminPage }')
         :value='searchText',
         @input='setSearchText($event.target.value)'
       )
-    .main-layout__push(@click='togglePush')
-      simple-svg(
-        :filepath='"/static/img/push.svg"',
-        :data-push='getNotificationsLength > 0 ? getNotificationsLength : false'
-      )
-      push(:isOpen='isOpenPush', @close-push='togglePush')
+    .main-layout__push.push
+      button.push__bell-btn(@click="togglePush")
+        simple-svg(
+          :filepath='"/static/img/push.svg"',
+          :data-push='getNotificationsLength > 0 ? getNotificationsLength : false'
+        )
+      push(:opened.sync='pushOpened')
   router-link.main-layout__user(v-if='getInfo', :to='{ name: "Profile" }')
     .main-layout__user-pic
       img(:src='getInfo.photo', :alt='getInfo.fullName')
@@ -30,7 +31,7 @@ export default {
   name: 'MainLayoutHeader',
   components: { Push },
   data: () => ({
-    isOpenPush: false
+    pushOpened: false
   }),
   computed: {
     ...mapGetters('global/search', ['searchText']),
@@ -51,11 +52,12 @@ export default {
       })
     },
     togglePush() {
-      this.isOpenPush = !this.isOpenPush
+      this.pushOpened = !this.pushOpened
     }
   },
   mounted() {
     if (!this.getInfo) this.apiInfo()
+
   },
   i18n: {
     messages: {
@@ -151,6 +153,11 @@ export default {
   justify-content: center;
   cursor: pointer;
 
+  .push__bell-btn {
+    background: transparent;
+    cursor: pointer;
+  }
+
   .simple-svg-wrapper {
     width: 17px;
     height: 17px;
@@ -158,6 +165,7 @@ export default {
 
     &[data-push]:after {
       content: attr(data-push);
+      color: #fff
       font-style: normal;
       font-weight: bold;
       font-size: 10px;
