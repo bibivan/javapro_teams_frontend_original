@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { mapPayload } from "@/utils/friends.util";
+import { mapPayload } from "@/utils/payload.util";
 
 export default {
   namespaced: true,
