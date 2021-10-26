@@ -1,0 +1,28 @@
+stages:          
+  - build
+  - deploy
+
+build-job:
+  image: node:14
+  stage: build
+  only:
+    - master
+  except:
+    - tags
+  script:
+    - echo "Build project..."
+    - npm install
+    - npm run build
+
+deploy-job:
+  image: docker:latest
+  stage: deploy 
+  only:
+     - master
+  except:
+     - tags
+
+  script:
+    - echo "Do docker image..."
+    - docker build -t social_network_front .
+    - cd /home/gitlab-runner/ && docker-compose up -d

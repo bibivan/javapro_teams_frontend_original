@@ -75,7 +75,7 @@ export default {
         url: `users/search?${query.join('&')}`,
         method: 'GET'
       }).then(response => {
-        console.log("TCL: searchUsers -> response", response)
+
         const result = [
           ...response.data.data
         ]

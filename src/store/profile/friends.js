@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { mapPayload } from "@/utils/payload.util";
 
 export default {
   namespaced: true,
@@ -25,96 +26,90 @@ export default {
     },
   },
   actions: {
-    async apiFriends({
-      commit
-    }, payload) {
-      let query = []
-      payload && Object.keys(payload).map(el => {
-        payload[el] && query.push(`${el}=${payload[el]}`)
+    async apiFriends(context, payload) {
+      let response
+      const query = mapPayload(payload)
+
+      try {
+        response = await axios.get('friends?' + query.join('&'))
+      } catch (e) {
+        console.log('Произошла ошибка при добавлении друзей')
+        throw e
+      }
+      context.commit('setResult', {
+        id: 'friends',
+        value: response.data.data
       })
-      await axios({
-        url: `friends?${query.join('&')}`,
-        method: 'GET'
-      }).then(response => {
-        console.log("TCL: friends", response)
-        commit('setResult', {
-          id: 'friends',
-          value: response.data.data
-        })
-      }).catch(error => {})
     },
-    apiDeleteFriends({
-      dispatch
-    }, id) {
-      axios({
-        url: `friends/${id}`,
-        method: 'DELETE'
-      }).then(response => {
-        console.log("TCL: response", response)
-        dispatch('global/alert/setAlert', {
-          status: 'success',
-          text: 'Пользователь удален из друзей'
-        }, {
-          root: true
-        })        
-        dispatch('apiFriends')
-      }).catch(error => {})
+    apiDeleteFriends(context, id) {
+      let response
+
+      try {
+        response = axios.delete('friends/' + id)
+      } catch (e) {
+        console.log('Произошла ошибка при удалении друга')
+        throw e
+      }
+      context.dispatch('global/alert/setAlert', {
+        status: 'success',
+        text: 'Пользователь удален из друзей'
+      }, {
+        root: true
+      })
+      context.dispatch('apiFriends')
     },
-    apiAddFriends({
-      commit,
-      dispatch
-    }, id) {
-      console.log('apiAddFriends', id)
-      axios({
-        url: `friends/${id}`,
-        method: 'POST'
-      }).then(response => {
-        console.log("TCL: response", response)
-        commit('delRequest', id)
-        dispatch('apiFriends')
-        dispatch('global/alert/setAlert', {
+    apiAddFriends(context, id) {
+      let response
+
+      try {
+        context.commit('delRequest', id)
+        response = axios.post('friends/' + id)
+        context.dispatch('apiFriends')
+        context.dispatch('global/alert/setAlert', {
           status: 'success',
           text: 'Заявка отправлена'
         }, {
           root: true
         })
-        
-      }).catch(error => {})
+      } catch (e) {
+        context.dispatch('global/alert/setAlert', {
+          status: 'error',
+          text: 'Произошла ошибка при отправлении заявки'
+        }, {
+          root: true
+        })
+
+        throw e
+      }
     },
-    async apiRequest({
-      commit
-    }, payload) {
-      let query = []
-      payload && Object.keys(payload).map(el => {
-        payload[el] && query.push(`${el}=${payload[el]}`)
-      })
-      await axios({
-        url: `friends/request?${query.join('&')}`,
-        method: 'GET'
-      }).then(response => {
-        console.log("TCL: request", response)
-        commit('setResult', {
+    async apiRequest(context, payload) {
+      let response
+      const query = mapPayload(payload)
+      try {
+        response = await axios.get('friends/request?' + query.join('&'))
+        context.commit('setResult', {
           id: 'request',
           value: response.data.data
         })
-      }).catch(error => {})
+      } catch (e) {
+        console.log("TCL: request", response)
+        throw e
+      }
     },
-    async apiRecommendations({
-      commit
-    }, payload) {
-      let query = []
-      payload && Object.keys(payload).map(el => {
-        payload[el] && query.push(`${el}=${payload[el]}`)
-      })
-      await axios({
-        url: `friends/recommendations?${query.join('&')}`,
-        method: 'GET'
-      }).then(response => {
-        commit('setResult', {
+    async apiRecommendations(context, payload) {
+      let response
+      const query = mapPayload(payload)
+
+      try {
+        response = await axios.get('friends/recommendations?' + query.join('&'))
+        context.commit('setResult', {
           id: 'recommendations',
           value: response.data.data
         })
-      }).catch(error => {})
+      } catch (e) {
+        console.log("TCL: recommendations", response)
+        throw e
+      }
     }
   }
 }

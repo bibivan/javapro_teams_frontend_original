@@ -1,5 +1,6 @@
 <template lang="pug">
-.settings-main
+.settings-main(v-if="!getInfo") Загрузка
+.settings-main(v-else)
   user-info-form-block(:label='$t("name")', :placeholder='$t("entName")', v-model='name')
   user-info-form-block(:label='$t("lastName")', :placeholder='$t("entLastName")', v-model='lastName')
   user-info-form-block(:label='$t("tel")', :placeholder='$t("entTel")', v-model='phone', phone)
@@ -9,39 +10,39 @@
     .user-info-form__wrap.countries(v-click-outside='countriesClose')
       input.user-info-form__input(
         type='text',
-        v-model='country',
+        v-model='country.title',
         :placeholder='$t("entCountry")',
         @input='countriesOpen'
       )
 
-      ul.countries__list(v-if='countries.length !== 0 && isCountriesShow')
-        li.countries__item(
-          v-for='item in countries',
-          :key='item.id',
-          tabindex=0,
-          @click='setCountry(item.title)',
-          @keyup.enter='setCountry(item.title)'
-        ) {{ item.title }}
+      //ul.countries__list(v-if='countries.length !== 0 && isCountriesShow')
+      //  li.countries__item(
+      //    v-for='item in countries',
+      //    :key='item.id',
+      //    tabindex=0,
+      //    @click='setCountry(item.title)',
+      //    @keyup.enter='setCountry(item.title)'
+      //  ) {{ item.title }}
 
   .user-info-form__block
     span.user-info-form__label {{ $t("city") }}
     .user-info-form__wrap.countries(v-click-outside='citiesClose')
       input.user-info-form__input(
         type='text',
-        v-model='city',
+        v-model='town.title',
         :placeholder='$t("entCity")',
         @input='citiesOpen',
-        @keyup.enter='setCity(city)'
+        @keyup.enter='setCity(town.id)'
       )
 
-      ul.countries__list(v-if='cities.length !== 0 && isCitiesShow')
-        li.countries__item(
-          v-for='item in cities',
-          :key='item.countryId',
-          @click='setCity(item)',
-          @keyup.enter='setCity(item)',
-          tabindex=0
-        ) {{ item.country }}
+      //ul.countries__list(v-if='cities.length !== 0 && isCitiesShow')
+      //  li.countries__item(
+      //    v-for='item in cities',
+      //    :key='item.countryId',
+      //    @click='setCity(item)',
+      //    @keyup.enter='setCity(item)',
+      //    tabindex=0
+      //  ) {{ item.country }}
 
   .user-info-form__block
     span.user-info-form__label {{ $t("birthDay") }}
@@ -82,6 +83,7 @@ import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import ClickOutside from 'vue-click-outside'
 import UserInfoFormBlock from '@/components/Settings/UserInfoForm/Block.vue'
+import { getMonthList } from "@/utils/getMonthList";
 export default {
   name: 'SettingsMain',
   components: { UserInfoFormBlock },
@@ -129,36 +131,9 @@ export default {
         : 30 + ((this.month.val + (this.month.val >> 3)) & 1)
     },
     months() {
-      if (localStorage.getItem('lang') === 'en') {
-        return [
-          { val: 0, text: 'January' },
-          { val: 1, text: 'February' },
-          { val: 2, text: 'March' },
-          { val: 3, text: 'April' },
-          { val: 4, text: 'May' },
-          { val: 5, text: 'June' },
-          { val: 6, text: 'July' },
-          { val: 7, text: 'August' },
-          { val: 8, text: 'September' },
-          { val: 9, text: 'October' },
-          { val: 10, text: 'November' },
-          { val: 11, text: 'December' }
-        ]
-      }
-      return [
-        { val: 0, text: 'Января' },
-        { val: 1, text: 'Февраля' },
-        { val: 2, text: 'Марта' },
-        { val: 3, text: 'Апреля' },
-        { val: 4, text: 'Мая' },
-        { val: 5, text: 'Июня' },
-        { val: 6, text: 'Июля' },
-        { val: 7, text: 'Августа' },
-        { val: 8, text: 'Сентября' },
-        { val: 9, text: 'Октября' },
-        { val: 10, text: 'Ноября' },
-        { val: 11, text: 'Декабря' }
-      ]
+      const lang = localStorage.getItem('lang')
+      return getMonthList(lang)
+
     }
   },
 
@@ -177,7 +152,7 @@ export default {
             phone: this.phoneNumber || null,
             about: this.about,
             country: this.country,
-            city: this.city
+            town: this.town
           })
         })
       } else {
@@ -188,7 +163,7 @@ export default {
           phone: this.phoneNumber || null,
           about: this.about,
           country: this.country,
-          city: this.city
+          town: this.town
         })
       }
     },
@@ -217,7 +192,7 @@ export default {
       }
       this.about = this.getInfo.about
       this.country = this.getInfo.country
-      this.city = this.getInfo.city
+      this.town = this.getInfo.town
     },
     countriesOpen() {
       this.isCountriesShow = true
