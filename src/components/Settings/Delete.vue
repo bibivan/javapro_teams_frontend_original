@@ -20,11 +20,12 @@ export default {
     ...mapActions('profile/info', ['deleteInfo']),
     ...mapActions('auth/api', ['logout']),
     onDelete() {
-      this.deleteInfo().then(() => {
-        this.logout().then(() => {
-          // this.$router.push({ name: 'Login' })
-        })
-      })
+      this.deleteInfo()
+      // .then(() => {
+      //   this.logout().then(() => {
+      //     // this.$router.push({ name: 'Login' })
+      //   })
+      // })
     }
   },
   i18n: {
