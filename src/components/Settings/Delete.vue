@@ -1,12 +1,12 @@
 <template lang="pug">
-  .settings-delete
-    h2.settings-delete__title {{ $t('title') }}
-    .settings-delete__confirm
-      input.settings-delete__confirm-input(type="checkbox" id="confirm" v-model="confirm")
-      label.settings-delete__confirm-label(for="confirm") {{ $t('confirm') }}
-    .settings-delete__actions
-      button-hover(:disable="!confirm" variant="warning" @click.prevent.native="onDelete") {{ $t('del') }}
-      router-link.settings-delete__actions-link(:to="{name: 'Profile'}") {{ $t('noDel') }}
+.settings-delete
+  h2.settings-delete__title {{ $t("title") }}
+  .settings-delete__confirm
+    input#confirm.settings-delete__confirm-input(type='checkbox', v-model='confirm')
+    label.settings-delete__confirm-label(for='confirm') {{ $t("confirm") }}
+  .settings-delete__actions
+    button-hover(:disable='!confirm', variant='warning', @click.prevent.native='onDelete') {{ $t("del") }}
+    router-link.settings-delete__actions-link(:to='{ name: "Profile" }') {{ $t("noDel") }}
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
     onDelete() {
       this.deleteInfo().then(() => {
         this.logout().then(() => {
-          this.$router.push({ name: 'Login' })
+          // this.$router.push({ name: 'Login' })
         })
       })
     }
