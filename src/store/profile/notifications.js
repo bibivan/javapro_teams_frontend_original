@@ -34,7 +34,10 @@ export default {
     async readNotifications(context, notificationId) {
 
       try {
-        if (!notificationId) await axios.put('notifications?all=true')
+        if (!notificationId) {
+          context.commit('setNotifications', [])
+          await axios.put('notifications?all=true')
+        }
         else {
           context.commit('setNotifications', context.state.notifications.filter(n => n.id !== notificationId))
           await axios.put('notifications?id=' + notificationId)
