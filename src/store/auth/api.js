@@ -1,5 +1,5 @@
-import axios from 'axios'
-import router from '../../router'
+import axios from 'axios';
+import router from '../../router';
 
 export default {
   namespaced: true,
@@ -20,7 +20,7 @@ export default {
     setStatus: (s, status) => s.status = status,
     setModal: (s, modalStatus) => s.modalOpen = modalStatus,
     setModalTitle: (s, modalTitle) => s.modalTitle = modalTitle,
-    setModalLink: (s, modalLink) => s.modalLink = modalLink
+    setModalLink: (s, modalLink) => s.modalLink = modalLink,
   },
   actions: {
     async register({
@@ -36,7 +36,7 @@ export default {
           text: 'Выслано письмо с подтверждением'
         }, {
           root: true
-        })
+        });
         router.push({
           name: 'RegisterLetter'
         });
@@ -46,11 +46,11 @@ export default {
           text: 'Не удалось зарегистрироваться'
         }, {
           root: true
-        })
+        });
         router.push({
           name: 'RegisterFailed'
         });
-      })
+      });
     },
     async confirmRegistration({
       dispatch
@@ -65,7 +65,7 @@ export default {
           text: 'Регистрация успешно подтверждена'
         }, {
           root: true
-        })
+        });
         router.push({
           name: 'RegisterSuccess'
         });
@@ -75,34 +75,34 @@ export default {
           text: 'Не удалось подтвердить регистрацию'
         }, {
           root: true
-        })
+        });
         router.push({
           name: 'RegisterConfirmationFailed'
         });
-      })
+      });
     },
     async login({
       commit
     }, user) {
-      commit('setStatus', 'loading')
+      commit('setStatus', 'loading');
       await axios({
         url: 'auth/login',
         data: user,
         method: 'POST'
       }).then(response => {
-        const token = response.data.data.token
-        localStorage.setItem('user-token', token)
-        axios.defaults.headers.common['Authorization'] = token
-        commit('setToken', token)
-        commit('setStatus', 'success')
+        const token = response.data.data.token;
+        localStorage.setItem('user-token', token);
+        axios.defaults.headers.common['Authorization'] = token;
+        commit('setToken', token);
+        commit('setStatus', 'success');
         commit('profile/info/setInfo', response.data.data, {
           root: true
-        })
+        });
       }).catch(error => {
         alert(error.response.data);
-        commit('setStatus', 'error')
-        localStorage.removeItem('user-token')
-      })
+        commit('setStatus', 'error');
+        localStorage.removeItem('user-token');
+      });
     },
     async logout({
       commit,
@@ -112,34 +112,42 @@ export default {
         url: 'auth/logout',
         method: 'POST'
       }).then(() => {
-        commit('setToken', '')
-        commit('setStatus', 'logout')
+        commit('setToken', '');
+        commit('setStatus', 'logout');
         dispatch('global/alert/setAlert', {
           status: 'success',
           text: 'Вы вышли из системы'
         }, {
           root: true
-        })
-        localStorage.removeItem('user-token')
-        delete axios.defaults.headers.common['Authorization']
-        window.location.reload()
-      }).catch(error => {})
+        });
+        localStorage.removeItem('user-token');
+        delete axios.defaults.headers.common['Authorization'];
+        window.location.reload();
+      }).catch(error => { });
     },
-    async sendToSupport (context, supportData) {
+    async sendToSupport(context, supportData) {
       await axios({
         url: 'support',
         data: supportData,
         method: 'POST'
-      })
+      });
     },
     async modalOff({ commit }) {
-      commit('setModal', false)
+      commit('setModal', false);
     },
     async modalOn({ commit }, { header, link }) {
       console.log(1);
-      commit('setModal', true)
-      commit('setModalTitle', header)
-      commit('setModalLink', link)
+      commit('setModal', true);
+      commit('setModalTitle', header);
+      commit('setModalLink', link);
+    },
+    async logoutAfterDelete({ commit }) {
+      commit('setToken', '');
+      commit('setStatus', 'logout');
+
+      localStorage.removeItem('user-token');
+      delete axios.defaults.headers.common['Authorization'];
+      window.location.reload();
     }
   },
-}
+};

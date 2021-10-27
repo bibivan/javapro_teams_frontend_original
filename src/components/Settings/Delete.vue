@@ -18,14 +18,15 @@ export default {
   }),
   methods: {
     ...mapActions('profile/info', ['deleteInfo']),
-    ...mapActions('auth/api', ['logout']),
+    ...mapActions('auth/api', ['logoutAfterDelete']),
     onDelete() {
       this.deleteInfo()
-      // .then(() => {
-      //   this.logout().then(() => {
-      //     // this.$router.push({ name: 'Login' })
-      //   })
-      // })
+      .then(() => {
+        this.logoutAfterDelete()
+        .then(() => {
+          this.$router.push({ name: 'Login' })
+        })
+      })
     }
   },
   i18n: {
