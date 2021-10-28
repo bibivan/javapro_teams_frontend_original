@@ -65,7 +65,7 @@ export default {
   },
   created() {
     this.apiCountries()
-    this.apiCities({ params: { countryId: 1 }})
+    this.apiCities({ country_id: 1 })
   },
   watch: {
     city(value) {
