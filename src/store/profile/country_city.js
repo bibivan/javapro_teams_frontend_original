@@ -16,8 +16,9 @@ export default {
   },
   actions: {
     async apiCountries(context, params) {
+      let response
       try {
-        await axios.get('platform/countries', {params})
+        response = await axios.get('platform/countries', {params})
         context.commit('setCountries', response.data.data)
       } catch (e) {
         console.log('Произощла ошибка при загрузке списк стран')
@@ -25,8 +26,9 @@ export default {
       }
     },
     async apiCities(context, params) {
+      let response
       try {
-        await axios('platform/cities', {params})
+        response = await axios('platform/cities', {params})
         context.commit('setCities', response.data.data)
       } catch (e) {
         console.log('Произощла ошибка при загрузке списка городов')
