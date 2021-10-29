@@ -8,6 +8,7 @@ build-job:
   only:
     - master
     - dev
+    - merge_request
   except:
     - tags
   script:
