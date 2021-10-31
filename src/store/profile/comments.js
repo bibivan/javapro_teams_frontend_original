@@ -33,7 +33,8 @@ export default {
         method: 'POST',
         data: {
           parent_id: payload.parent_id,
-          comment_text: payload.text
+          comment_text: payload.text,
+          author: payload.author
         }
       }).then(() => {
         dispatch('commentsById', payload.post_id)
@@ -75,6 +76,7 @@ export default {
     async commentActions({
       dispatch
     }, payload) {
+      console.log(payload);
       payload.edit
         ? await dispatch('editComment', payload)
         : await dispatch('newComment', payload)
