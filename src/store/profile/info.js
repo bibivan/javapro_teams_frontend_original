@@ -43,9 +43,12 @@ export default {
         throw e
       }
     },
-    async deleteInfo() {
+    async deleteInfo(confirm) {
       try {
-        await axios.delete('users/me')
+        await axios('users/me', {
+          method: 'DELETE',
+          params: { isSoftDelete: confirm}
+        })
       } catch (e) {
         console.log('Произошла ошибка при загрузке данных пользователя')
         throw e
