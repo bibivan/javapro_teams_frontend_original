@@ -51,7 +51,7 @@ export default {
             comment.is_deleted = comment.is_deleted || false
             comment.sub_comments =  comment.sub_comments || []
 
-            if (comment.parent_id !== 0) {
+            if (comment.parent_id && comment.parent_id !== 0) {
               el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
             }
           })
@@ -75,7 +75,12 @@ export default {
     },
     setWallById: (s, payload) => s.wall[s.wall.indexOf(s.wall.find(el => el.id === payload.id))] = payload.value,
     setCommentsById: (s, payload) => {
-      s.wall[s.wall.indexOf(s.wall.find(el => el.id === payload.post_id))].comments = payload.value
+
+      s.wall.filter(el => el.id === payload,post_id).comments = payload.value
+
+      //s.wall[s.wall.indexOf(s.wall.find(el => el.id === payload.post_id))].comments = payload.value
+
+      // ???
       s.wall.push('dog-nail')
       s.wall.splice(-1,1)
     },

@@ -7,7 +7,7 @@ export default {
   },
   getters: {
     getFeeds(state) {
-      if (!state.feeds) return
+      if (!state.feeds.length) return
       let result = [
         ...state.feeds
       ]
