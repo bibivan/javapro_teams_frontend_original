@@ -1,12 +1,7 @@
-FROM node:latest as build-stage
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY ./ ./
-
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-ARG CONF_FILE=localhost
-ADD ${CONF_FILE} /etc/nginx/sites-available/45.134.255.54
+FROM node:latest
+WORKDIR /usr/app/front
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+COPY ./ ./
+RUN npm install
+CMD ["npm", "start"]
+
