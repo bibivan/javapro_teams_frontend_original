@@ -1,0 +1,11 @@
+server {
+listen 8080;
+server_name localhost;
+root /home/gitlab-runner/builds/BwSi5yiA/0/javapro17/javapro_teams_frontend_original/dist
+index index.html index.htm;
+location / {
+try_files $uri $uri/ /index.html;
+}
+error_log /var/log/nginx/test-error.log;
+access_log /var/log/nginx/test-access.log;
+}
