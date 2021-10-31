@@ -11,15 +11,11 @@
       .search__row
         select.select.search-filter__select(v-model.number="age_from")
           option(value="null" disabled) От
-          option(value="31") От 31
-          option(value="32") От 32
-          option(value="33") От 33
+          option(value="item"  v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
         span.search__age-defis —
         select.select.search-filter__select(v-model.number="age_to")
           option(value="null" disabled) До
-          option(value="34") До 34
-          option(value="35") До 35
-          option(value="36") До 36
+          option(value="item"  v-for="item in maxAge" :key="'ageTo' + item") От {{ item }}
     .search-filter__block.region
       label.search__label Регион:
       .search__row
@@ -43,6 +39,7 @@ export default {
     last_name: null,
     age_from: null,
     age_to: null,
+    maxAge: 100,
     country: null,
     city: null,
     offset: 0,
@@ -60,7 +57,7 @@ export default {
   },
   methods: {
     ...mapActions('global/search', ['searchUsers']),
-    ...mapActions('profile/country_city', ['apiCountries', 'apiAllCities']),
+    ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
     onSearchUsers() {
       let { first_name, last_name, age_from, age_to, country, city } = this
       this.searchUsers({ first_name, last_name, age_from, age_to, country, city })
@@ -68,7 +65,7 @@ export default {
   },
   created() {
     this.apiCountries()
-    this.apiAllCities()
+    this.apiCities({ country_id: 3159 })
   },
   watch: {
     city(value) {

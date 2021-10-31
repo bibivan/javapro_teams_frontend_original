@@ -7,45 +7,33 @@ export default {
     cities: [],
   },
   getters: {
-    getCountries: s => s.countries,
-    getCities: s => s.cities,
+    getCountries: state => state.countries,
+    getCities: state => state.cities,
   },
   mutations: {
-    setCountries: (s, value) => s.countries = value,
-    setCities: (s, value) => s.cities = value,
+    setCountries: (state, value) => state.countries = value,
+    setCities: (state, value) => state.cities = value,
   },
   actions: {
-    async apiCountries({
-      commit
-    }) {
-      await axios({
-        url: 'platform/countries',
-        method: 'GET',
-        params: {}
-      }).then(response => {
-        commit('setCountries', response.data.data)
-      }).catch(() => {})
+    async apiCountries(context, params) {
+      let response
+      try {
+        response = await axios.get('platform/countries', {params})
+        context.commit('setCountries', response.data.data)
+      } catch (e) {
+        console.log('Произощла ошибка при загрузке списк стран')
+        throw e
+      }
     },
-    async apiCities({
-      commit
-    }) {
-      await axios({
-        url: 'platform/cities',
-        method: 'GET',
-        params: {'countryId':'1'}
-      }).then(response => {
-        commit('setCities', response.data.data)
-      }).catch(() => {})
-    },
-    async apiAllCities({
-      commit
-    }) {
-      await axios({
-        url: 'platform/getAllCountriesWithTowns',
-        method: 'GET'
-      }).then(response => {
-        commit('setCities', response.data.data)
-      }).catch(() => {})
-    },
+    async apiCities(context, params) {
+      let response
+      try {
+        response = await axios('platform/cities', {params})
+        context.commit('setCities', response.data.data)
+      } catch (e) {
+        console.log('Произощла ошибка при загрузке списка городов')
+        throw e
+      }
+    }
   }
 }

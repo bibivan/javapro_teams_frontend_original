@@ -24,10 +24,10 @@ export default {
           return this.getNotifications
         case 'Комментарии':
           return this.getNotifications.filter(
-            el => el.event_type === 'POST_COMMENT' || el.event_type === 'COMMENT_COMMENT'
+            el => el.type_id === 2 || el.type_id === 3
           )
         case 'Друзья':
-          return this.getNotifications.filter(el => el.event_type === 'FRIEND_REQUEST')
+          return this.getNotifications.filter(el => el.type_id === 4)
       }
     }
   },

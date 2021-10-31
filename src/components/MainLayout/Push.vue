@@ -30,9 +30,6 @@ export default {
   },
   computed: {
     ...mapGetters('profile/notifications', ['getNotifications', 'getNotificationsLength']),
-    lang() {
-      return localStorage.getItem('lang')
-    }
   },
   watch: {
     opened(val) {
