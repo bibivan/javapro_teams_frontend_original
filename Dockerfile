@@ -1,11 +1,6 @@
-FROM node:latest as build-stage
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-
-
-FROM nginx:latest as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+FROM node:latest
+WORKDIR /usr/app/front
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+COPY ./ ./
+RUN npm install
+CMD ["npm", "start"]
