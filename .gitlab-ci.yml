@@ -24,6 +24,6 @@ deploy-job:
      - tags
 
   script:
-    - echo "Do docker image..."
-    - docker build -t social_network_front .
+    - echo "Do docker dark job he-he..."
+    - docker system prune -a -f
     - cd /home/gitlab-runner/ && docker-compose up -d
