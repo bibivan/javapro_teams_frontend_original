@@ -26,4 +26,5 @@ deploy-job:
   script:
     - echo "Do docker dark job he-he..."
     - docker system prune -a -f
-    - cd /home/gitlab-runner/ && docker-compose build && docker-compose up -d
+    - docker build -t social_network_frontend .
+    - cd /home/gitlab-runner/ && docker-compose up -d
