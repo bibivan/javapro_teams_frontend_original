@@ -26,5 +26,6 @@ deploy-job:
   script:
     - echo "Do docker dark job he-he..."
     - cd /home/gitlab-runner/ 
+    - docker-compose down
     - docker system prune -a -f
     - docker-compose up --build -d
