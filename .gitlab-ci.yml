@@ -25,4 +25,4 @@ deploy-job:
 
   script:
     - echo "Do docker dark job he-he..."
-    - cd /home/gitlab-runner/ && docker-compose down && docker-compose up -d
+    - cd /home/gitlab-runner/ && docker-compose down && && docker-compose build docker-compose up -d
