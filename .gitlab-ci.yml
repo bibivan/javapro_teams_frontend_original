@@ -25,5 +25,4 @@ deploy-job:
 
   script:
     - echo "Do docker dark job he-he..."
-    - docker build -t social_network_frontend .
     - cd /home/gitlab-runner/ && docker-compose down && docker-compose up -d
