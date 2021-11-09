@@ -30,19 +30,19 @@ export function getNotificationType(notificationID) {
   }
   if (lang === 'en') {
     switch (notificationID) {
-      case 1:
+      case 'POST':
         return 'posted a new post'
-      case 2:
+      case 'POST_COMMENT':
         return 'left a comment'
-      case 3:
+      case 'COMMENT_COMMENT':
         return 'replied to your comment'
       case 4:
         return 'birthday'
-      case 5:
+      case 'MESSAGE':
         return 'sent a message'
       case 6:
         return 'added a new user as a friend'
-      case 7:
+      case 'FRIEND_REQUEST':
         return 'wants to add you as a friend'
     }
   }
