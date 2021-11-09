@@ -1,41 +1,59 @@
 <template lang="pug">
-  .news-add-form
-    form.news-add__main(action="#" @submit.prevent="" ref="form")
-      .news-add__text
-        input.news-add__text-title(type="text" placeholder="Дайте тему" v-model="title")
-        editor-content.news-add__text-main(:editor="editor")
-        editor-menu-bar.news-add__actions(:editor="editor" v-slot="{ commands, isActive, getMarkAttrs, menu }" @mouseleave.native="hideLinkMenu")
-          .news-add__actions-buttons
-            button.bold(:class="{ 'is-active': isActive.bold() }" @click="commands.bold") ж
-            button.italic(:class="{ 'is-active': isActive.italic() }" @click="commands.italic") к
-            button.underline(:class="{ 'is-active': isActive.underline() }" @click="commands.underline") ч
-            .news-add__actions-link
-              .news-add__actions-link-hidden(:class="{'is-active': isOpenLinkMenu}")
-                form(@submit.prevent="setLinkUrl(commands.link, linkUrl)")
-                  input(type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu")
-                  button(type="button" @click="setLinkUrl(commands.link, linkUrl)")
-                    simple-svg(:filepath="'/static/img/add.svg'")
-              button.link(:class="{ 'is-active': isActive.link() }" @click="openLinkMenu(getMarkAttrs('link'))")
-                simple-svg(:filepath="'/static/img/link.svg'")
-      .news-add__settings
-        h4.news-add__settings-title {{ $t('title') }}
-        add-tags(:tags="tags" @change-tags="onChangeTags")
-        button-hover.news-add__planning(variant="white" bordered @click.native="openModal" v-if="!edit || deffered") {{ $t('plannig') }}
-        button-hover(@click.native="submitForm") {{ $t('publish') }}
-    modal.news-add__modal(v-model="modalShow")
-      v-date-picker(v-model="planingTime" @input="onChangeDatePicker" title-position="left" :min-date='new Date()' is-inline :attributes='attrs' :key="componentKey")
-      .news-add__modal-selects
-        select.select.news-add__modal-select.day(v-model="day" @change="changeDate")
-          option(v-for="d in days" :key="d") {{d}}
-        select.select.news-add__modal-select.month(v-model="month" @change="changeDate")
-          option(v-for="month in months" :key="month.val" :value="month") {{month.text}}
-        select.select.news-add__modal-select.year(v-model="year" @change="changeDate")
-          option(v-for="i in years" :key="i") {{i}}
-        select.select.news-add__modal-select.time(v-model="time")
-          option(v-for="t in times" :key="t") {{t}}
-      template(slot="actions")
-        button-hover(@click.native="onPlaning") {{ $t('plannig') }}
-        button-hover(variant="red" bordered @click.native="closeModal") {{ $t('cancel') }}
+.news-add-form
+  form.news-add__main(action='#', @submit.prevent='', ref='form')
+    .news-add__text
+      input.news-add__text-title(type='text', placeholder='Дайте тему', v-model='title')
+      editor-content.news-add__text-main(:editor='editor')
+      editor-menu-bar.news-add__actions(
+        :editor='editor',
+        v-slot='{ commands, isActive, getMarkAttrs, menu }',
+        @mouseleave.native='hideLinkMenu'
+      )
+        .news-add__actions-buttons
+          button.bold(:class='{ "is-active": isActive.bold() }', @click='commands.bold') ж
+          button.italic(:class='{ "is-active": isActive.italic() }', @click='commands.italic') к
+          button.underline(:class='{ "is-active": isActive.underline() }', @click='commands.underline') ч
+          .news-add__actions-link
+            .news-add__actions-link-hidden(:class='{ "is-active": isOpenLinkMenu }')
+              form(@submit.prevent='setLinkUrl(commands.link, linkUrl)')
+                input(
+                  type='text',
+                  v-model='linkUrl',
+                  placeholder='https://',
+                  ref='linkInput',
+                  @keydown.esc='hideLinkMenu'
+                )
+                button(type='button', @click='setLinkUrl(commands.link, linkUrl)')
+                  simple-svg(:filepath='"/static/img/add.svg"')
+            button.link(:class='{ "is-active": isActive.link() }', @click='openLinkMenu(getMarkAttrs("link"))')
+              simple-svg(:filepath='"/static/img/link.svg"')
+    .news-add__settings
+      h4.news-add__settings-title {{ $t("title") }}
+      add-tags(:tags='tags', @change-tags='onChangeTags')
+      button-hover.news-add__planning(variant='white', bordered, @click.native='openModal', v-if='!edit || deffered') {{ $t("plannig") }}
+      button-hover(@click.native='submitForm') {{ $t("publish") }}
+  modal.news-add__modal(v-model='modalShow')
+    v-date-picker(
+      v-model='planingTime',
+      @input='onChangeDatePicker',
+      title-position='left',
+      :min-date='new Date()',
+      is-inline,
+      :attributes='attrs',
+      :key='componentKey'
+    )
+    .news-add__modal-selects
+      select.select.news-add__modal-select.day(v-model='day', @change='changeDate')
+        option(v-for='d in days', :key='d') {{ d }}
+      select.select.news-add__modal-select.month(v-model='month', @change='changeDate')
+        option(v-for='month in months', :key='month.val', :value='month') {{ month.text }}
+      select.select.news-add__modal-select.year(v-model='year', @change='changeDate')
+        option(v-for='i in years', :key='i') {{ i }}
+      select.select.news-add__modal-select.time(v-model='time')
+        option(v-for='t in times', :key='t') {{ t }}
+    template(slot='actions')
+      button-hover(@click.native='onPlaning') {{ $t("plannig") }}
+      button-hover(variant='red', bordered, @click.native='closeModal') {{ $t("cancel") }}
 </template>
 
 <script>
@@ -161,7 +179,7 @@ export default {
     submitForm() {
       if (this.title.length <= 5 || this.editor.getHTML().length <= 7) {
         this.modalShow && this.closeModal()
-        alert('Введите тему или текст')
+        alert('Введите тему (не менее 5 символов) или текст (не менее 7 символов')
         return
       }
       this.modalShow = false
@@ -276,7 +294,7 @@ export default {
 </script>
 
 <style>
-  .cursor-text {
-    cursor: text;
-  }
+.cursor-text {
+  cursor: text;
+}
 </style>

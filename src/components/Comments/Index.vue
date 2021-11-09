@@ -75,7 +75,7 @@ export default {
         post_id: this.id,
         text: this.commentText,
         id: this.commentEdit ? this.commentEditInfo.id : null,
-        author: { id: this.getInfo.id, fullName: this.getInfo.fullName, photot: this.getInfo.photo }
+        author: { id: this.getInfo.id, fullName: this.getInfo.fullName, photo: this.getInfo.photo }
       }).then(() => {
         this.commentText = ''
         this.commentEdit = false
