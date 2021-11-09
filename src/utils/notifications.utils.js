@@ -1,6 +1,6 @@
 export function getRouteByNotification(notification) {
   switch (notification.type_id) {
-      case 5:
+      case 'MESSAGE':
         return { name: 'Im',  params: { id: notification.id } }
       default:
         return { name: 'ProfileId', params: { id: notification.author.author_id } }
@@ -12,19 +12,19 @@ export function getNotificationType(notificationID) {
 
   if (lang === 'ru') {
     switch (notificationID) {
-      case 1:
+      case 'POST':
         return 'опубликовал новую запись'
-      case 2:
+      case 'POST_COMMENT':
         return 'оставил комментарий'
-      case 3:
+      case 'COMMENT_COMMENT':
         return 'ответил на ваш комментарий'
       case 4:
         return 'день рождение'
-      case 5:
+      case 'MESSAGE':
         return 'прислал сообщение'
       case 6:
         return 'добавил в друзья нового пользователя'
-      case 7:
+      case 'FRIEND_REQUEST':
         return 'хочет дабавить вас в друзья'
     }
   }
