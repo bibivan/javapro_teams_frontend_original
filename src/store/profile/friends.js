@@ -96,6 +96,19 @@ export default {
         throw e
       }
     },
+    async apiRefuseRequest(context) {
+      let response
+      try {
+        response = await axios.delete('friends/request')
+        context.commit('setResult', {
+          id: 'request',
+          value: response.data.data
+        })
+      } catch (e) {
+        console.log("TCL: request", response)
+        throw e
+      }
+    },
     async apiRecommendations(context, payload) {
       let response
       const query = mapPayload(payload)
