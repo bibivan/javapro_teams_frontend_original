@@ -1,13 +1,10 @@
 module.exports = {
-    devServer: {
+    dev: {
       // Бэкенд сервер 
-      proxy: { 
-        "^/api/*": {
+        '/api/v1/': {
           target: 'https://45.134.255.54:8086/',
           changeOrigin: true,
           ws: true,
-        },
-      },
-      
+        },  
     },
   };
