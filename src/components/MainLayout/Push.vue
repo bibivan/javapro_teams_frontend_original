@@ -29,7 +29,8 @@ export default {
     opened: Boolean
   },
   computed: {
-    ...mapGetters('profile/notifications', ['getNotifications', 'getNotificationsLength']),
+    // s2_t2-t5
+    // ...mapGetters('profile/notifications', ['getNotifications', 'getNotificationsLength', 'getNotificationsTextType'])
   },
   watch: {
     opened(val) {

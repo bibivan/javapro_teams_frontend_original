@@ -7,7 +7,18 @@ export default {
     info: null
   },
   getters: {
-    getInfo: state => state.info
+    getInfo(state) {
+      if (!state.info) return
+      let result = {
+        ...state.info.data
+      }
+      console.log(result)
+      result.fullName = result.first_name + ' ' + result.last_name
+      result.ages = moment().diff(result.birth_date * 1000, 'years')
+      // Добавить дефолтную аватарку
+      if (!result.photo) result.photo = '../static/img/user/default_avatar.svg'
+      return result
+    }
   },
   mutations: {
     setInfo: (state, info) => {

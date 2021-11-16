@@ -3,13 +3,12 @@ stages:
   - deploy
 
 build-job:
-  image: node:14
+  image: node:latest
   stage: build
   only:
     - master
     - dev
     - merge_request
-
   except:
     - tags
   script:
@@ -25,6 +24,8 @@ deploy-job:
      - tags
 
   script:
-    - echo "Do docker image..."
-    - docker build -t social_network_front .
-    - cd /home/gitlab-runner/ && docker-compose up -d
+    - echo "Do docker dark job he-he..."
+    - cd /home/gitlab-runner/ 
+    - docker-compose down
+    - docker system prune -a -f --volumes
+    - docker-compose up --build -d
