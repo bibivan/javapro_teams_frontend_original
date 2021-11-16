@@ -6,6 +6,7 @@
   .search-filter__block.time
     label.search__label Время публикации:
     select.select.search-filter__select(v-model='date_from')
+      option(value='allTime') За все время
       option(value='year') За последний год
       option(value='month') За последний месяц
       option(value='week') За последнюю неделю
@@ -24,7 +25,7 @@ export default {
   components: { AddTags },
   data: () => ({
     tags: [],
-    date_from: 'year',
+    date_from: 'week',
     date_to: 0,
     offset: 0,
     itemPerPage: 20,

@@ -128,7 +128,6 @@ export default {
           commit('dialogsLoaded')
         })
         .catch(error => {
-          console.error(error)
         })
     },
     async createDialogWithUser({ dispatch, commit }, userId) {
@@ -145,7 +144,6 @@ export default {
           await dispatch('switchDialog', dialogId)
         })
         .catch(error => {
-          console.error(error)
         })
     },
     async loadFreshMessages({ commit, state, dispatch }, id) {
@@ -163,7 +161,6 @@ export default {
           }
         })
         .catch(error => {
-          console.error(error)
         })
     },
     async loadOlderMessages({ commit, getters, state }) {
@@ -183,7 +180,6 @@ export default {
           }
         })
         .catch(error => {
-          console.error(error)
         })
     },
     async postMessage({ dispatch }, payload) {
@@ -198,7 +194,6 @@ export default {
           dispatch('loadFreshMessages', payload.id)
         })
         .catch(error => {
-          console.error(error)
         })
     },
     async apiUnreadedMessages({ commit }) {
@@ -210,7 +205,6 @@ export default {
           commit('setUnreadedMessages', response.data.data.count)
         })
         .catch(error => {
-          console.error(error)
         })
     }
   }

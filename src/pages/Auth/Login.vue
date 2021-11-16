@@ -13,62 +13,71 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { required, email, minLength } from 'vuelidate/lib/validators'
 import PasswordField from '@/components/FormElements/PasswordField'
 import EmailField from '@/components/FormElements/EmailField'
 export default {
-    name: 'Login',
-    components: {
-        PasswordField,
-        EmailField,
+  name: 'Login',
+  components: {
+    PasswordField,
+    EmailField
+  },
+  data: () => ({
+    email: '',
+    password: ''
+  }),
+  computed: {
+    ...mapGetters('auth/api', ['authStatus']),
+    redirectUrl() {
+      return this.$route.query.redirect
     },
-    data: () => ({
-        email: '',
-        password: '',
-    }),
-    computed: {
-        redirectUrl() {
-            return this.$route.query.redirect
-        },
-    },
-    methods: {
-        ...mapActions('auth/api', ['login']),
-        ...mapActions('profile/info', ['apiInfo']),
-        submitHandler() {
-            console.log(this.redirectUrl)
-            if (this.$v.$invalid) {
-                this.$v.$touch()
-                return
-            }
+    authErrorMessage() {
+      return this.authErr
+    }
+  },
+  methods: {
+    ...mapActions('auth/api', ['login']),
+    ...mapActions('profile/info', ['apiInfo']),
+    submitHandler() {
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
 
-            this.login({ email: this.email, password: this.password })
-                .then(() => {
-                    this.apiInfo().then(() => {
-                        this.$router.push({ name: this.redirectUrl || 'News' })
-                    })
-                })
-                .catch((error) => {})
-        },
+      this.login({ email: this.email, password: this.password })
+        .then(() => {
+          this.apiInfo().then(() => {
+            if (this.authStatus === 'error') {
+              return
+            }
+            this.$router.push({ name: this.redirectUrl || 'News' })
+          })
+        })
+        .catch(error => {})
     },
-    validations: {
-        email: { required, email },
-        password: { required, minLength: minLength(8) },
-    },
-    i18n: {
-        messages: {
-            en: {
-                title: 'Log in',
-                login: 'Sign in',
-                forgot: 'Forgot your password?',
-            },
-            ru: {
-                title: 'Войдите в аккаунт',
-                login: 'Войти',
-                forgot: 'Забыли пароль?',
-            },
-        },
-    },
+    hideModal() {
+      this.$modal.show('privacy')
+    }
+  },
+  validations: {
+    email: { required, email },
+    password: { required, minLength: minLength(8) }
+  },
+  i18n: {
+    messages: {
+      en: {
+        title: 'Log in',
+        login: 'Sign in',
+        forgot: 'Forgot your password?'
+      },
+      ru: {
+        title: 'Войдите в аккаунт',
+        login: 'Войти',
+        forgot: 'Забыли пароль?'
+      }
+    }
+  }
 }
 </script>
 

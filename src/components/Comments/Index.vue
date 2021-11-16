@@ -1,20 +1,20 @@
 <template lang="pug">
-  .comments(:class="{open: isOpenComments, 'comments--admin': admin}")
-    h4.comments__title
-      span {{ $t('title') }} ({{commentsLength}})
-      a.comments__show(@click.prevent="showComments" href="#" v-if="info.length > 1") {{showText}}
-    .comments__list(v-if="getInfo")
-      comment-block(
-        :admin="admin"
-        v-for="i in info"
-        :key="i.id"
-        :info="i"
-        :edit="getInfo.id === i.author_id"
-        :deleted="getInfo.id === i.author_id"
-        @edit-comment="onEditMain"
-      )
-      .comments__add(v-if="!admin")
-        comment-add(ref="addComment" :id="id" v-model="commentText" @submited="onSubmitComment")
+.comments(:class='{ open: isOpenComments, "comments--admin": admin }')
+  h4.comments__title
+    span {{ $t("title") }} ({{ commentsLength }})
+    a.comments__show(@click.prevent='showComments', href='#', v-if='info.length > 1') {{ showText }}
+  .comments__list(v-if='getInfo')
+    comment-block(
+      :admin='admin',
+      v-for='i in info',
+      :key='i.id',
+      :info='i',
+      :edit='getInfo.id === i.author_id',
+      :deleted='getInfo.id === i.author_id',
+      @edit-comment='onEditMain'
+    )
+    .comments__add(v-if='!admin')
+      comment-add(ref='addComment', :id='id', v-model='commentText', @submited='onSubmitComment')
 </template>
 
 <script>
@@ -69,12 +69,13 @@ export default {
       this.$refs.addComment.$refs.addInput.focus()
     },
     onSubmitComment() {
-      if(this.commentText === '') return
+      if (this.commentText === '') return
       this.commentActions({
         edit: this.commentEdit,
         post_id: this.id,
         text: this.commentText,
-        id: this.commentEdit ? this.commentEditInfo.id : null
+        id: this.commentEdit ? this.commentEditInfo.id : null,
+        author: { id: this.getInfo.id, fullName: this.getInfo.fullName, photo: this.getInfo.photo }
       }).then(() => {
         this.commentText = ''
         this.commentEdit = false
@@ -84,14 +85,14 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "title": "Comments",
+      en: {
+        title: 'Comments'
       },
-      "ru": {
-        "title": "Комментарии",
+      ru: {
+        title: 'Комментарии'
       }
     }
-  },
+  }
 }
 </script>
 

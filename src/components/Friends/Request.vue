@@ -6,7 +6,9 @@
         .friends-possible__pic
           img(:src="user.photo" :alt="user.first_name")
         router-link.friends-possible__name(:to="{name: 'ProfileId', params: {id: user.id}}" replace) {{user.first_name + ' ' + user.last_name}}
-        a.friends-possible__link(href="#" @click.prevent="apiAddFriends(user.id)") {{ $t('add') }}
+        .friends-possible__response
+          a.friends-possible__link.friends-possible__link--add(href="#" @click.prevent="apiAddFriends(user.id)") {{ $t('add') }}
+          a.friends-possible__link.friends-possible__link--refuse(href="#" @click.prevent="apiRefuseRequest(user.id)") {{ $t('refuse') }}
     router-link.friends-possible__btn(href="#" :to="{name: 'FriendsFind'}")
       simple-svg(:filepath="'/static/img/search.svg'")
       span.friends-possible__link {{ $t('find') }}
@@ -23,7 +25,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('profile/friends', ['apiAddFriends', 'apiRequest'])
+    ...mapActions('profile/friends', ['apiAddFriends', 'apiRequest', 'apiRefuseRequest'])
   },
   mounted() {
     if (this.requestFriends.length === 0) this.apiRequest()
@@ -33,11 +35,13 @@ export default {
       "en": {
         "title": "Friend requests",
         "add": "Add",
+        "refuse": "Refuse",
         "find": "Find friends"
       },
       "ru": {
         "title": "Заявки в друзья",
-        "add": "Добавить",
+        "add": "Принять",
+        "refuse": "Отказаться",
         "find": "Искать друзей"
       }
     }

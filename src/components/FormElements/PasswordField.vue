@@ -8,7 +8,6 @@
     :type='passwordFieldType',
     :autocomplete='autocomplete',
     v-model.trim='password',
-    :autocomplete='autocomplete',
     :class='{ invalid: (v.$dirty && !v.required) || (v.$dirty && !v.minLength) || !v.passwordRule }'
   )
     //- @change='passwordBlur',
@@ -17,7 +16,7 @@
   .form__error-block
     template(v-if='registration')
       span.form__password-helper(:class='levelInfo.class')
-      span.form__error(v-if='password.length >= 3') {{ levelInfo.text }}
+      span.form__error(v-if='password.length >= 1') {{ levelInfo.text }}
     template(v-else)
       span.form__error(v-if='v.$dirty && !v.minLength') {{ $t("errorPassword1") }} {{ v.$params.minLength.min }} {{ $t("errorPassword2") }} {{ password.length }}
   template(v-if='info')
@@ -49,7 +48,7 @@ export default {
     autocomplete: {
       type: String,
       required: true
-    },
+    }
   },
   data: () => ({
     passwordFieldType: 'password',
@@ -67,22 +66,23 @@ export default {
     levelInfo() {
       if (!this.passwordHelperShow) return { text: null, class: null }
 
-
-      if(!this.v.passwordRule) {
-        return {text: this.$t('notValid'), class: null};
+      if (this.password.length === 0) {
+        return { text: null, class: null }
       }
 
-      return this.password.length >= 3 && this.password.length < 7
-        ? { text: this.$t('easy'), class: 'easy' }
-        : this.password.length >= 7 && this.password.length < 11
-        ? { text: this.$t('middle'), class: 'middle' }
-        : this.password.length >= 11 && { text: this.$t('hard'), class: 'hard' }
+      if (!this.v.passwordRule || this.password.length < 8) {
+        return { text: this.$t('notValid'), class: 'easy' }
+      } else if (this.password.length >= 8 && this.password.length < 11) {
+        return { text: this.$t('middle'), class: 'middle' }
+      } else {
+        return { text: this.$t('hard'), class: 'hard' }
+      }
     }
   },
   methods: {
     switchVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
-    },
+    }
     // passwordBlur() {
     //   this.passwordHelperShow = false
     //   this.v.$touch()
@@ -94,30 +94,32 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "password": "Password",
-        "enterPassword": "Enter password",
-        "errorPassword1": "Password must be at least",
-        "errorPassword2": "characters. He is now",
-        "infoPassword": "The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.",
-        "easy": "Easy",
-        "middle": "Middle",
-        "hard": "Hard",
-        "notValid": "Does not meet safety requirements"
+      en: {
+        password: 'Password',
+        enterPassword: 'Enter password',
+        errorPassword1: 'Password must be at least',
+        errorPassword2: 'characters. He is now',
+        infoPassword:
+          'The password must consist of Latin letters, numbers and symbols. Must contain one capital letter, one number and 8 characters.',
+        easy: 'Easy',
+        middle: 'Middle',
+        hard: 'Hard',
+        notValid: 'Does not meet safety requirements'
       },
-      "ru": {
-        "password": "Пароль",
-        "enterPassword": "Введите пароль",
-        "errorPassword1": "Пароль должен быть не менее",
-        "errorPassword2": "символов. Сейчас он",
-        "infoPassword": "Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.",
-        "easy": "Слабый",
-        "middle": "Средний",
-        "hard": "Надёжный",
-        "notValid": "Не соответствует требованиям безопасности"
+      ru: {
+        password: 'Пароль',
+        enterPassword: 'Введите пароль',
+        errorPassword1: 'Пароль должен быть не менее',
+        errorPassword2: 'символов. Сейчас он',
+        infoPassword:
+          'Пароль должен состоять из латинских букв, цифр и знаков. Обязательно содержать одну заглавную букву, одну цифру и состоять из 8 символов.',
+        easy: 'Слабый',
+        middle: 'Средний',
+        hard: 'Надёжный',
+        notValid: 'Не соответствует требованиям безопасности'
       }
     }
-  },
+  }
 }
 </script>
 

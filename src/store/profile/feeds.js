@@ -7,7 +7,7 @@ export default {
   },
   getters: {
     getFeeds(state) {
-      if (!state.feeds) return
+      if (!state.feeds.length) return
       let result = [
         ...state.feeds
       ]
@@ -34,7 +34,8 @@ export default {
   mutations: {
     setFeeds: (s, feeds) => s.feeds = feeds,
     setCommentsById: (s, payload) => {
-      s.feeds[s.feeds.indexOf(s.feeds.find(el => el.id === payload.post_id))].comments = payload.value
+      s.feeds.filter((el) => el.id === payload.post_id).comments = payload.value
+      // s.feeds[s.feeds.indexOf(s.feeds.find(el => el.id === payload.post_id))].comments = payload.value
       // s.feeds.push('dog-nail')
       // s.feeds.splice(-1,1)
     },

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { mapPayload } from "@/utils/friends.util";
+import { mapPayload } from "@/utils/payload.util";
 
 export default {
   namespaced: true,
@@ -36,7 +36,6 @@ export default {
         console.log('Произошла ошибка при добавлении друзей')
         throw e
       }
-      console.log("TCL: friends", response)
       context.commit('setResult', {
         id: 'friends',
         value: response.data.data
@@ -51,8 +50,6 @@ export default {
         console.log('Произошла ошибка при удалении друга')
         throw e
       }
-
-      console.log("TCL: response", response)
       context.dispatch('global/alert/setAlert', {
         status: 'success',
         text: 'Пользователь удален из друзей'
@@ -64,9 +61,7 @@ export default {
     apiAddFriends(context, id) {
       let response
 
-      console.log('apiAddFriends', id)
       try {
-        console.log("TCL: response", response)
         context.commit('delRequest', id)
         response = axios.post('friends/' + id)
         context.dispatch('apiFriends')
@@ -92,7 +87,19 @@ export default {
       const query = mapPayload(payload)
       try {
         response = await axios.get('friends/request?' + query.join('&'))
+        context.commit('setResult', {
+          id: 'request',
+          value: response.data.data
+        })
+      } catch (e) {
         console.log("TCL: request", response)
+        throw e
+      }
+    },
+    async apiRefuseRequest(context) {
+      let response
+      try {
+        response = await axios.delete('friends/request')
         context.commit('setResult', {
           id: 'request',
           value: response.data.data
@@ -105,6 +112,7 @@ export default {
     async apiRecommendations(context, payload) {
       let response
       const query = mapPayload(payload)
+      console.log(payload, 'payload')
 
       try {
         response = await axios.get('friends/recommendations?' + query.join('&'))

@@ -1,9 +1,9 @@
 <template lang="pug">
-  .page-push.inner-page
-    .inner-page__main(v-if="getNotificationsLength > 0")
-      push-block(v-for="info in filterNotifications" :key="info.id" :info="info")
-    .inner-page__aside
-      push-sidebar(v-model="activeFilter" @change-push-sidebar="onChangeFilter")
+.page-push.inner-page
+  .inner-page__main(v-if='getNotificationsLength > 0')
+    push-block(v-for='info in filterNotifications', :key='info.id', :info='info')
+  .inner-page__aside
+    push-sidebar(v-model='activeFilter', @change-push-sidebar='onChangeFilter')
 </template>
 
 <script>
@@ -24,11 +24,9 @@ export default {
         case 'Все':
           return this.getNotifications
         case 'Комментарии':
-          return this.getNotifications.filter(
-            el => el.event_type === 'POST_COMMENT' || el.event_type === 'COMMENT_COMMENT'
-          )
+          return this.getNotifications.filter(el => el.type_id === 'POST_COMMENT' || el.type_id === 'COMMENT_COMMENT')
         case 'Друзья':
-          return this.getNotifications.filter(el => el.event_type === 'FRIEND_REQUEST')
+          return this.getNotifications.filter(el => el.type_id === 'FRIEND_REQUEST')
       }
     }
   },
