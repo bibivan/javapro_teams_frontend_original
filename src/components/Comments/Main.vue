@@ -12,7 +12,7 @@
     router-link.comment-main__pic(:to='{ name: "ProfileId", params: { id: info.author_id } }')
       img(:src='info.photo', :alt='info.first_name')
     .comment-main__main
-      router-link.comment-main__author(:to='{ name: "ProfileId", params: { id: info.author_id } }') {{ info.author.fullName }}
+      router-link.comment-main__author(:to='{ name: "ProfileId", params: { id: info.author_id } }') {{ info.fullName }}
       p.comment-main__text {{ info.comment_text }}
       .comment-main__actions
         span.comment-main__time {{ info.time | moment("from") }}

@@ -46,10 +46,11 @@ export default {
       result.forEach(el => {
         if(el.comments && el.comments.length) {
           el.comments.forEach(comment => {
-            comment.photo = el.photo || '../static/img/user/default_avatar.svg'
+            comment.photo = el.photo || comment.author.photo || '../static/img/user/default_avatar.svg'
             comment.my_like =  comment.my_like || false
             comment.is_deleted = comment.is_deleted || false
             comment.sub_comments =  comment.sub_comments || []
+            comment.fullName = comment.author.fullName
 
             if (comment.parent_id && comment.parent_id !== 0) {
               el.comments.find(res => res.id === comment.parent_id).sub_comments.push(comment)
@@ -61,7 +62,7 @@ export default {
           // el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
         }
         })
-
+      console.log(result);
       return result
     },
     getWallPostedLength: s => s.wall.filter(el => el.type === 'POSTED').length,
@@ -89,60 +90,54 @@ export default {
     }
   },
   actions: {
-    async apiInfo({
-      commit
-    }, id) {
-      await axios({
-        url: `users/${id}`,
-        method: 'GET'
-      }).then(response => {
+    async apiInfo({ commit }, id) {
+      try {
+        const response = await axios({ url: `users/${id}`,  method: 'GET' });
         commit('setInfo', response.data.data)
-      }).catch(error => {})
+      }
+      catch (error) {
+        console.log(error);
+      }
     },
-    async apiWall({
-      commit
-    }, {id, offset, itemPerPage}) {
+    async apiWall({ commit }, {id, offset, itemPerPage}) {
       console.log('fetch wall', id)
-      await axios({
+      try {
+        const response =  await axios({
         url: `users/${id}/wall${offset ? '?offset='+offset : ''}${itemPerPage ? '&itemPerPage='+itemPerPage : ''}`,
         method: 'GET'
-      }).then(response => {
-        commit('setWall', response.data.data)
-      }).catch(error => {})
+      })
+      commit('setWall', response.data.data)
+      } catch (error) {
+        console.log(error);
+      }
     },
-    async apiWallById({
-      commit
-    }, id) {
-      await axios({
-        url: `post/${id}`,
-        method: 'GET'
-      }).then(response => {
-        commit('setWallById', {
+    async apiWallById({ commit }, id) {
+      try {
+        const response = await axios({ url: `post/${id}`, method: 'GET'  })
+      commit('setWallById', {
           id,
           value: response.data.data
         })
-      }).catch(error => {})
+      } catch (error) {
+        console.log(error);
+      }
     },
-    async apiCommentsById({
-      commit
-    }, id) {
-      await axios({
-        url: `post/${id}/comments`,
-        method: 'GET'
-      }).then(response => {
-        commit('setCommentsById', response.data.data)
-      }).catch(error => {})
+    async apiCommentsById({ commit }, id) {
+      try {
+        const response = await axios({ url: `post/${id}/comments`,  method: 'GET' })
+          commit('setCommentsById', response.data.data)
+      } catch (error) {
+        console.log(error);
+      }
     },
-    async userInfoId({
-      commit, dispatch
-    }, id) {
-      await axios({
-        url: `users/${id}`,
-        method: 'GET'
-      }).then(async response => {
+    async userInfoId({ commit, dispatch }, id) {
+      try {
+        const response = await axios({ url: `users/${id}`, method: 'GET' })
         await dispatch('apiWall', {id})
         commit('setUsersInfo', response.data)
-      }).catch(error => {})
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }
