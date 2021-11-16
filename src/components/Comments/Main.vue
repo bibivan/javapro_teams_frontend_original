@@ -12,7 +12,7 @@
     router-link.comment-main__pic(:to='{ name: "ProfileId", params: { id: info.author_id } }')
       img(:src='info.photo', :alt='info.first_name')
     .comment-main__main
-      router-link.comment-main__author(:to='{ name: "ProfileId", params: { id: info.author_id } }') {{ info.first_name + " " + info.last_name }}
+      router-link.comment-main__author(:to='{ name: "ProfileId", params: { id: info.author_id } }') {{ info.author.fullName }}
       p.comment-main__text {{ info.comment_text }}
       .comment-main__actions
         span.comment-main__time {{ info.time | moment("from") }}
@@ -56,18 +56,18 @@ export default {
   },
   i18n: {
     messages: {
-      "en": {
-        "del": "Comment has been deleted",
-        "restore": "Restore",
-        "answer": "To answer"
+      en: {
+        del: 'Comment has been deleted',
+        restore: 'Restore',
+        answer: 'To answer'
       },
-      "ru": {
-        "del": "Комментарий удален",
-        "restore": "Восстановить",
-        "answer": "Ответить"
+      ru: {
+        del: 'Комментарий удален',
+        restore: 'Восстановить',
+        answer: 'Ответить'
       }
     }
-  },
+  }
 }
 </script>
 
