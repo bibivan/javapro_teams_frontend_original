@@ -9,7 +9,6 @@
     :autocomplete='autocomplete'
   )
   label.form__label(:for='id') {{ placeholder }}
-    span.required-field *
   span.form__error(v-if='v.$dirty && !v.required') {{ $t("enterEmail") }}
   span.form__error(v-else-if='v.$dirty && !v.email') {{ $t("correctEmail") }}
 </template>

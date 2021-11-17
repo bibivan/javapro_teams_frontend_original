@@ -3,10 +3,16 @@
   h2.login__title.form__title {{ $t("title") }}
   form.login__form(@submit.prevent='submitHandler')
     email-field#login-email(v-model='email', :v='$v.email')
-    password-field#login-password(v-model='password', :v='$v.password', autocomplete='current-password')
+    password-field#login-password(
+      v-model='password',
+      :v='$v.password',
+      autocomplete='current-password')
     .login__action
       button-hover(tag='button', type='submit', variant='white') {{ $t("login") }}
       router-link.login__link(:to='{ name: "Forgot" }') {{ $t("forgot") }}
+
+
+
 
       //- временный вход
     //-   router-link.login__link(:to='{ name: "Forgot" }') тыкни сюда
@@ -25,7 +31,8 @@ export default {
   },
   data: () => ({
     email: '',
-    password: ''
+    password: '',
+    incorrectData: false,
   }),
   computed: {
     ...mapGetters('auth/api', ['authStatus']),
@@ -47,6 +54,7 @@ export default {
 
       this.login({ email: this.email, password: this.password })
         .then(() => {
+          this.incorrectData = false
           this.apiInfo().then(() => {
             if (this.authStatus === 'error') {
               return
@@ -54,7 +62,12 @@ export default {
             this.$router.push({ name: this.redirectUrl || 'News' })
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          if (error.response.status === 403) {
+            console.log('da')
+            this.incorrectData = true
+          }
+        })
     },
     hideModal() {
       this.$modal.show('privacy')
@@ -62,19 +75,23 @@ export default {
   },
   validations: {
     email: { required, email },
-    password: { required, minLength: minLength(8) }
+    password: { required, minLength: minLength(8), passwordRule: true }
   },
   i18n: {
     messages: {
       en: {
         title: 'Log in',
         login: 'Sign in',
-        forgot: 'Forgot your password?'
+        forgot: 'Forgot your password?',
+        incorrectData: 'Wrong login or password',
+        unknownError: 'Unknown error'
       },
       ru: {
         title: 'Войдите в аккаунт',
         login: 'Войти',
-        forgot: 'Забыли пароль?'
+        forgot: 'Забыли пароль?',
+        incorrectData: 'Неверный логин или пароль',
+        unknownError: 'Что-то пошло не так'
       }
     }
   }
