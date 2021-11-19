@@ -10,12 +10,11 @@
     .login__action
       button-hover(tag='button', type='submit', variant='white') {{ $t("login") }}
       router-link.login__link(:to='{ name: "Forgot" }') {{ $t("forgot") }}
+    .login__message-error(v-if="incorrectData")
+      span.login__caption-error {{ $t("incorrectData1") }}
+      | {{ $t("incorrectData2") }}
 
 
-
-
-      //- временный вход
-    //-   router-link.login__link(:to='{ name: "Forgot" }') тыкни сюда
 </template>
 
 <script>
@@ -83,14 +82,16 @@ export default {
         title: 'Log in',
         login: 'Sign in',
         forgot: 'Forgot your password?',
-        incorrectData: 'Wrong login or password',
+        incorrectData1: 'Unable to login',
+        incorrectData2: 'Please check the spelling of your login and password.',
         unknownError: 'Unknown error'
       },
       ru: {
         title: 'Войдите в аккаунт',
         login: 'Войти',
         forgot: 'Забыли пароль?',
-        incorrectData: 'Неверный логин или пароль',
+        incorrectData1: 'Не удаётся войти.',
+        incorrectData2: 'Пожалуйста, проверьте правильность написания логина и пароля.',
         unknownError: 'Что-то пошло не так'
       }
     }
@@ -108,6 +109,10 @@ export default {
   justify-content: center;
 }
 
+.login__form {
+  position: relative;
+}
+
 .login__title {
   margin-bottom: 50px;
 }
@@ -116,6 +121,22 @@ export default {
   display: flex;
   align-items: center;
   margin-top: 50px;
+}
+
+.login__message-error {
+  position: absolute;
+  display block;
+  top: -110%;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid white;
+  line-height: 24px;
+}
+
+.login__caption-error {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
 }
 
 .login__link {

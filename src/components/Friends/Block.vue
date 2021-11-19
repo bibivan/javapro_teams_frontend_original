@@ -93,6 +93,15 @@ export default {
     sendMessage(userId) {
       this.$router.push({ name: 'Im', query: { userId: userId } })
     },
+    //
+    // async deleteFriend (id) {
+    //   try {
+    //
+    //     this.apiDeleteFriends(id)
+    //   } catch (e) {
+    //
+    //   }
+    // },
     onConfrim(id) {
       this.modalType === 'delete'
         ? this.apiDeleteFriends(id).then(() => this.closeModal())

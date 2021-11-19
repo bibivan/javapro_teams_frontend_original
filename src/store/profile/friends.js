@@ -23,7 +23,7 @@ export default {
       const index = s.result.request.findIndex(el => el.id === id)
       if (index === -1) return
       return s.result.request.splice(index, 1)
-    },
+    }
   },
   actions: {
     async apiFriends(context, payload) {
@@ -44,6 +44,7 @@ export default {
     apiDeleteFriends(context, id) {
       let response
 
+      context.state.result.friends.filter(f => f.id !== +id)
       try {
         response = axios.delete('friends/' + id)
       } catch (e) {
@@ -96,10 +97,10 @@ export default {
         throw e
       }
     },
-    async apiRefuseRequest(context) {
+    async apiRefuseRequest(context, id) {
       let response
       try {
-        response = await axios.delete('friends/request')
+        response = await axios.delete('friends/delete/' + id)
         context.commit('setResult', {
           id: 'request',
           value: response.data.data
