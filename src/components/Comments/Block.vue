@@ -110,6 +110,7 @@ export default {
       this.onAnswerSub()
     },
     onSubmitComment() {
+      console.log()
       if (this.commentText === '') return
       this.commentActions({
         edit: this.commentEdit,
@@ -123,6 +124,7 @@ export default {
         this.commentEditInfo = null
         this.commentEditParentId = null
       })
+      apiWall
     }
   },
   i18n: {

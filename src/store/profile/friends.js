@@ -12,7 +12,8 @@ export default {
   },
   getters: {
     getResult: s => s.result,
-    getResultById: s => id => s.result[id]
+    getResultById: s => id => s.result[id],
+    getResultFriends: s => s.result.friends
   },
   mutations: {
     setResult: (s, payload) => {
@@ -44,7 +45,10 @@ export default {
     apiDeleteFriends(context, id) {
       let response
 
-      context.state.result.friends.filter(f => f.id !== +id)
+      context.commit('setResult', {
+        id: 'friends',
+        value: context.state.result.friends.filter(f => f.id =id)
+      })
       try {
         response = axios.delete('friends/' + id)
       } catch (e) {
@@ -57,7 +61,6 @@ export default {
       }, {
         root: true
       })
-      context.dispatch('apiFriends')
     },
     apiAddFriends(context, id) {
       let response

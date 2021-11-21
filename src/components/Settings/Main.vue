@@ -140,7 +140,7 @@ export default {
   methods: {
     ...mapActions('global/storage', ['apiStorage']),
     ...mapActions('profile/info', ['apiChangeInfo']),
-    ...mapActions('profile/country_city', ['apiCountries', 'apiAllCities']),
+    ...mapActions('profile/country_city', ['apiCountries']),
     submitHandler() {
       if (this.getInfo && this.src !== this.getInfo.photo && this.src !== '') {
         this.apiStorage(this.photo).then(() => {
@@ -239,7 +239,6 @@ export default {
   mounted() {
     if (this.getInfo) this.setInfo()
     this.apiCountries()
-    this.apiAllCities()
   },
   directives: {
     ClickOutside

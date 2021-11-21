@@ -6,7 +6,7 @@
   .comments__list(v-if='getInfo')
     comment-block(
       :admin='admin',
-      v-for='i in info',
+      v-for='i in comments',
       :key='i.id',
       :info='i',
       :edit='getInfo.id === i.author_id',
@@ -39,6 +39,15 @@ export default {
   }),
   computed: {
     ...mapGetters('profile/info', ['getInfo']),
+    ...mapGetters('users/info', ['getWall']),
+    comments: {
+      get () {
+        return this.info
+      },
+      set (value) {
+        this.$emit('input', value)
+      }
+    },
     showText() {
       if (localStorage.getItem('lang') === 'en') {
         return this.isOpenComments ? 'hide' : 'show'
@@ -58,7 +67,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('profile/comments', ['commentActions']),
+    ...mapActions('profile/comments', ['commentActions', 'commentsById']),
     showComments() {
       this.isOpenComments = !this.isOpenComments
     },
@@ -69,6 +78,7 @@ export default {
       this.$refs.addComment.$refs.addInput.focus()
     },
     onSubmitComment() {
+      console.log('worked', this.id)
       if (this.commentText === '') return
       this.commentActions({
         edit: this.commentEdit,
@@ -81,6 +91,7 @@ export default {
         this.commentEdit = false
         this.commentEditInfo = null
       })
+      // this.commentsById(this.getInfo.id)
     }
   },
   i18n: {

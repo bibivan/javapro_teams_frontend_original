@@ -80,8 +80,7 @@ export default {
   },
   methods: {
     ...mapActions('profile/friends', ['apiAddFriends', 'apiDeleteFriends']),
-    // s2_t2-t5
-    // ...mapActions('profile/dialogs', ['openDialog']),
+    ...mapActions('profile/dialogs', ['openDialog']),
     ...mapActions('users/actions', ['apiBlockUser', 'apiUnblockUser']),
     closeModal() {
       this.modalShow = false
