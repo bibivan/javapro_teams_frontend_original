@@ -1,7 +1,6 @@
 <template lang="pug">
 .form__group(:class='{ fill: password.length > 0 }')
   label.form__label(:for='id') {{ $t("repeatPassword") }}
-    span.required-field *
   input.form__input(
     name='password',
     type='password',

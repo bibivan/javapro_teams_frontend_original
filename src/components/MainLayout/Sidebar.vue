@@ -5,7 +5,7 @@
       .main-layout__admin-logo(v-if="isAdminPage")
         simple-svg(:filepath="'/static/img/logo-admin.svg'")
     nav.main-layout__nav
-      router-link.main-layout__link(v-for="(item,index) in info" :key="index" :exact="item.exact" :to="item.link" :class="{'main-layout__link--im': item.link.name === 'Im', 'big': unreadedMessages >= 100}" :data-push="item.link.name === 'Im' ? unreadedMessages : false")
+      router-link.main-layout__link(v-for="(item,index) in info" :key="index" :exact="item.exact" :to="item.link" :class="{'main-layout__link--im': item.link.name === 'Im', 'big': unreadedMessages >= 100, 'no-messages': unreadedMessages === 0}" :data-push="item.link.name === 'Im' ? unreadedMessages : false")
         img(:src="`/static/img/sidebar/admin/${item.icon}.png`" :alt="item.text" v-if="isAdminPage")
         simple-svg(:filepath="`/static/img/sidebar/${item.icon}.svg`" v-else)
         span {{item.text}}
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     ...mapActions('auth/api', ['logout']),
-    // ...mapActions('profile/dialogs', ['apiUnreadedMessages']),
+    ...mapActions('profile/dialogs', ['apiUnreadedMessages']),
     onLogout() {
       this.logout().then(() => {
         this.$router.push({ name: 'Login' })
@@ -41,7 +41,8 @@ export default {
     }
   },
   mounted() {
-    this.apiUnreadedMessages()
+    console.log(this.unreadedMessages)
+    // this.apiUnreadedMessages()
   },
   i18n: {
     messages: {
@@ -171,6 +172,12 @@ export default {
   .simple-svg, img {
     opacity: 0.4;
     transition: all 0.2s;
+  }
+}
+
+.no-messages {
+  &:after {
+    display: none;
   }
 }
 </style>

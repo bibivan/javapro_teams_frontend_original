@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     ...mapActions('global/search', ['searchUsers', 'clearSearch']),
-    ...mapActions('profile/country_city', ['apiCountries', 'apiAllCities']),
+    ...mapActions('profile/country_city', ['apiCountries']),
     onSearchUsers() {
       let { first_name, last_name, age_from, age_to, country, city } = this
       this.searchUsers({ first_name, last_name, age_from, age_to, country, city })
@@ -71,7 +71,6 @@ export default {
   },
   created() {
     this.apiCountries()
-    this.apiAllCities()
   },
   watch: {
     city(value) {

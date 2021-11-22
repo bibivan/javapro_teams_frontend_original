@@ -3,11 +3,21 @@ import router from '@/router';
 
 export default {
   namespaced: true,
+  state: {
+    commentLoading: false,
+  },
+  getters: {
+    getCommentLoading: state => state.commentLoading
+  },
+  mutation: {
+    setLoadingStatus: (state, status) => state.commentLoading = status
+  },
   actions: {
     async commentsById({ commit }, post_id) {
+      let dataComments
       try {
-        const response = await axios({ url: `post/${post_id}/comments`, method: 'GET' });
-        let dataComments = {
+        const response = await axios.get(`post/${post_id}/comments`);
+        dataComments = {
           post_id,
           value: response.data.data
         }
@@ -17,21 +27,22 @@ export default {
       }
       catch (error) { }
     },
-    async newComment({ dispatch }, payload) {
+    async newComment(context, payload) {
       try {
-        await axios({
-          url: `post/${payload.post_id}/comments`, method: 'POST',
-          data: {
-            parent_id: payload.parent_id,
-            comment_text: payload.text,
-            author: payload.author
-          }
-        });
-        dispatch('commentsById', payload.post_id);
+        await axios.post(
+          `post/${payload.post_id}/comments`, {
+            data: {
+              parent_id: payload.parent_id,
+              comment_text: payload.text,
+              author: payload.author
+            }
+          });
+        context.dispatch('commentsById', payload.post_id);
       }
       catch (error) { }
+
     },
-    async editComment({ dispatch }, payload) {
+    async editComment(context, payload) {
       try {
         await axios({
           url: `post/${payload.post_id}/comments/${payload.id}`,
@@ -40,13 +51,13 @@ export default {
             comment_text: payload.text
           }
         });
-        dispatch('commentsById', payload.post_id);
+        context.dispatch('commentsById', payload.post_id);
       }
       catch (err) { }
+
     },
     async deleteComment({ dispatch }, payload) {
       try {
-
         await axios({
           url: `post/${payload.post_id}/comments/${payload.id}`,
           method: 'DELETE'
@@ -54,20 +65,20 @@ export default {
         dispatch('commentsById', payload.post_id);
       } catch (err) { }
     },
-    async recoverComment({ dispatch }, payload) {
+    async recoverComment(context, payload) {
       try {
-
         await axios({
           url: `post/${payload.post_id}/comments/${payload.id}/recover`,
           method: 'PUT'
         });
-        dispatch('commentsById', payload.post_id);
+        context.dispatch('commentsById', payload.post_id);
       } catch (err) { }
 
     },
-    async commentActions({ dispatch }, payload) {
+    async commentActions(context, payload) {
       console.log(payload);
-      payload.edit ? await dispatch('editComment', payload) : await dispatch('newComment', payload);
+      payload.edit ? await context.dispatch('editComment', payload) : await context.dispatch('newComment', payload);
+
     }
   }
 };

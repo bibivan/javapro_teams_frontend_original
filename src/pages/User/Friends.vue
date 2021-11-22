@@ -28,12 +28,17 @@ export default {
   }),
   computed: {
     ...mapGetters('profile/friends', ['getResultById']),
-    friends() {
-      return this.first_name.length === 0
-        ? this.getResultById('friends')
-        : this.getResultById('friends').filter(
-            el => el.first_name.toLowerCase().indexOf(this.first_name.toLowerCase()) !== -1
-          )
+    friends: {
+      get () {
+        return this.getResultById('friends')
+      },
+      set () {
+        this.$emit('input', () => {
+          this.getResultById('friends').filter(el => {
+            el.first_name.toLowerCase().indexOf(this.first_name.toLowerCase()) !== -1
+          })
+        })
+      }
     }
   },
   methods: {

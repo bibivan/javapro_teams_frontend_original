@@ -6,13 +6,13 @@ export default {
     feeds: []
   },
   getters: {
-    getFeeds(state) {
-      if (!state.feeds.length) return
-      let result = [
-        ...state.feeds
-      ]
+    getFeeds: state => state.feeds
+  },
+  mutations: {
+    setFeeds: (s, feeds) => {
+      s.feeds = feeds
 
-      result.forEach(el => {
+      s.feeds.forEach(el => {
         el.comments.forEach(comment => {
           comment.photo = el.photo || '../static/img/user/default_avatar.svg'
           comment.my_like =  comment.my_like || false
@@ -27,12 +27,8 @@ export default {
         el.comments = el.comments.filter(comment => !comment.parent_id)
         // el.tags = el.tags || ['Tag1', 'Tag2', 'Tag3', 'Tag4', 'Tag5', 'Tag6']
       })
-
-      return result
+      return s.feeds
     },
-  },
-  mutations: {
-    setFeeds: (s, feeds) => s.feeds = feeds,
     setCommentsById: (s, payload) => {
       s.feeds.filter((el) => el.id === payload.post_id).comments = payload.value
       // s.feeds[s.feeds.indexOf(s.feeds.find(el => el.id === payload.post_id))].comments = payload.value

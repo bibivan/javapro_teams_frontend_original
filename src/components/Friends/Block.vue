@@ -80,8 +80,7 @@ export default {
   },
   methods: {
     ...mapActions('profile/friends', ['apiAddFriends', 'apiDeleteFriends']),
-    // s2_t2-t5
-    // ...mapActions('profile/dialogs', ['openDialog']),
+    ...mapActions('profile/dialogs', ['openDialog']),
     ...mapActions('users/actions', ['apiBlockUser', 'apiUnblockUser']),
     closeModal() {
       this.modalShow = false
@@ -93,6 +92,15 @@ export default {
     sendMessage(userId) {
       this.$router.push({ name: 'Im', query: { userId: userId } })
     },
+    //
+    // async deleteFriend (id) {
+    //   try {
+    //
+    //     this.apiDeleteFriends(id)
+    //   } catch (e) {
+    //
+    //   }
+    // },
     onConfrim(id) {
       this.modalType === 'delete'
         ? this.apiDeleteFriends(id).then(() => this.closeModal())
