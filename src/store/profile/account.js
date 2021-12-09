@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 
 export default {
   namespaced: true,
@@ -80,29 +81,27 @@ export default {
     async passwordRecovery({}, email) {
       await axios({
         url: 'account/password/recovery',
+        params: {
+          email
+        },
         method: 'PUT',
-        data: email
       }).then(response => {}).catch(error => {})
     },
-    async passwordSet({
-      rootState
-    }, value) {
-      let data = {
-        token: value.token,
-        password: value.password
-      }
-      console.log(value)
+    async passwordSet(context, value) {
       await axios({
         url: 'account/password/set',
         method: 'PUT',
-        data
+        params: {
+          password: value,
+          token:  localStorage.getItem('user-token')
+        }
       }).then(response => {}).catch(error => {})
     },
     async changeEmail({}, email) {
       await axios({
         url: 'account/email',
         method: 'PUT',
-        data: { email }
+        params: { email }
       }).then(response => {}).catch(error => {})
     },
     changeNotifications({

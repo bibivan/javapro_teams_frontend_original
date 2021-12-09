@@ -17,6 +17,7 @@ export default {
       let dataComments
       try {
         const response = await axios.get(`post/${post_id}/comments`);
+        console.log(response.data.data)
         dataComments = {
           post_id,
           value: response.data.data
@@ -29,14 +30,10 @@ export default {
     },
     async newComment(context, payload) {
       try {
-        await axios.post(
-          `post/${payload.post_id}/comments`, {
-            data: {
+        await axios.post(`post/${payload.post_id}/comments`, {
               parent_id: payload.parent_id,
               comment_text: payload.text,
-              author: payload.author
-            }
-          });
+            });
         context.dispatch('commentsById', payload.post_id);
       }
       catch (error) { }
@@ -76,7 +73,6 @@ export default {
 
     },
     async commentActions(context, payload) {
-      console.log(payload);
       payload.edit ? await context.dispatch('editComment', payload) : await context.dispatch('newComment', payload);
 
     }
