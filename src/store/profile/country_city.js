@@ -18,7 +18,7 @@ export default {
     async apiCountries(context) {
       let response
       try {
-        await axios.get('platform/countries')
+        response = await axios.get('platform/countries')
         context.commit('setCountries', response.data.data)
       } catch (e) {
         console.log('Произошла ошибка при загрузке списка стран')

@@ -29,7 +29,7 @@ export default {
         return
       }
       this.changeEmail(this.email).then(() => {
-        this.$router.push({ name: 'Login' })
+        // this.$router.push({ name: 'Login' })
       })
     }
   },

@@ -18,9 +18,9 @@
   .comment-block__reviews(v-if='!info.is_deleted')
     a.comment-block__reviews-show(
       href='#',
-      v-if='!isShowSubComments && info.sub_comments.length > 0',
+      v-if='!isShowSubComments',
       @click.prevent='showSubComments'
-    ) {{ $t("show") }} {{ info.sub_comments.length }} {{ answerText }}
+    ) {{ $t("show") }}
     .comment-block__reviews-list(v-else)
       comment-main(
         :admin='admin',
@@ -68,6 +68,7 @@ export default {
   computed: {
     ...mapGetters('profile/info', ['getInfo']),
     answerText() {
+      console.log('at')
       if (!this.info) return 'ответ'
       return this.info.sub_comments.length > 1 ? 'ответа' : 'ответ'
     }
@@ -110,7 +111,6 @@ export default {
       this.onAnswerSub()
     },
     onSubmitComment() {
-      console.log()
       if (this.commentText === '') return
       this.commentActions({
         edit: this.commentEdit,

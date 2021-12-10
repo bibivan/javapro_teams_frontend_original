@@ -113,14 +113,15 @@ export default {
       }
     },
 
-    async apiLoadAllDialogs({ commit }, payload) {
-      let query = []
-      payload &&
-        Object.keys(payload).map(el => {
-          payload[el] && query.push(`${el}=${payload[el]}`)
-        })
+    async apiLoadAllDialogs({ commit }, dialogId) {
+      // let query = []
+      // payload &&
+      //   Object.keys(payload).map(el => {
+      //     payload[el] && query.push(`${el}=${payload[el]}`)
+      //   })
       await axios({
-        url: `dialogs?${query.join('&')}`,
+        // url: `dialogs?${query.join('&')}`,
+        url: `dialogs/${dialogId}/messages`,
         method: 'GET'
       })
         .then(response => {
@@ -130,20 +131,35 @@ export default {
         .catch(error => {
         })
     },
-    async createDialogWithUser({ dispatch, commit }, userId) {
-      await axios({
+    async createDialogWithUser({ dispatch, commit }, id) {
+      await axios.post({
         url: 'dialogs',
-        method: 'POST',
-        data: {
-          users_ids: [userId]
+        params: {
+          userId: id
         }
-      })
-        .then(async response => {
+      }).then(async response => {
           const dialogId = response.data.data.id
           await dispatch('apiLoadAllDialogs', dialogId)
           await dispatch('switchDialog', dialogId)
         })
         .catch(error => {
+          console.log('does it work?')
+        })
+    },
+    async deleteDialogWithUser({ dispatch, commit }, {id, name}) {
+      await axios.delete({
+        url: 'dialogs',
+        params: {
+          userId: id,
+          name: name
+        }
+      }).then(async response => {
+        const dialogId = response.data.data.id
+        await dispatch('apiLoadAllDialogs', dialogId)
+        await dispatch('switchDialog', dialogId)
+      })
+        .catch(error => {
+          console.log('does it work?')
         })
     },
     async loadFreshMessages({ commit, state, dispatch }, id) {

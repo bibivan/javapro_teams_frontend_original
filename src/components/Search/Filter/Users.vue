@@ -21,11 +21,11 @@
       .search__row
         select.select.search-filter__select(v-model="country")
           option(value="null") Страна
-          option(v-for="country in getCountries" :key="country.id") {{ country.title }}
+          option(v-for="country in getCountries" :key="country.id" :value="country.id") {{ country.title }}
 
-        select.select.search-filter__select(v-model="city")
+        select.select.search-filter__select(v-model="city" :disabled="citiesDisabled")
           option(value="null") Город
-          option(v-for="city in getCityFilter" :key="city.countryId") {{ city.country }}
+          option(v-for="city in getCities" :key="city.id") {{ city.title }}
     .search-filter__block.btn-news(@click.prevent="onSearchUsers")
       button-hover Применить
 </template>
@@ -43,17 +43,15 @@ export default {
     country: null,
     city: null,
     offset: 0,
-    itemPerPage: 20
+    itemPerPage: 20,
+    disabled: true
   }),
   computed: {
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
-    getCityFilter() {
-      if (!this.country || this.country === "null") {
-        return this.getCities
-      } else {
-        return this.getCities.filter(el => el.city === this.country)
-      }
-    }
+    citiesDisabled () {
+      console.log(this.getCities)
+      if (this.getCities) return false
+    },
   },
   methods: {
     ...mapActions('global/search', ['searchUsers']),
@@ -65,13 +63,12 @@ export default {
   },
   created() {
     this.apiCountries()
-    this.apiCities({ country_id: 3159 })
   },
   watch: {
-    city(value) {
+    country(value) {
+      console.log(value)
       if (!value || value === "null") return
-      const countryId = this.getCities.find(el => el.country === value).cityId
-      this.country = this.getCountries.find(el => el.id === countryId).title
+      this.apiCities({ countryId: value })
     }
   },
 }

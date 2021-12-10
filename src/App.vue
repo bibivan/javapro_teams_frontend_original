@@ -8,7 +8,7 @@
 
 <script>
 import { VSnackbar } from 'vuetify/lib'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import FormLayout from '@/layouts/FormLayout'
 import MainLayout from '@/layouts/MainLayout'
 import EmptyLayout from '@/layouts/EmptyLayout'
@@ -24,15 +24,18 @@ export default {
   },
   computed: {
     ...mapGetters('global/alert', ['getState']),
+    ...mapGetters('auth/api', ['apiToken']),
+    ...mapMutations('auth/api', ['setToken']),
     layout() {
       return this.$route.meta.layout + '-layout'
     }
-  }
+  },
 }
 </script>
 
 <style lang="stylus">
 @import './assets/stylus/main.styl';
+@import 'vue-select/dist/vue-select.css';
 
 .v-snack__wrapper {
   &.success {
