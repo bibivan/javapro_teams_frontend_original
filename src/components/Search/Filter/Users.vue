@@ -11,17 +11,23 @@
       .search__row
         select.select.search-filter__select(v-model.number="age_from")
           option(value="null" disabled) От
-          option(value="item"  v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
+          option(v-model="age_from" v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
         span.search__age-defis —
         select.select.search-filter__select(v-model.number="age_to")
           option(value="null" disabled) До
-          option(value="item"  v-for="item in maxAge" :key="'ageTo' + item") От {{ item }}
+          option(v-model="age_to" v-for="item in maxAge" :key="'ageTo' + item") От {{ item }}
     .search-filter__block.region
       label.search__label Регион:
       .search__row
         select.select.search-filter__select(v-model="country")
           option(value="null") Страна
           option(v-for="country in getCountries" :key="country.id" :value="country.id") {{ country.title }}
+
+        //vSelect.search-filter__select(v-model="country" :options="getCountries" label="title" placeholder="Страна")
+        //
+        //vSelect.search-filter__select(v-model="city" :options="getCities" :disabled="citiesDisabled" placeholder="Город")
+        //  option(value="null") Город
+        //  option(v-for="city in getCities" :key="city.id") {{ city.title }}
 
         select.select.search-filter__select(v-model="city" :disabled="citiesDisabled")
           option(value="null") Город
@@ -32,8 +38,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+
 export default {
   name: 'SearchFilterUsers',
+  components: {
+    vSelect
+  },
   data: () => ({
     first_name: null,
     last_name: null,
@@ -49,7 +61,6 @@ export default {
   computed: {
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
     citiesDisabled () {
-      console.log(this.getCities)
       if (this.getCities) return false
     },
   },
@@ -73,3 +84,30 @@ export default {
   },
 }
 </script>
+
+<style  lang="stylus">
+
+.search-filter {
+
+
+  .vs__dropdown-toggle {
+    font-size: 15px;
+    color: #000;
+    padding: 0 15px;
+    height: 45px;
+    border: 1px solid #E3E3E3;
+    border-radius: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    white-space: nowrap;
+    background: #fff url('/static/img/arrow-bottom.png') no-repeat calc(100% - 10px) 16px;
+
+
+    .vs__actions {
+      display none
+    }
+  }
+}
+
+</style>
