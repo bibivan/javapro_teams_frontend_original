@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     ...mapActions('profile/friends', ['apiAddFriends', 'apiDeleteFriends']),
-    ...mapActions('profile/dialogs', ['openDialog']),
+    ...mapActions('profile/dialogs', ['openDialog', 'createDialogWithUser']),
     ...mapActions('users/actions', ['apiBlockUser', 'apiUnblockUser']),
     closeModal() {
       this.modalShow = false
@@ -89,7 +89,8 @@ export default {
       this.modalType = id
       this.modalShow = true
     },
-    sendMessage(userId) {
+    async sendMessage(userId) {
+      // await this.createDialogWithUser(userId);
       this.$router.push({ name: 'Im', query: { userId: userId } })
     },
     //
