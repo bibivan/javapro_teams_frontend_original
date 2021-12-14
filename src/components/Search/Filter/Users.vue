@@ -11,11 +11,11 @@
       .search__row
         select.select.search-filter__select(v-model.number="age_from")
           option(value="null" disabled) От
-          option(v-model="age_from" v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
+          option(:value="item" v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
         span.search__age-defis —
         select.select.search-filter__select(v-model.number="age_to")
           option(value="null" disabled) До
-          option(v-model="age_to" v-for="item in maxAge" :key="'ageTo' + item") От {{ item }}
+          option(:value="item" v-for="item in maxAge" :key="'ageTo' + item") До {{ item }}
     .search-filter__block.region
       label.search__label Регион:
       .search__row
