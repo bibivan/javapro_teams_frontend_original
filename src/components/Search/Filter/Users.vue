@@ -34,6 +34,8 @@
           option(v-for="city in getCities" :key="city.id") {{ city.title }}
     .search-filter__block.btn-news(@click.prevent="onSearchUsers")
       button-hover Применить
+    .search-filter__block.btn-news(@click.prevent="loadMoreUsers")
+      button-hover Еще
 
     //paginate(
     //  v-if="!!getFoundTotal"
@@ -61,29 +63,51 @@ export default {
     maxAge: 100,
     country: null,
     city: null,
-    offset: 2,
+    offset: 0,
     itemPerPage: 20,
     disabled: true,
-    searchComplete: false
+    // searchComplete: false
   }),
   computed: {
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
     ...mapGetters('global/search', ['getFoundTotal']),
+    foundPagesCount() {
+      if (!!this.getFoundTotal) {
+        return Math.ceil(this.getFoundTotal / this.itemPerPage);
+      }
+    },
     citiesDisabled () {
       if (this.getCities) return false
-    },
+    }
   },
   methods: {
     ...mapActions('global/search', ['searchUsers']),
     ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
     async onSearchUsers() {
-      let { first_name, last_name, age_from, age_to, country, city, offset } = this
-      await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset })
-      // this.searchComplete = true;
+      let { first_name, last_name, age_from, age_to, country, city, offset, itemPerPage } = this
+      await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset, itemPerPage })
     },
+    loadMoreUsers() {
+      const bottomOffset = 2000
+      let loadUsers;
+
+      document.addEventListener('scroll', e => {
+        if (window.scrollY > window.innerHeight - bottomOffset) {
+          clearTimeout(loadUsers);
+          loadUsers = setTimeout(() => {
+            if (this.offset < this.foundPagesCount) {
+              console.log(this.foundPagesCount)
+              this.offset++;
+              this.onSearchUsers();
+            }
+          }, 300);;
+        }
+      })
+    }
   },
   created() {
-    this.apiCountries()
+    this.apiCountries();
+    this.loadMoreUsers();
   },
   watch: {
     country(value) {

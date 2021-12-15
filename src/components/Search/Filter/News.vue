@@ -32,7 +32,13 @@ export default {
     author: ''
   }),
   computed: {
-    ...mapGetters('global/search', ['searchText'])
+    ...mapGetters('global/search', ['searchText']),
+    ...mapGetters('global/search', ['getFoundTotal']),
+    foundPagesCount() {
+      if (!!this.getFoundTotal) {
+        return Math.ceil(this.getFoundTotal / this.itemPerPage);
+      }
+    },
   },
   methods: {
     ...mapActions('global/search', ['searchNews']),
@@ -42,6 +48,8 @@ export default {
     onSearchNews() {
       this.searchNews({
         text: this.searchText,
+        offset: this.offset,
+        itemPerPage: this.itemPerPage,
         date_from: moment()
           .subtract(1, this.date_from)
           .format(),
@@ -51,10 +59,28 @@ export default {
         date_to: moment().format(), //this.date_to
         author: this.author
       })
+    },
+    loadMoreNews() {
+      const bottomOffset = 2000
+      let loadUsers;
+
+      document.addEventListener('scroll', e => {
+        if (window.scrollY > window.innerHeight - bottomOffset) {
+          clearTimeout(loadUsers);
+          loadUsers = setTimeout(() => {
+            if (this.offset < this.foundPagesCount) {
+              console.log(this.foundPagesCount)
+              this.offset++;
+              this.onSearchUsers();
+            }
+          }, 300);;
+        }
+      })
     }
   },
   mounted() {
-    this.date_to = moment().valueOf()
+    this.date_to = moment().valueOf();
+    this.loadMoreNews();
   }
 }
 </script>

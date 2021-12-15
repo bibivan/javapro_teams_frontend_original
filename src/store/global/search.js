@@ -48,7 +48,12 @@ export default {
         query
       })
     },
-    setResult: (s, result) => s.result[result.id] = result.value,
+    setResult: (s, result) => {
+      result.value.forEach(item => {
+        s.result[result.id].push(item);
+      })
+      return s.result[result.id];
+    },
     setFoundTotal: (s, total) => s.foundTotal = total,
   },
   actions: {

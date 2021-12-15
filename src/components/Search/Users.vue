@@ -1,7 +1,7 @@
 <template lang="pug">
   .search-users
     search-block(title="Люди", id="users")
-      .friends__list
+      .friends__list(id="foundUsersList")
         friends-block(v-for="user in users" :key="user.id" :info="user")
 </template>
 
