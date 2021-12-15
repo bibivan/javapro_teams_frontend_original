@@ -34,6 +34,13 @@
           option(v-for="city in getCities" :key="city.id") {{ city.title }}
     .search-filter__block.btn-news(@click.prevent="onSearchUsers")
       button-hover Применить
+
+    //paginate(
+    //  v-if="!!getFoundTotal"
+    //  :page-count="20"
+    //  :prev-text="'Назад'"
+    //  :next-text="'Вперед'"
+    //  :container-class="'className'")
 </template>
 
 <script>
@@ -54,12 +61,14 @@ export default {
     maxAge: 100,
     country: null,
     city: null,
-    offset: 0,
+    offset: 2,
     itemPerPage: 20,
-    disabled: true
+    disabled: true,
+    searchComplete: false
   }),
   computed: {
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
+    ...mapGetters('global/search', ['getFoundTotal']),
     citiesDisabled () {
       if (this.getCities) return false
     },
@@ -67,9 +76,10 @@ export default {
   methods: {
     ...mapActions('global/search', ['searchUsers']),
     ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
-    onSearchUsers() {
-      let { first_name, last_name, age_from, age_to, country, city } = this
-      this.searchUsers({ first_name, last_name, age_from, age_to, country, city })
+    async onSearchUsers() {
+      let { first_name, last_name, age_from, age_to, country, city, offset } = this
+      await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset })
+      // this.searchComplete = true;
     },
   },
   created() {
