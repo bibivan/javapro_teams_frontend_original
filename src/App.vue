@@ -35,7 +35,6 @@ export default {
 
 <style lang="stylus">
 @import './assets/stylus/main.styl';
-@import 'vue-select/dist/vue-select.css';
 
 .v-snack__wrapper {
   &.success {

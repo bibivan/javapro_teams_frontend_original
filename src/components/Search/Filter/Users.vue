@@ -11,11 +11,11 @@
       .search__row
         select.select.search-filter__select(v-model.number="age_from")
           option(value="null" disabled) От
-          option(value="item"  v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
+          option(:value="item" v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
         span.search__age-defis —
         select.select.search-filter__select(v-model.number="age_to")
           option(value="null" disabled) До
-          option(value="item"  v-for="item in maxAge" :key="'ageTo' + item") От {{ item }}
+          option(:value="item" v-for="item in maxAge" :key="'ageTo' + item") До {{ item }}
     .search-filter__block.region
       label.search__label Регион:
       .search__row
@@ -23,17 +23,38 @@
           option(value="null") Страна
           option(v-for="country in getCountries" :key="country.id" :value="country.id") {{ country.title }}
 
+        //vSelect.search-filter__select(v-model="country" :options="getCountries" label="title" placeholder="Страна")
+        //
+        //vSelect.search-filter__select(v-model="city" :options="getCities" :disabled="citiesDisabled" placeholder="Город")
+        //  option(value="null") Город
+        //  option(v-for="city in getCities" :key="city.id") {{ city.title }}
+
         select.select.search-filter__select(v-model="city" :disabled="citiesDisabled")
           option(value="null") Город
           option(v-for="city in getCities" :key="city.id") {{ city.title }}
     .search-filter__block.btn-news(@click.prevent="onSearchUsers")
       button-hover Применить
+    .search-filter__block.btn-news(@click.prevent="loadMoreUsers")
+      button-hover Еще
+
+    //paginate(
+    //  v-if="!!getFoundTotal"
+    //  :page-count="20"
+    //  :prev-text="'Назад'"
+    //  :next-text="'Вперед'"
+    //  :container-class="'className'")
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+
 export default {
   name: 'SearchFilterUsers',
+  components: {
+    vSelect
+  },
   data: () => ({
     first_name: null,
     last_name: null,
@@ -44,25 +65,49 @@ export default {
     city: null,
     offset: 0,
     itemPerPage: 20,
-    disabled: true
+    disabled: true,
+    // searchComplete: false
   }),
   computed: {
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
-    citiesDisabled () {
-      console.log(this.getCities)
-      if (this.getCities) return false
+    ...mapGetters('global/search', ['getFoundTotal']),
+    foundPagesCount() {
+      if (!!this.getFoundTotal) {
+        return Math.ceil(this.getFoundTotal / this.itemPerPage);
+      }
     },
+    citiesDisabled () {
+      if (this.getCities) return false
+    }
   },
   methods: {
     ...mapActions('global/search', ['searchUsers']),
     ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
-    onSearchUsers() {
-      let { first_name, last_name, age_from, age_to, country, city } = this
-      this.searchUsers({ first_name, last_name, age_from, age_to, country, city })
+    async onSearchUsers() {
+      let { first_name, last_name, age_from, age_to, country, city, offset, itemPerPage } = this
+      await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset, itemPerPage })
     },
+    loadMoreUsers() {
+      const bottomOffset = 2000
+      let loadUsers;
+
+      document.addEventListener('scroll', e => {
+        if (window.scrollY > window.innerHeight - bottomOffset) {
+          clearTimeout(loadUsers);
+          loadUsers = setTimeout(() => {
+            if (this.offset < this.foundPagesCount) {
+              console.log(this.foundPagesCount)
+              this.offset++;
+              this.onSearchUsers();
+            }
+          }, 300);;
+        }
+      })
+    }
   },
   created() {
-    this.apiCountries()
+    this.apiCountries();
+    this.loadMoreUsers();
   },
   watch: {
     country(value) {
@@ -73,3 +118,30 @@ export default {
   },
 }
 </script>
+
+<style  lang="stylus">
+
+.search-filter {
+
+
+  .vs__dropdown-toggle {
+    font-size: 15px;
+    color: #000;
+    padding: 0 15px;
+    height: 45px;
+    border: 1px solid #E3E3E3;
+    border-radius: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    white-space: nowrap;
+    background: #fff url('/static/img/arrow-bottom.png') no-repeat calc(100% - 10px) 16px;
+
+
+    .vs__actions {
+      display none
+    }
+  }
+}
+
+</style>

@@ -8,12 +8,14 @@ import router from './router';
 import store from './store';
 import VModal from 'vue-js-modal';
 import Vuelidate from 'vuelidate';
+import Paginate from 'vuejs-paginate';
 // import VueJWT from 'vuejs-jwt'
 import './settings';
 
 Vue.use(VueI18n);
 Vue.use(VModal);
 Vue.use(Vuelidate);
+Vue.component('paginate', Paginate)
 // Vue.use(VueJWT, options);
 
 if (!localStorage.getItem('lang')) {

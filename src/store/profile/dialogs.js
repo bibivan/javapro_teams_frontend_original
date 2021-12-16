@@ -29,29 +29,7 @@ export default {
   },
   getters: {
     oldestKnownMessageId: s => (s.messages.length > 0 ? s.messages[0]['id'] : null),
-    dialogs: s => {
-      const result = [
-        ...s.dialogs
-      ]
-
-      result.forEach(dialog => {
-        // dialog.last_message = dialog.last_message || {}
-        // dialog.last_message.isSentByMe = dialog.last_message.isSentByMe || true
-        // dialog.last_message.recipient = dialog.last_message.recipient || {}
-        // dialog.last_message.recipient.last_online_time = dialog.last_message.recipient.last_online_time * 1000 || 0
-        // dialog.last_message.recipient.id = dialog.last_message.recipient.id || dialog.last_message.recipient_id
-        // dialog.last_message.recipient.photo = dialog.last_message.recipient.photo || '../static/img/user/default_avatar.svg'
-        // dialog.last_message.recipient.first_name = dialog.last_message.recipient.first_name || 'Name'
-        // dialog.last_message.recipient.last_name = dialog.last_message.recipient.last_name || 'LastName'
-        // dialog.last_message.time = dialog.last_message.time * 1000
-        // dialog.last_message.last_online_time = dialog.last_message.last_online_time * 1000
-        // dialog.last_message.photo = dialog.last_message.photo || '../static/img/user/default_avatar.svg'
-        dialog.recipient.photo = dialog.recipient.photo || '../static/img/user/default_avatar.svg'
-        dialog.recipient.last_online_time = dialog.recipient.last_online_time * 1000 || 0
-      })
-
-      return result
-    },
+    dialogs: s => s.dialogs,
     activeDialog: s => s.dialogs.find(el => el.id == s.activeId),
     activeDialogId: s => s.activeId,
     dialogsLoaded: s => s.dialogsLoaded,
@@ -82,7 +60,25 @@ export default {
   },
   mutations: {
     setUnreadedMessages: (s, unread) => (s.unreadedMessages = unread),
-    setDialogs: (s, dialogs) => (s.dialogs = dialogs),
+    setDialogs: (s, dialogs) =>  {
+      dialogs.forEach(dialog => {
+        // dialog.last_message = dialog.last_message || {}
+        // dialog.last_message.isSentByMe = dialog.last_message.isSentByMe || true
+        // dialog.last_message.recipient = dialog.last_message.recipient || {}
+        // dialog.last_message.recipient.last_online_time = dialog.last_message.recipient.last_online_time * 1000 || 0
+        // dialog.last_message.recipient.id = dialog.last_message.recipient.id || dialog.last_message.recipient_id
+        // dialog.last_message.recipient.photo = dialog.last_message.recipient.photo || '../static/img/user/default_avatar.svg'
+        // dialog.last_message.recipient.first_name = dialog.last_message.recipient.first_name || 'Name'
+        // dialog.last_message.recipient.last_name = dialog.last_message.recipient.last_name || 'LastName'
+        // dialog.last_message.time = dialog.last_message.time * 1000
+        // dialog.last_message.last_online_time = dialog.last_message.last_online_time * 1000
+        // dialog.last_message.photo = dialog.last_message.photo || '../static/img/user/default_avatar.svg'
+        dialog.recipient.photo = dialog.recipient.photo || '../static/img/user/default_avatar.svg'
+        dialog.recipient.last_online_time = dialog.recipient.last_online_time * 1000 || 0
+      })
+
+      return s.dialogs = dialogs
+    },
     dialogsLoaded: s => (s.dialogsLoaded = true),
     addMessages: (s, { messages, total }) => {
       s.messages = [...s.messages, ...messages]
@@ -132,8 +128,10 @@ export default {
         })
     },
     async createDialogWithUser({ dispatch, commit }, id) {
-      await axios.post({
+      console.log(id, 'im here!');
+      await axios({
         url: 'dialogs',
+        method: 'POST',
         params: {
           userId: id
         }
@@ -143,7 +141,7 @@ export default {
           await dispatch('switchDialog', dialogId)
         })
         .catch(error => {
-          console.log('does it work?')
+          console.log(error)
         })
     },
     async deleteDialogWithUser({ dispatch, commit }, {id, name}) {
