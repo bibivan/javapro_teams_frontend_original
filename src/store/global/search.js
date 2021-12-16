@@ -5,22 +5,27 @@ export default {
   namespaced: true,
   state: {
     searchText: '',
-    tabs: [{
-      id: 'all',
-      text: 'Всё'
-    }, {
-      id: 'users',
-      text: 'Люди'
-    }, {
-      id: 'news',
-      text: 'Новости'
-    }],
+    tabs: [
+      {
+        id: 'all',
+        text: 'Всё'
+      },
+      {
+        id: 'users',
+        text: 'Люди'
+      },
+      {
+        id: 'news',
+        text: 'Новости'
+      }
+    ],
     tabSelect: 'all',
     result: {
       users: [],
       news: []
     },
     status: '',
+    foundTotal: null,
   },
   getters: {
     searchText: s => s.searchText,
@@ -28,7 +33,8 @@ export default {
     tabSelect: s => s.tabSelect,
     getResult: s => s.result,
     getResultById: s => id => s.result[id],
-    getStatus: s => s.status
+    getStatus: s => s.status,
+    getFoundTotal: s => s.foundTotal,
   },
   mutations: {
     setSearchText: (s, value) => s.searchText = value,
@@ -42,7 +48,13 @@ export default {
         query
       })
     },
-    setResult: (s, result) => s.result[result.id] = result.value
+    setResult: (s, result) => {
+      result.value.forEach(item => {
+        s.result[result.id].push(item);
+      })
+      return s.result[result.id];
+    },
+    setFoundTotal: (s, total) => s.foundTotal = total,
   },
   actions: {
     clearSearch({
@@ -75,7 +87,7 @@ export default {
         url: `users/search?${query.join('&')}`,
         method: 'GET'
       }).then(response => {
-
+        console.log(response.data)
         const result = [
           ...response.data.data
         ]
@@ -84,6 +96,7 @@ export default {
           id: 'users',
           value: result
         })
+        commit('setFoundTotal', response.data.total)
       }).catch(error => {})
     },
     async searchNews({
