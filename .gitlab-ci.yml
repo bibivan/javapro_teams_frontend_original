@@ -16,13 +16,11 @@ build-job:
     - npm install
 
 deploy-job:
-  image: docker:latest
   stage: deploy 
   only:
      - master
   except:
      - tags
-
   script:
     - echo "do deploy"
     - cd /home/gitlab-runner/postgres/ 
