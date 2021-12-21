@@ -1,7 +1,7 @@
 <template lang="pug">
 .profile.inner-page(v-if='getUsersInfo')
   .inner-page__main
-    .profile__info(v-if='!getUsersInfo.is_blocked')
+    .profile__info(v-if='!getUsersInfo.isDeleted')
       profile-info(
         :info='getUsersInfo',
         :blocked='getUsersInfo.is_blocked',
