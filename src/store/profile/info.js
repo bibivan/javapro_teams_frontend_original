@@ -32,7 +32,6 @@ export default {
     async apiChangeInfo(context, user) {
       try {
         const response = await axios.put('users/me', { data: user })
-        console.log(response);
         context.dispatch('global/alert/setAlert', {
           status: 'success',
           text: 'Информация обновлена'

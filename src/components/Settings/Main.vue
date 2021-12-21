@@ -1,5 +1,5 @@
 <template lang="pug">
-.settings-main(v-if="!getInfo") Загрузка
+.settings-main(v-if='!getInfo') Загрузка
 .settings-main(v-else)
   user-info-form-block(:label='$t("name")', :placeholder='$t("entName")', v-model='name')
   user-info-form-block(:label='$t("lastName")', :placeholder='$t("entLastName")', v-model='lastName')
@@ -15,15 +15,6 @@
         @input='countriesOpen'
       )
 
-      //ul.countries__list(v-if='countries.length !== 0 && isCountriesShow')
-      //  li.countries__item(
-      //    v-for='item in countries',
-      //    :key='item.id',
-      //    tabindex=0,
-      //    @click='setCountry(item.title)',
-      //    @keyup.enter='setCountry(item.title)'
-      //  ) {{ item.title }}
-
   .user-info-form__block
     span.user-info-form__label {{ $t("city") }}
     .user-info-form__wrap.countries(v-click-outside='citiesClose')
@@ -34,15 +25,6 @@
         @input='citiesOpen',
         @keyup.enter='setCity(town.id)'
       )
-
-      //ul.countries__list(v-if='cities.length !== 0 && isCitiesShow')
-      //  li.countries__item(
-      //    v-for='item in cities',
-      //    :key='item.countryId',
-      //    @click='setCity(item)',
-      //    @keyup.enter='setCity(item)',
-      //    tabindex=0
-      //  ) {{ item.country }}
 
   .user-info-form__block
     span.user-info-form__label {{ $t("birthDay") }}
@@ -83,7 +65,7 @@ import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import ClickOutside from 'vue-click-outside'
 import UserInfoFormBlock from '@/components/Settings/UserInfoForm/Block.vue'
-import { getMonthList } from "@/utils/getMonthList";
+import { getMonthList } from '@/utils/getMonthList'
 export default {
   name: 'SettingsMain',
   components: { UserInfoFormBlock },
@@ -112,7 +94,7 @@ export default {
     ...mapGetters('profile/info', ['getInfo']),
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
     countries() {
-      return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.toUpperCase()))
+      return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.title.toUpperCase()))
     },
     cities() {
       return this.getCities.filter(c => c.country.toUpperCase().includes(this.city.toUpperCase()))
@@ -133,7 +115,6 @@ export default {
     months() {
       const lang = localStorage.getItem('lang')
       return getMonthList(lang)
-
     }
   },
 
@@ -187,7 +168,7 @@ export default {
       this.phone = this.getInfo.phone ? this.getInfo.phone.replace(/^[+]?[78]/, '') : ''
       if (this.getInfo.birth_date) {
         this.day = moment(this.getInfo.birth_date * 1000).date()
-        this.month = this.months[moment(this.getInfo.birth_date * 1000).month()]
+        this.month = moment(this.getInfo.birth_date * 1000).month()
         this.year = moment(this.getInfo.birth_date * 1000).year()
       }
       this.about = this.getInfo.about
