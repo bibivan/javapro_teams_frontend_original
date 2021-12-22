@@ -1,48 +1,55 @@
 <template lang="pug">
-  .search-filter
-    .search-filter__block.name
-      label.search__label(for="search-people-name") Имя:
-      input.search__input(type="text" id="search-people-name" v-model="first_name")
-    .search-filter__block.lastname
-      label.search__label(for="search-people-lastname") Фамилия:
-      input.search__input(type="text" id="search-people-lastname" v-model="last_name")
-    .search-filter__block.age
-      label.search__label Возраст:
-      .search__row
-        select.select.search-filter__select(v-model.number="age_from")
-          option(value="null" disabled) От
-          option(:value="item" v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
-        span.search__age-defis —
-        select.select.search-filter__select(v-model.number="age_to")
-          option(value="null" disabled) До
-          option(:value="item" v-for="item in maxAge" :key="'ageTo' + item") До {{ item }}
-    .search-filter__block.region
-      label.search__label Регион:
-      .search__row
-        select.select.search-filter__select(v-model="country")
-          option(value="null") Страна
-          option(v-for="country in getCountries" :key="country.id" :value="country.id") {{ country.title }}
+  div
+    paginate(
+      v-if="!!getFoundTotal"
+      v-model="offset"
+      :page-count="getFoundTotal"
+      :prev-text="'Назад'"
+      :next-text="'Вперед'"
+      :container-class="'pagination'"
+      :page-link-class="'pagination__link'"
+      :prev-class="'pagination__item--prev'"
+      :next-class="'pagination__item--next'"
+      :page-class="'pagination__item'")
 
-        //vSelect.search-filter__select(v-model="country" :options="getCountries" label="title" placeholder="Страна")
-        //
-        //vSelect.search-filter__select(v-model="city" :options="getCities" :disabled="citiesDisabled" placeholder="Город")
-        //  option(value="null") Город
-        //  option(v-for="city in getCities" :key="city.id") {{ city.title }}
+    .search-filter
+      .search-filter__block.name
+        label.search__label(for="search-people-name") Имя:
+        input.search__input(type="text" id="search-people-name" v-model="first_name")
+      .search-filter__block.lastname
+        label.search__label(for="search-people-lastname") Фамилия:
+        input.search__input(type="text" id="search-people-lastname" v-model="last_name")
+      .search-filter__block.age
+        label.search__label Возраст:
+        .search__row
+          select.select.search-filter__select(v-model.number="age_from")
+            option(value="null" disabled) От
+            option(:value="item" v-for="item in maxAge" :key="'ageFrom' + item") От {{ item }}
+          span.search__age-defis —
+          select.select.search-filter__select(v-model.number="age_to")
+            option(value="null" disabled) До
+            option(:value="item" v-for="item in maxAge" :key="'ageTo' + item") До {{ item }}
+      .search-filter__block.region
+        label.search__label Регион:
+        .search__row
+          select.select.search-filter__select(v-model="country")
+            option(value="null") Страна
+            option(v-for="country in getCountries" :key="country.id" :value="country.id") {{ country.title }}
 
-        select.select.search-filter__select(v-model="city" :disabled="citiesDisabled")
-          option(value="null") Город
-          option(v-for="city in getCities" :key="city.id") {{ city.title }}
-    .search-filter__block.btn-news(@click.prevent="onSearchUsers")
-      button-hover Применить
-    .search-filter__block.btn-news(@click.prevent="loadMoreUsers")
-      button-hover Еще
+          //vSelect.search-filter__select(v-model="country" :options="getCountries" label="title" placeholder="Страна")
+          //
+          //vSelect.search-filter__select(v-model="city" :options="getCities" :disabled="citiesDisabled" placeholder="Город")
+          //  option(value="null") Город
+          //  option(v-for="city in getCities" :key="city.id") {{ city.title }}
 
-    //paginate(
-    //  v-if="!!getFoundTotal"
-    //  :page-count="20"
-    //  :prev-text="'Назад'"
-    //  :next-text="'Вперед'"
-    //  :container-class="'className'")
+          select.select.search-filter__select(v-model="city" :disabled="citiesDisabled")
+            option(value="null") Город
+            option(v-for="city in getCities" :key="city.id") {{ city.title }}
+      .search-filter__block.btn-news(@click.prevent="onSearchUsers")
+        button-hover Применить
+      //.search-filter__block.btn-news(@click.prevent="loadMoreUsers")
+      //  button-hover Еще
+
 </template>
 
 <script>
@@ -87,29 +94,15 @@ export default {
       let { first_name, last_name, age_from, age_to, country, city, offset, itemPerPage } = this
       await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset, itemPerPage })
     },
-    loadMoreUsers() {
-      const bottomOffset = 2000
-      let loadUsers;
-
-      document.addEventListener('scroll', e => {
-        if (window.scrollY > window.innerHeight - bottomOffset) {
-          clearTimeout(loadUsers);
-          loadUsers = setTimeout(() => {
-            if (this.offset < this.foundPagesCount) {
-              console.log(this.foundPagesCount)
-              this.offset++;
-              this.onSearchUsers();
-            }
-          }, 300);;
-        }
-      })
-    }
   },
   created() {
     this.apiCountries();
     this.loadMoreUsers();
   },
   watch: {
+    offset () {
+      this.onSearchUsers();
+    },
     country(value) {
       console.log(value)
       if (!value || value === "null") return
