@@ -38,7 +38,7 @@ export default {
         }, {
           root: true
         })
-        context.commit('setInfo', response.data)
+        context.commit('setInfo', response.data.data)
       } catch (e) {
         console.log('Произошла ошибка при загрузке данных пользователя')
         throw e

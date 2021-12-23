@@ -5,19 +5,19 @@
   user-info-form-block(:label='$t("lastName")', :placeholder='$t("entLastName")', v-model='lastName')
   user-info-form-block(:label='$t("tel")', :placeholder='$t("entTel")', v-model='phone', phone)
 
-  .user-info-form__block(v-if='country || isCountryShow')
+  .user-info-form__block
     span.user-info-form__label {{ $t("country") }}
-    .user-info-form__wrap.countries(v-click-outside='countriesClose')
+    .user-info-form__wrap.countries
       input.user-info-form__input(
         type='text',
-        v-model='country.title',
+        v-model='country',
         :placeholder='$t("entCountry")',
         @input='countriesOpen'
       )
 
   .user-info-form__block
     span.user-info-form__label {{ $t("city") }}
-    .user-info-form__wrap.countries(v-click-outside='citiesClose')
+    .user-info-form__wrap.countries
       input.user-info-form__input(
         type='text',
         v-model='town.title',
@@ -94,7 +94,7 @@ export default {
     ...mapGetters('profile/info', ['getInfo']),
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
     countries() {
-      return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.title.toUpperCase()))
+      return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.toUpperCase()))
     },
     cities() {
       return this.getCities.filter(c => c.country.toUpperCase().includes(this.city.toUpperCase()))
@@ -172,7 +172,7 @@ export default {
         this.year = moment(this.getInfo.birth_date * 1000).year()
       }
       this.about = this.getInfo.about
-      this.country = this.getInfo.country
+      this.country = this.getInfo.country.title
       this.town = this.getInfo.town
     },
     countriesOpen() {
