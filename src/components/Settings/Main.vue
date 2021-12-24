@@ -118,7 +118,6 @@ export default {
     ...mapActions('profile/info', ['apiChangeInfo']),
     ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
     loadCitiesByCountry() {
-      console.log(112312312)
       this.apiCities({ countryId: this.country.id });
       this.city = '';
     },
@@ -133,7 +132,7 @@ export default {
             phone: this.phoneNumber || null,
             about: this.about,
             country: this.country.id,
-            // town: this.city.id
+            town: this.city.id
           })
         })
       } else {
@@ -144,7 +143,7 @@ export default {
           phone: this.phoneNumber || null,
           about: this.about,
           country: this.country.id,
-          // town: this.city.id
+          town: this.city.id
         })
       }
     },
