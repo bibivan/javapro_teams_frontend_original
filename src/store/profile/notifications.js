@@ -23,7 +23,7 @@ export default {
       try {
         response = await axios.get('notifications')
       } catch (e) {
-        console.log('произошла ошибка при загрузке уведомлений')
+        console.log('произошла ошибка при загрузке уведомлений');
         throw e
       }
         if (`${response.data.data.map(n => n.sent_time)}` !== `${context.state.notifications.map(n => n.sent_time)}`) {

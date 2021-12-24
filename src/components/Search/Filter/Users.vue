@@ -1,9 +1,9 @@
 <template lang="pug">
   div
     paginate(
-      v-if="!!getFoundTotal"
+      v-if="foundPagesCount > 1"
       v-model="offset"
-      :page-count="getFoundTotal"
+      :page-count="foundPagesCount"
       :prev-text="'Назад'"
       :next-text="'Вперед'"
       :container-class="'pagination'"
@@ -70,7 +70,7 @@ export default {
     maxAge: 100,
     country: null,
     city: null,
-    offset: 0,
+    offset: 1,
     itemPerPage: 20,
     disabled: true,
     // searchComplete: false
@@ -92,12 +92,11 @@ export default {
     ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
     async onSearchUsers() {
       let { first_name, last_name, age_from, age_to, country, city, offset, itemPerPage } = this
-      await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset, itemPerPage })
+      await this.searchUsers({ first_name, last_name, age_from, age_to, country, city, offset: offset - 1, itemPerPage })
     },
   },
   created() {
     this.apiCountries();
-    this.loadMoreUsers();
   },
   watch: {
     offset () {
