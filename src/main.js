@@ -15,7 +15,7 @@ import './settings';
 Vue.use(VueI18n);
 Vue.use(VModal);
 Vue.use(Vuelidate);
-Vue.component('paginate', Paginate)
+Vue.component('paginate', Paginate);
 // Vue.use(VueJWT, options);
 
 if (!localStorage.getItem('lang')) {

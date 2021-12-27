@@ -32,8 +32,8 @@ export default {
         },
         {
           icon: 'birthdays',
-          name: 'О дне рождения друга',
-          type: 'FRIEND_BIRTHDAY',
+          name: 'О публикациях друзей',
+          type: 'POST',
           enable: false
         }
       ],
@@ -64,8 +64,8 @@ export default {
         },
         {
           icon: 'birthdays',
-          name: 'Birthday friend',
-          type: 'FRIEND_BIRTHDAY',
+          name: 'About friends posts',
+          type: 'POST',
           enable: false
         }
       ],

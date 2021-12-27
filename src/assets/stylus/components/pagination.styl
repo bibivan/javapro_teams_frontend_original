@@ -1,0 +1,90 @@
+.pagination {
+  position fixed;
+  z-index: 999;
+  left: 50%;
+  bottom: 20px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transform: translateX(-50%);
+
+
+
+  &__item {
+    .disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .disabled:focus, .disabled:hover {
+      border-color: #e2e2e2;
+    }
+  }
+
+
+  .active {
+
+    .pagination__link {
+      color: #000;
+      font-weight: 700;
+    }
+  }
+}
+
+
+.pagination__item--next, .pagination__item--prev {
+  background: #21a45d;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 1;
+  color: #fff;
+  min-width: 75px;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  transition: all 0.2s;
+
+  a {
+    color: #fff;
+  }
+}
+
+.pagination__item--prev {
+  margin-right: 25px;
+}
+
+.pagination__item--next {
+  margin-left: 25px;
+}
+
+.pagination__link {
+  display: block;
+  padding: 13px 3px;
+  height: 40px;
+  min-width: 40px;
+  font-size: 16px;
+  line-height: 1;
+  color: #666;
+  text-align: center;
+  transition: all .2s ease;
+
+}
+
+.pagination__link[href]:not(:disabled):focus, .pagination__link[href]:not(:disabled):hover {
+  color: #222
+}
+
+
+
+.pagination__link--arrow {
+  border: 1px solid #e2e2e2;
+  border-radius: 50%
+}
+
+.pagination__link--arrow:focus, .pagination__link--arrow:hover {
+  border-color: #222
+}

@@ -1,81 +1,64 @@
 <template lang="pug">
-.settings-main(v-if="!getInfo") Загрузка
-.settings-main(v-else)
-  user-info-form-block(:label='$t("name")', :placeholder='$t("entName")', v-model='name')
-  user-info-form-block(:label='$t("lastName")', :placeholder='$t("entLastName")', v-model='lastName')
-  user-info-form-block(:label='$t("tel")', :placeholder='$t("entTel")', v-model='phone', phone)
+  .settings-main(v-if="!getInfo") Загрузка
+  .settings-main(v-else)
+    user-info-form-block(:label='$t("name")', :placeholder='$t("entName")', v-model='name')
+    user-info-form-block(:label='$t("lastName")', :placeholder='$t("entLastName")', v-model='lastName')
+    user-info-form-block(:label='$t("tel")', :placeholder='$t("entTel")', v-model='phone', phone)
 
-  .user-info-form__block(v-if='country || isCountryShow')
-    span.user-info-form__label {{ $t("country") }}
-    .user-info-form__wrap.countries(v-click-outside='countriesClose')
-      input.user-info-form__input(
-        type='text',
-        v-model='country.title',
-        :placeholder='$t("entCountry")',
-        @input='countriesOpen'
-      )
-
-      //ul.countries__list(v-if='countries.length !== 0 && isCountriesShow')
-      //  li.countries__item(
-      //    v-for='item in countries',
-      //    :key='item.id',
-      //    tabindex=0,
-      //    @click='setCountry(item.title)',
-      //    @keyup.enter='setCountry(item.title)'
-      //  ) {{ item.title }}
-
-  .user-info-form__block
-    span.user-info-form__label {{ $t("city") }}
-    .user-info-form__wrap.countries(v-click-outside='citiesClose')
-      input.user-info-form__input(
-        type='text',
-        v-model='town.title',
-        :placeholder='$t("entCity")',
-        @input='citiesOpen',
-        @keyup.enter='setCity(town.id)'
-      )
-
-      //ul.countries__list(v-if='cities.length !== 0 && isCitiesShow')
-      //  li.countries__item(
-      //    v-for='item in cities',
-      //    :key='item.countryId',
-      //    @click='setCity(item)',
-      //    @keyup.enter='setCity(item)',
-      //    tabindex=0
-      //  ) {{ item.country }}
-
-  .user-info-form__block
-    span.user-info-form__label {{ $t("birthDay") }}
-    .user-info-form__wrap
-      select.select.user-info-form__select.day(v-model='day')
-        option(v-for='d in days', :key='d') {{ d }}
-      select.select.user-info-form__select.month(v-model='month')
-        option(v-for='month in months', :key='month.val', :value='month.val') {{ month.text }}
-      select.select.user-info-form__select.year(v-model='year')
-        option(v-for='i in years', :key='i') {{ i }}
-  .user-info-form__block.user-info-form__block--photo
-    span.user-info-form__label {{ $t("photo") }}
-    .user-info-form__wrap
-      .user-info-form__photo-wrap
-        input#photo.user-info-form__input-photo(
-          type='file',
-          ref='photo',
-          @change='processFile($event)',
-          accept='image/*'
+    .user-info-form__block
+      span.user-info-form__label {{ $t("country") }}
+      .user-info-form__wrap.countries(v-if="!!getCountries" )
+        vSelect(
+          v-model="country",
+          :value="country.title",
+          :options="getCountries",
+          placeholder="Страна",
+          label="title",
         )
-        label.user-info-form__input.user-info-form__input--photo(for='photo')
-          span.setting-main__photo-delete(v-if='photo') {{ photo.name }}
-            simple-svg(:filepath='"/static/img/delete.svg"', @click.native.prevent='deletePhoto')
-        button-hover(variant='fill', bordered, @click.native='loadPhoto') {{ $t("download") }}
-      .user-info-form__photo-pic(v-if='src')
-        img(:src='src', :alt='name + " " + lastName')
-  user-info-form-block(:label='$t("myself")', v-model='about', about)
-  .user-info-form__block.user-info-form__block--actions
-    span.user-info-form__label
-    .user-info-form__wrap
-      button-hover(@click.native.prevent='submitHandler') {{ $t("save") }}
-      router-link.settings-main__back(:to='{ name: "Profile" }')
-        button-hover(variant='red', bordered) {{ $t("cancel") }}
+
+    .user-info-form__block
+      span.user-info-form__label {{ $t("city") }}
+      .user-info-form__wrap.countries(v-if="!!getCities")
+        vSelect(
+          v-model='city',
+          :value="city.title",
+          :options="getCities",
+          placeholder="Город",
+          label="title"
+        )
+
+    .user-info-form__block
+      span.user-info-form__label {{ $t("birthDay") }}
+      .user-info-form__wrap
+        select.select.user-info-form__select.day(v-model='day')
+          option(v-for='d in days', :key='d') {{ d }}
+        select.select.user-info-form__select.month(v-model='month')
+          option(v-for='month in months', :key='month.val', :value='month.val') {{ month.text }}
+        select.select.user-info-form__select.year(v-model='year')
+          option(v-for='i in years', :key='i') {{ i }}
+    .user-info-form__block.user-info-form__block--photo
+      span.user-info-form__label {{ $t("photo") }}
+      .user-info-form__wrap
+        .user-info-form__photo-wrap
+          input#photo.user-info-form__input-photo(
+            type='file',
+            ref='photo',
+            @change='processFile($event)',
+            accept='image/*'
+          )
+          label.user-info-form__input.user-info-form__input--photo(for='photo')
+            span.setting-main__photo-delete(v-if='photo') {{ photo.name }}
+              simple-svg(:filepath='"/static/img/delete.svg"', @click.native.prevent='deletePhoto')
+          button-hover(variant='fill', bordered, @click.native='loadPhoto') {{ $t("download") }}
+        .user-info-form__photo-pic(v-if='src')
+          img(:src='src', :alt='name + " " + lastName')
+    user-info-form-block(:label='$t("myself")', v-model='about', about)
+    .user-info-form__block.user-info-form__block--actions
+      span.user-info-form__label
+      .user-info-form__wrap
+        button-hover(@click.native.prevent='submitHandler') {{ $t("save") }}
+        router-link.settings-main__back(:to='{ name: "Profile" }')
+          button-hover(variant='red', bordered) {{ $t("cancel") }}
 </template>
 
 <script>
@@ -84,9 +67,12 @@ import moment from 'moment'
 import ClickOutside from 'vue-click-outside'
 import UserInfoFormBlock from '@/components/Settings/UserInfoForm/Block.vue'
 import { getMonthList } from "@/utils/getMonthList";
+import vSelect from 'vue-select';
+import "vue-select/dist/vue-select.css";
+
 export default {
   name: 'SettingsMain',
-  components: { UserInfoFormBlock },
+  components: { UserInfoFormBlock, vSelect },
   data: () => ({
     name: '',
     lastName: '',
@@ -101,22 +87,12 @@ export default {
     city: '',
     isCountriesShow: false,
     isCitiesShow: false,
-    isCountryShow: false,
-    country_city: {
-      country: '',
-      city: ''
-    }
+    isCountryShow: false
   }),
   computed: {
     ...mapGetters('global/storage', ['getStorage']),
     ...mapGetters('profile/info', ['getInfo']),
     ...mapGetters('profile/country_city', ['getCountries', 'getCities']),
-    countries() {
-      return this.getCountries.filter(c => c.title.toUpperCase().includes(this.country.toUpperCase()))
-    },
-    cities() {
-      return this.getCities.filter(c => c.country.toUpperCase().includes(this.city.toUpperCase()))
-    },
     phoneNumber() {
       return this.phone.replace(/\D+/g, '')
     },
@@ -140,7 +116,11 @@ export default {
   methods: {
     ...mapActions('global/storage', ['apiStorage']),
     ...mapActions('profile/info', ['apiChangeInfo']),
-    ...mapActions('profile/country_city', ['apiCountries']),
+    ...mapActions('profile/country_city', ['apiCountries', 'apiCities']),
+    loadCitiesByCountry() {
+      this.apiCities({ countryId: this.country.id });
+      this.city = '';
+    },
     submitHandler() {
       if (this.getInfo && this.src !== this.getInfo.photo && this.src !== '') {
         this.apiStorage(this.photo).then(() => {
@@ -151,8 +131,8 @@ export default {
             birth_date: moment(new Date(this.year, this.month, this.day)).format(),
             phone: this.phoneNumber || null,
             about: this.about,
-            country: this.country,
-            town: this.town
+            country: this.country.id,
+            town: this.city.id
           })
         })
       } else {
@@ -162,8 +142,8 @@ export default {
           birth_date: moment(new Date(this.year, this.month, this.day)).format(),
           phone: this.phoneNumber || null,
           about: this.about,
-          country: this.country,
-          town: this.town
+          country: this.country.id,
+          town: this.city.id
         })
       }
     },
@@ -187,12 +167,12 @@ export default {
       this.phone = this.getInfo.phone ? this.getInfo.phone.replace(/^[+]?[78]/, '') : ''
       if (this.getInfo.birth_date) {
         this.day = moment(this.getInfo.birth_date * 1000).date()
-        this.month = this.months[moment(this.getInfo.birth_date * 1000).month()]
+        this.month = moment(this.getInfo.birth_date * 1000).month();
         this.year = moment(this.getInfo.birth_date * 1000).year()
       }
       this.about = this.getInfo.about
       this.country = this.getInfo.country
-      this.town = this.getInfo.town
+      this.city = this.getInfo.town
     },
     countriesOpen() {
       this.isCountriesShow = true
@@ -234,11 +214,17 @@ export default {
     getInfo(value) {
       if (!value) return
       this.setInfo()
+    },
+    country(value) {
+      console.log(value);
+      this.apiCities({ countryId: value.id });
+      // this.city = '';
     }
   },
   mounted() {
-    if (this.getInfo) this.setInfo()
-    this.apiCountries()
+    if (this.getInfo) this.setInfo();
+    this.apiCountries();
+    if (this.getInfo) this.setInfo();
   },
   directives: {
     ClickOutside
@@ -328,6 +314,48 @@ export default {
       background-color: rgba(0, 0, 0, 0.3);
       cursor: pointer;
     }
+  }
+}
+
+.countries {
+  .v-select {
+    font-size: 15px;
+    //
+    width: 100%;
+    //font-size: 15px;
+    //
+
+    .vs__dropdown-toggle {
+      padding: 0 20px;
+      height: 45px;
+      border: 1px solid #E3E3E3;
+      border-radius: 0;
+
+      .vs__selected-options {
+        padding: 0;
+
+        .vs__selected {
+          margin: 0;
+          padding: 0;
+        }
+
+        .vs__search, vs__search:focus {
+          font-size: 15px;
+        }
+
+        //border: none;
+      }
+
+
+    }
+  }
+
+  .vs__dropdown-option--highlight {
+    background: #21a45d
+  }
+
+  .vs__actions {
+    display: none;
   }
 }
 </style>

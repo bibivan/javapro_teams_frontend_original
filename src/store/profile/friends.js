@@ -103,7 +103,7 @@ export default {
     async apiRefuseRequest(context, id) {
       let response
       try {
-        response = await axios.delete('friends/delete/' + id)
+        response = await axios.delete('friends/' + id)
         context.commit('setResult', {
           id: 'request',
           value: response.data.data
